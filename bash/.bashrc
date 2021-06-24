@@ -7,9 +7,20 @@ esac
 
 # ================= General Settings ======================
 
-export EDITOR='nvim'
-export VISUAL='nvim'
-export MANPAGER="nvim +Man!"
+# Check for available editor
+if [ -x "$(command -v nvim)" ];then
+	export EDITOR='nvim'
+	export VISUAL='nvim'
+	export MANPAGER="nvim +Man!"
+elif [ -x "$(command -v vim)" ];then
+	export EDITOR='vim'
+	export VISUAL='vim'
+	export MANPAGER='vim -c "%! col -b" -c "set ft=man nomod nolist ignorecase" -'
+else
+	export EDITOR='nano'
+	export VISUAL='nano'
+	export MANPAGER="less"
+fi
 
 # Don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth:erasedups
