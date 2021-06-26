@@ -1,19 +1,18 @@
-
 " ================ Plugins ===========================
 "{{{
 
-"Neovim expects Vim-Plug in a different folder, but with LunarVim it becomes unnecessary
+"Neovim expects vim-plug in a different location, but with LunarVim it becomes unnecessary anyway
 if ! has('nvim')
 
 	" Install vim-plug if not found
 	if empty(glob('~/.vim/autoload/plug.vim'))
 		silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-			  \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+		     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	endif
 
 	" Run PlugInstall if there are missing plugins
 	autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-		\| PlugInstall --sync | source $MYVIMRC
+	     \| PlugInstall --sync | source $MYVIMRC
 	\| endif
 
 	" Plugins will be downloaded under the specified directory.
@@ -48,8 +47,8 @@ set guifont=FiraCode\ Nerd\ Font
 " ================ General Config ====================
 "{{{
 
-" Set the window title to '/path/to/file [RO] [Filetype]'
-set title titlestring=%<%(VIM\ -\ %)%r%(\ %y%)%(\ %F%)
+" Set the window title to 'VIM: filename [+][RO][Filetype]'
+set title titlestring=%<%(VIM:\ %)%(%t\ %)%m%r%y
 
 set background=dark
 colorscheme gruvbox
