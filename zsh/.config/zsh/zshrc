@@ -46,3 +46,6 @@ zsh_add_file "extract_archives.zsh"
 # Plugins
 zsh_add_plugin "zsh-users/zsh-autosuggestions"
 zsh_add_plugin "zsh-users/zsh-syntax-highlighting"
+
+
+bindkey "^R" history-incremental-pattern-search-backward
