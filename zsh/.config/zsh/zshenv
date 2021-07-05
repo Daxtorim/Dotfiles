@@ -1,14 +1,20 @@
-# Check for available editors
+# Check for available editor
 if [ -x "$(command -v nvim)" ];then
 	export EDITOR='nvim'
 	export VISUAL='nvim'
-	export MANPAGER="nvim +Man!"
 elif [ -x "$(command -v vim)" ];then
 	export EDITOR='vim'
 	export VISUAL='vim'
-	export MANPAGER='vim -c "%! col -b" -c "set ft=man nomod nolist ignorecase" -'
 else
 	export EDITOR='nano'
 	export VISUAL='nano'
+fi
+
+# Check for avaliable manpager (prefer basic vim over potentially larger nvim config)
+if [ -x "$(command -v vim)" ];then
+	export MANPAGER='vim -c "%! col -b" -c "setlocal ft=man nomod nolist norelativenumber" -c "nmap q :q!" -'
+elif [ -x "$(command -v nvim)" ];then
+	export MANPAGER="nvim +Man!"
+else
 	export MANPAGER="less"
 fi
