@@ -161,4 +161,9 @@ nnoremap <C-l> :nohl<CR><C-l>
 " Make Y yank to the end of line (act like D or C)
 nmap Y y$
 
+"Search and Replace shortcuts
+nmap <C-f> yiw/<C-r>"<CR>
+nmap <C-h> yiw:%s@<C-r>"@@g<left><left>
+vmap <C-h> yiw:s@<C-r>"@@g<left><left>
+
 "}}}
