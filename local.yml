@@ -3,30 +3,34 @@
   become: true
 
   tasks:
-  - name: Cloning Dotfiles repo to dax user
+  - name: Creating shallow clone of Dotfiles repo for dax user
     git:
       repo: https://github.com/Daxtorim/Dotfiles.git
       dest: /home/dax/Dotfiles
       clone: yes
+      depth: 1
       update: yes
 
   - name: Change ownership of repo to dax user
     file:
       path: /home/dax/Dotfiles
+      state: directory
+      recurse: yes
       owner: dax
       group: dax
-      mode: 0644
 
   - name: Get state on .bashrc file
     file:
       path: /home/dax/.bashrc
     register: bash_file
+    ignore_errors: yes
 
   - name: Removing .bashrc file
+    when: bash_file["state"] == "file"
     file:
       path: /home/dax/.bashrc
       state: absent
-    when: bash_file["state"] == "file"
+    ignore_errors: yes
 
   - name: Installing dotfiles for dax user
     command:
