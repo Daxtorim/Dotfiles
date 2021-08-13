@@ -17,6 +17,15 @@
       group: dax
       mode: 0644
 
-  - name: Installing dotfiles for dax user
-    command:
-      cmd: /usr/bin/stow --no-folding --dir=/home/dax/Dotfiles --restow bash zsh vim alacritty
+  - name: Check if dotfiles are files or symlinks
+    file:
+      path: /home/dax/
+    register: dax_files
+
+  - name: Show facts available on the system
+    debug:
+      var: dax_files
+
+  # - name: Installing dotfiles for dax user
+  #   command:
+  #     cmd: /usr/bin/stow --no-folding --dir=/home/dax/Dotfiles --restow bash zsh vim alacritty
