@@ -2,14 +2,17 @@
   connection: local
   become: true
 
-- name: Cloning Dotfiles repo to dax user
-  git:
-    repo: https://github.com/Daxtorim/Dotfiles.git
-    dest: /home/dax/Dotfiles
-    clone: yes
-    update: yes
-  become_user: dax
+  tasks:
+  - name: Cloning Dotfiles repo to dax user
+    git:
+      repo: https://github.com/Daxtorim/Dotfiles.git
+      dest: /home/dax/Dotfiles
+      clone: yes
+      update: yes
+    become_user: dax
+    register: repo
 
-- name: Installing dotfiles for dax user
-  command:
-    cmd: /usr/bin/stow --no-folding --dir=/home/dax/Dotfiles --restow bash zsh vim alacritty
+  - name: Installing dotfiles for dax user
+    command:
+      cmd: /usr/bin/stow --no-folding --dir=/home/dax/Dotfiles --restow bash zsh vim alacritty
+    when: repo.changed
