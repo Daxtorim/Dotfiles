@@ -90,12 +90,12 @@ set autoindent                 "Keep new lines on the same level as previous lin
 set smartindent                "Auto indent new lines after e.g '{'
 set nosmarttab                 "Use actual tab when using <TAB>, ignore whatever mess smarttab tries to create
 set tabstop=4                  "Maximum width of a tab character
-set softtabstop=0              "Pretend this is tabstop for <BS> and <TAB> operations, switch between tabs and spaces when necessary, (0=off)
+set softtabstop=-1             "Pretend this is tabstop for <BS> and <TAB> operations, switch between tabs and spaces when necessary, (0=off, negative=shiftwidth)
 set shiftwidth=0               "Number of spaces by which text is shifted (0=tabstop)
 set noexpandtab                "Use actual tab characters, do not replace them with spaces
 
-" Override ftplugins that think they know better
-autocmd BufRead,BufNew * setlocal autoindent smartindent nosmarttab tabstop=4 softtabstop=0 shiftwidth=0 noexpandtab
+" Override ftplugins that think they know better but let them still set tabstop and expandtab
+autocmd BufRead,BufNew * setlocal autoindent smartindent nosmarttab softtabstop=-1 shiftwidth=0
 "}}}
 
 " ================ Folds =============================
