@@ -9,8 +9,12 @@
       dest: /home/dax/Dotfiles
       clone: yes
       update: yes
-    become_user: dax
     register: repo
+
+  - name: Change ownership of repo to dax user
+    command:
+        cmd: /usr/bin/chown dax:dax /home/dax/Dotfiles
+    when: repo.changed
 
   - name: Installing dotfiles for dax user
     command:
