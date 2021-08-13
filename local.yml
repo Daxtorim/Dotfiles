@@ -17,15 +17,17 @@
       group: dax
       mode: 0644
 
-  - name: Check if dotfiles are files or symlinks
+  - name: Get state on .bashrc file
     file:
-      path: /home/dax/
-    register: dax_files
+      path: /home/dax/.bashrc
+    register: bash_file
 
-  - name: Show facts available on the system
-    debug:
-      var: dax_files
+  - name: Removing .bashrc file
+    file:
+      path: /home/dax/.bashrc
+      state: absent
+    when: bash_file["state"] == "file"
 
-  # - name: Installing dotfiles for dax user
-  #   command:
-  #     cmd: /usr/bin/stow --no-folding --dir=/home/dax/Dotfiles --restow bash zsh vim alacritty
+  - name: Installing dotfiles for dax user
+    command:
+      cmd: /usr/bin/stow --no-folding --dir=/home/dax/Dotfiles --restow bash zsh vim
