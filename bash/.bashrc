@@ -11,14 +11,20 @@ esac
 if [ -x "$(command -v nvim)" ];then
 	export EDITOR='nvim'
 	export VISUAL='nvim'
-	export MANPAGER="nvim +Man!"
 elif [ -x "$(command -v vim)" ];then
 	export EDITOR='vim'
 	export VISUAL='vim'
-	export MANPAGER='vim -c "%! col -b" -c "set ft=man nomod nolist ignorecase" -'
 else
 	export EDITOR='nano'
 	export VISUAL='nano'
+fi
+
+# Check for avaliable manpager (prefer basic vim over potentially larger nvim config)
+if [ -x "$(command -v vim)" ];then
+	export MANPAGER='vim -c "%! col -b" -c "set ft=man nomod nolist norelativenumber" -c "nmap q :q!" -'
+elif [ -x "$(command -v nvim)" ];then
+	export MANPAGER="nvim +Man!"
+else
 	export MANPAGER="less"
 fi
 
@@ -47,22 +53,16 @@ shopt -s checkwinsize
 	cyan='\033[36m'
 	white='\033[37m'
 
+
 # Git integration in prompt
-# no-op to avoid errors if git is not installed
-alias git_prompt_update=''
 if [ -x "$(command -v git)" ];then
-	gitprompt=$(find ~ -maxdepth 2 -name "*git-prompt*" 2>/dev/null)
-	if [ -f "${gitprompt}" ];then
-		source "${gitprompt}"
-		GIT_PS1_SHOWDIRTYSTATE=1
-		GIT_PS1_SHOWUNTRACKEDFILES=1
-		GIT_PS1_SHOWSTASHSTATE=1
-		alias git_prompt_update='__git_ps1 "-[$cyan%s$white]"'
-	fi
-	gitcompletion=$(find ~ -maxdepth 2 -name "*git-completion*" 2>/dev/null)
-	if [ -f "${gitcompletion}"  ]; then
-		source "${gitcompletion}"
-	fi
+	GIT_PS1_SHOWDIRTYSTATE=1
+	GIT_PS1_SHOWUNTRACKEDFILES=1
+	GIT_PS1_SHOWSTASHSTATE=1
+	alias git_prompt_update='__git_ps1 "-[$cyan%s$white]"'
+else
+	# no-op to avoid errors if git is not installed
+	alias git_prompt_update=''
 fi
 
 export PS1="\n\[$white\]╭[\$?]-[\[$yellow\]\u\[$green\]@\[$blue\]\h\[$white\]]-[\[$magenta\]\w\[$white\]]\$(git_prompt_update)\n╰─╸\[$green\]\\$ \[$reset\]"

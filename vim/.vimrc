@@ -17,7 +17,7 @@ if ! has('nvim')
 
 	" Plugins will be downloaded under the specified directory.
 	call plug#begin('~/.vim/plugged')
-		Plug 'morhetz/gruvbox'
+		Plug 'lifepillar/vim-gruvbox8'
 		Plug 'tpope/vim-commentary'
 		Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 		Plug 'jiangmiao/auto-pairs'
@@ -27,6 +27,9 @@ if ! has('nvim')
 
 	"Plugin settings
 	let g:highlightedyank_highlight_duration = 300
+
+	set background=dark
+	colorscheme gruvbox8
 
 endif
 
@@ -48,10 +51,8 @@ set guifont=FiraCode\ Nerd\ Font
 "{{{
 
 " Set the window title to 'VIM: filename [+][RO][Filetype]'
-set title titlestring=%<%(VIM:\ %)%(%t\ %)%m%r%y
+set title titlestring=%<%(VIM:\ %t\ %)%m%r%y
 
-set background=dark
-colorscheme gruvbox
 set termguicolors               "Activate true color support
 syntax enable                   "Turn on syntax highlighting when applicable
 set belloff=all                 "Turn off the bell for all events, i.e. NO BEEP
@@ -159,5 +160,10 @@ nnoremap <C-l> :nohl<CR><C-l>
 
 " Make Y yank to the end of line (act like D or C)
 nmap Y y$
+
+"Search and Replace shortcuts
+nmap <C-f> yiw/<C-r>"<CR>
+nmap <C-h> yiw:%s@<C-r>"@@g<left><left>
+vmap <C-h> yiw:s@<C-r>"@@g<left><left>
 
 "}}}
