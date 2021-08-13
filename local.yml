@@ -9,14 +9,14 @@
       dest: /home/dax/Dotfiles
       clone: yes
       update: yes
-    register: repo
 
   - name: Change ownership of repo to dax user
-    command:
-        cmd: /usr/bin/chown dax:dax /home/dax/Dotfiles
-    when: repo.changed
+    file:
+      path: /home/dax/Dotfiles
+      owner: dax
+      group: dax
+      mode: 0644
 
   - name: Installing dotfiles for dax user
     command:
       cmd: /usr/bin/stow --no-folding --dir=/home/dax/Dotfiles --restow bash zsh vim alacritty
-    when: repo.changed
