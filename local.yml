@@ -35,3 +35,4 @@
   - name: Installing dotfiles for dax user
     command:
       cmd: /usr/bin/stow --no-folding --dir=/home/dax/Dotfiles --restow bash zsh vim
+    become_user: dax
