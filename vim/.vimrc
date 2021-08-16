@@ -21,7 +21,7 @@ if ! has('nvim')
 		Plug 'tpope/vim-commentary'
 		Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 		Plug 'jiangmiao/auto-pairs'
-		" Plug 'itchyny/lightline.vim'
+		Plug 'itchyny/lightline.vim'
 		Plug 'machakann/vim-highlightedyank'
 	call plug#end()
 
@@ -59,7 +59,7 @@ set belloff=all                 "Turn off the bell for all events, i.e. NO BEEP
 
 set number                      "Show line number of current line
 set relativenumber              "Show other line numbers relative to current line
-" set cursorline                  "Highlight line where the cursor is
+set cursorline                  "Highlight line where the cursor is
 set wildmenu                    "Add menu for auto completion
 set wildmode=longest:full,full
 set laststatus=2                "Always display the status line, even if only one window is displayed
@@ -100,18 +100,16 @@ autocmd BufRead,BufNew * setlocal autoindent smartindent nosmarttab softtabstop=
 "}}}
 
 " ================ Folds =============================
-""{{{
-"Too heavy for the RPiZero
+"{{{
+set foldenable                  "Fold by default
+set foldmethod=indent           "Fold based on indentation
+set foldignore=                 "Do not exclude any lines from folds
+set foldlevel=99                "Open all folds by default
+set foldcolumn=0                "Display foldlevel in n wide gutter
 
-"set foldenable                  "Fold by default
-"set foldmethod=indent           "Fold based on indentation
-"set foldignore=                 "Do not exclude any lines from folds
-"set foldlevel=99                "Open all folds by default
-"set foldcolumn=0                "Display foldlevel in n wide gutter
-
-"" Filetype specific overrides
-" autocmd FileType vim setlocal foldmethod=marker foldlevel=0
-""}}}
+" Filetype specific overrides
+ autocmd FileType vim setlocal foldmethod=marker foldlevel=0
+"}}}
 
 " ================ Scrolling =========================
 "{{{
