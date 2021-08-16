@@ -18,6 +18,7 @@ while [ "$#" -gt 0 ]; do
   shift
 done
 
+user=${user:=$USER}
 [ -d "/home/${user}/Dotfiles" ] || exit 2
 
 # Stash uncommited changes to preserve machine dependent modifications
