@@ -19,14 +19,16 @@ if ! has('nvim')
 	call plug#begin('~/.vim/plugged')
 		Plug 'lifepillar/vim-gruvbox8'
 		Plug 'tpope/vim-commentary'
-		Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-		Plug 'jiangmiao/auto-pairs'
+		Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
+		Plug 'LunarWatcher/auto-pairs', { 'tag': '*' }
 		Plug 'itchyny/lightline.vim'
 		Plug 'machakann/vim-highlightedyank'
 	call plug#end()
 
 	"Plugin settings
 	let g:highlightedyank_highlight_duration = 300
+	let g:AutoPairsCompatibleMaps = 0
+	let g:AutoPairsShortcutFastWrap = '<C-e>'
 
 	set background=dark
 	colorscheme gruvbox8
@@ -56,7 +58,6 @@ set title titlestring=%<%(VIM:\ %t\ %)%m%r%y
 set termguicolors               "Activate true color support
 syntax enable                   "Turn on syntax highlighting when applicable
 set belloff=all                 "Turn off the bell for all events, i.e. NO BEEP
-
 set number                      "Show line number of current line
 set relativenumber              "Show other line numbers relative to current line
 set cursorline                  "Highlight line where the cursor is
@@ -129,8 +130,8 @@ set incsearch                   "Search while still typing
 
 " ================ Keybindings =======================
 "{{{
-" Capitalization matters with meta keys
-" It does NOT matter with CTRL (for some reason)
+" Avoid meta key, not reliable
+" Capitalization does NOT matter with CTRL
 
 " Leader key
 let mapleader=' '
@@ -138,28 +139,16 @@ let mapleader=' '
 " DO NOT GO INTO EX MODE EVER !!!
 nmap Q <ESC>
 
+" Make Y yank to the end of line (act like D or C)
+nmap Y y$
+
 " I see no scenario where I really need to step over wrapped lines
 " Motions still act as if the wrapped lines were a single line
 nnoremap j gj
 nnoremap k gk
 
-" Use meta-hjkl to move between splits
-nnoremap <M-j> <C-w><C-j>
-nnoremap <M-k> <C-w><C-k>
-nnoremap <M-l> <C-w><C-l>
-nnoremap <M-h> <C-w><C-h>
-
-" Use meta+JK to move lines up and down
-nmap <M-J> V:move '>+1<CR>gv-gv<ESC>
-nmap <M-K> V:move '<-2<CR>gv-gv<ESC>
-vmap <M-J> :move '>+1<CR>gv-gv
-vmap <M-K> :move '<-2<CR>gv-gv
-
 " Use CTRL+l to remove highlighting until next search
 nnoremap <C-l> :nohl<CR><C-l>
-
-" Make Y yank to the end of line (act like D or C)
-nmap Y y$
 
 "Search and Replace shortcuts
 nmap <C-f> yiw/<C-r>"<CR>
