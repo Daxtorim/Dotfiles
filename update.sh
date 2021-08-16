@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 
-# Check if another process is still running (because of networking for example)
-[ "${DOTFILE_UPDATE_RUNNING:=0}" = "0" ] || exit 1
-export DOTFILE_UPDATE_RUNNING=1
+# Only allow one instance of this script (Boilerplate taken from `man flock')
+[ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -en "$0" "$0" "$@" || :
 
 # Wait for networking
 while ! ping -c1 github.com &>/dev/null
@@ -13,20 +12,20 @@ done
 
 # Parse Command Line Arguments
 while [ "$#" -gt 0 ]; do
-  case "$1" in
-    --user=*)
-        user="${1#*=}"
-        ;;
-    --module-list=*)
-        module_list="${1#*=}"
-        ;;
-    *)
-      printf "***************************\n"
-      printf "* Error: Invalid argument!*\n"
-      printf "***************************\n"
-      exit 2
-  esac
-  shift
+	case "$1" in
+		--user=*)
+				user="${1#*=}"
+				;;
+		--module-list=*)
+				module_list="${1#*=}"
+				;;
+		*)
+			printf "***************************\n"
+			printf "* Error: Invalid argument!*\n"
+			printf "***************************\n"
+			exit 2
+	esac
+	shift
 done
 
 user=${user:=$USER}
@@ -75,7 +74,7 @@ do
 		# Add module to a list when the real file exists
 		if [ -e "${abs_filename}" ]; then
 			# Delete actual files so they can be replaced by appropriate symlinks
-			if [ -f "${abs_filename}" ]; then
+			if [ ! -L "${abs_filename}" ]; then
 				rm -f ${abs_filename}
 			fi
 			if [ -z "$(grep ${module} <<< ${module_list})" ]; then
@@ -88,5 +87,3 @@ done
 # Prune potentially dead symlinks and add new ones
 IFS=' '
 stow --dir="/home/${user}/Dotfiles" --target="/home/${user}" --no-folding --restow $module_list
-
-DOTFILE_UPDATE_RUNNING=0
