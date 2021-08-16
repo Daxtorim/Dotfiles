@@ -35,7 +35,11 @@ else
 			abs_filename="/home/${user}/${rel_filename}"
 
 			# Add module to a list when the real file exists
-			if [ -e "${asb_filename}" ]; then
+			if [ -e "${abs_filename}" ]; then
+				# Delete actual files so they can be replaced by appropriate symlinks
+				if [ -f "${abs_filename}" ]; then
+					rm -f ${abs_filename}
+				fi
 				if [ -z "$(grep ${module} <<< ${module_list})" ]; then
 					module_list=$(printf '%s %s' "${module_list}" "${module}")
 				fi
