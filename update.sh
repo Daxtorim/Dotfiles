@@ -27,11 +27,11 @@ git remote update &>/dev/null
 git stash push --quiet
 if git diff --quiet @{u}; then
 	# Nothing to do
-	git stash pop --quiet
+	git stash pop --quiet || true
 else
 	# Update Dotfiles
 	git pull --quiet
-	git stash pop --quiet
+	git stash pop --quiet || true
 
 	# Get all files in the repo in a way that handles newlines in filenames gracefully (except .git directory)
 	dotfiles=$(find "/home/${user}/Dotfiles" -path "/home/${user}/Dotfiles/.git" -prune -o -type f -print0 | xargs -0 -I {} printf '%s,' {})
