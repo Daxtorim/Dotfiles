@@ -1,7 +1,24 @@
 #!/usr/bin/env bash
 
-user=$1
-[ -d "/home/${user}/Dotfiles" ] || exit 1
+# Parse Command Line Arguments
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --user=*)
+        user="${1#*=}"
+        ;;
+    --module-list=*)
+        module_list="${1#*=}"
+        ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument!*\n"
+      printf "***************************\n"
+      exit 1
+  esac
+  shift
+done
+
+[ -d "/home/${user}/Dotfiles" ] || exit 2
 
 # Stash uncommited changes to preserve machine dependent modifications
 cd "/home/${user}/Dotfiles"
