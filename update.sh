@@ -39,6 +39,7 @@ git stash push --quiet
 
 # Only allow skip when no modules where specified on the commandline
 if [ -z "${module_list}" ]; then
+	# And there is no update to the repo
 	if git diff --quiet @{u}; then
 		# Nothing to do, pop stash, exit early
 		[ ! "$(git stash list)" = "" ] && git stash pop --quiet
@@ -53,9 +54,7 @@ git pull --quiet
 [ ! "$(git stash list)" = "" ] && git stash pop --quiet
 
 # Get all files in the repo in a way that handles newlines in filenames gracefully (except .git directory)
-dotfiles=$(find "/home/${user}/Dotfiles" -path "/home/${user}/Dotfiles/.git" -prune -o -type f -print0 | xargs -0 -I {} printf '%s,' {})
-IFS=','
-for repo_filename in $dotfiles
+while IFS= read -r -d $'\0' repo_filename
 do
 	# Replace newlines in filenames with placeholder for commands that work on a line by line basis
 	sane_filename=$(sed -z 's/\n/@NEWLINE@/' <<< "${repo_filename}")
@@ -75,15 +74,14 @@ do
 		if [ -e "${abs_filename}" ]; then
 			# Delete actual files so they can be replaced by appropriate symlinks
 			if [ ! -L "${abs_filename}" ]; then
-				rm -f ${abs_filename}
+				rm -f "${abs_filename}"
 			fi
 			if [ -z "$(grep ${module} <<< ${module_list})" ]; then
 				module_list=$(printf '%s %s' "${module_list}" "${module}")
 			fi
 		fi
 	fi
-done
+done < <(find "/home/${user}/Dotfiles" -path "/home/${user}/Dotfiles/.git" -prune -o -type f -print0)
 
 # Prune potentially dead symlinks and add new ones
-IFS=' '
 stow --dir="/home/${user}/Dotfiles" --target="/home/${user}" --no-folding --restow $module_list
