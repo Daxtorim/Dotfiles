@@ -1,7 +1,7 @@
 " ================ Plugins ===========================
 "{{{
 
-"Neovim expects vim-plug in a different location, but with LunarVim it becomes unnecessary anyway
+" Neovim expects vim-plug in a different location, but with LunarVim it becomes unnecessary anyway
 if ! has('nvim')
 
 	" Install vim-plug if not found
@@ -76,7 +76,9 @@ set spelllang=en_us             "Default spell checking for american english
 set textwidth=0                 "Do not automatically break long lines
 
 " Display whitespace visually
-set list listchars=tab:›\ ,trail:~,space:∙,nbsp:⍽,extends:>,precedes:<
+" set list listchars=tab:›\ ,trail:~,space:∙,nbsp:⍽,extends:>,precedes:<
+set list listchars=tab:›\ ,trail:~,space:⸱,nbsp:⍽,extends:>,precedes:<
+
 
 " Stop looking for a mapping/keycode after n milliseconds
 set timeout timeoutlen=1000 ttimeoutlen=30
@@ -130,14 +132,14 @@ set incsearch                   "Search while still typing
 
 " ================ Keybindings =======================
 "{{{
-" Avoid meta key, not reliable
+" Avoid meta (alt) key, not reliable
 " Capitalization does NOT matter with CTRL
-
-" Leader key
-let mapleader=' '
 
 " DO NOT GO INTO EX MODE EVER !!!
 nmap Q <ESC>
+
+" Save file
+nmap <C-s> :w<CR>
 
 " Make Y yank to the end of line (act like D or C)
 nmap Y y$

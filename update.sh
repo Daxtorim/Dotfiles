@@ -4,12 +4,6 @@
 # Only allow one instance of this script (Boilerplate taken from `man flock')
 [ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -en "$0" "$0" "$@" || :
 
-# Wait for networking
-while ! ping -c1 github.com &>/dev/null
-do
-	sleep 1
-done
-
 # Parse Command Line Arguments
 while [ "$#" -gt 0 ]; do
 	case "$1" in
@@ -26,6 +20,12 @@ while [ "$#" -gt 0 ]; do
 			exit 2
 	esac
 	shift
+done
+
+# Wait for networking
+while ! ping -c1 github.com &>/dev/null
+do
+	sleep 1
 done
 
 user=${user:=$USER}
@@ -70,12 +70,12 @@ do
 		rel_filename=$(sed -z 's/@NEWLINE@/\n/' <<< "${tmp_filename}")
 		abs_filename="/home/${user}/${rel_filename}"
 
-		# Add module to a list when the real file exists
 		if [ -e "${abs_filename}" ]; then
 			# Delete actual files so they can be replaced by appropriate symlinks
 			if [ ! -L "${abs_filename}" ]; then
 				rm -f "${abs_filename}"
 			fi
+			# Add module to the update list when the real file exists
 			if [ -z "$(grep ${module} <<< ${module_list})" ]; then
 				module_list=$(printf '%s %s' "${module_list}" "${module}")
 			fi
