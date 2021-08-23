@@ -1,5 +1,5 @@
 -- ================ Sourcing .vimrc ========================
-vim.cmd('source ~/.config/lvim/vimrc.original')
+vim.cmd('source ${HOME}/.config/lvim/vimrc.original')
 
 
 -- ================ Plugins ================================
@@ -24,7 +24,7 @@ lvim.builtin.nvimtree.hide_dotfiles = 0
 
 -- ================= General Settings ======================
 
-lvim.format_on_save = true
+lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.colorscheme = 'material'
 

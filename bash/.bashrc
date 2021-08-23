@@ -7,8 +7,8 @@ esac
 
 # ================= General Settings ======================
 
-[ -f "~/Dotfiles/shell-env" ] && source "~/Dotfiles/shell-env"
-[ -f "~/Dotfiles/shell-aliases" ] && source "~/Dotfiles/shell-aliases"
+[ -f "${HOME}/Dotfiles/shell-env" ] && source "${HOME}/Dotfiles/shell-env"
+[ -f "${HOME}/Dotfiles/shell-aliases" ] && source "${HOME}/Dotfiles/shell-aliases"
 
 # Don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth:erasedups

@@ -1,6 +1,6 @@
 #!/bin/bash
 # ~/.bash_profile
 
-[[ -f ~/.bashrc ]] && . ~/.bashrc
+[[ -f "${HOME}/.bashrc" ]] && source "${HOME}/.bashrc"
 
-[[ -f /etc/bash_completion ]] && . /etc/bash_completion
+[[ -f "/etc/bash_completion" ]] && source "/etc/bash_completion"
