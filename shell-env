@@ -1,0 +1,14 @@
+# Check for available editor
+if [ -x "$(command -v lvim)" ];then
+	# LunarVim
+	export EDITOR='lvim'
+	export VISUAL='lvim'
+elif [ -x "$(command -v vim)" ];then
+	export EDITOR='vim'
+	export VISUAL='vim'
+fi
+
+# Check for avaliable manpager
+if [ -x "$(command -v vim)" ];then
+	export MANPAGER='vim -c "%! col -b" -c "setlocal ft=man nomod nolist norelativenumber" -c "nmap q :q!" -'
+fi
