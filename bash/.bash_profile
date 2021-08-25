@@ -1,6 +1,5 @@
 #!/bin/bash
 # ~/.bash_profile
 
-[[ -f "${HOME}/.bashrc" ]] && source "${HOME}/.bashrc"
-
-[[ -f "/etc/bash_completion" ]] && source "/etc/bash_completion"
+[ -f "${HOME}/Dotfiles/shell-env" ] && source "${HOME}/Dotfiles/shell-env"
+[ -f "${HOME}/.bashrc" ] && source "${HOME}/.bashrc"

@@ -1,14 +1,22 @@
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+	*i*) ;;
+	  *) return;;
 esac
 
 
 # ================= General Settings ======================
 
-[ -f "${HOME}/Dotfiles/shell-env" ] && source "${HOME}/Dotfiles/shell-env"
 [ -f "${HOME}/Dotfiles/shell-aliases" ] && source "${HOME}/Dotfiles/shell-aliases"
+
+# enable bash completion in interactive shells
+if ! shopt -oq posix; then
+	if [ -f /usr/share/bash-completion/bash_completion ]; then
+		source /usr/share/bash-completion/bash_completion
+	elif [ -f /etc/bash_completion ]; then
+		source /etc/bash_completion
+	fi
+fi
 
 # Don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth:erasedups
@@ -43,7 +51,7 @@ if [ "$(command -v __git_ps1)" ];then
 	GIT_PS1_SHOWSTASHSTATE=1
 	alias git_prompt_update='__git_ps1 "-[$cyan%s$white]"'
 else
-	# no-op to avoid errors if git is not installed
+	# no-op to avoid errors if git function is not found
 	alias git_prompt_update=''
 fi
 

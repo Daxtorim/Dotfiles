@@ -43,6 +43,7 @@ function zsh_add_plugin() {
 
 
 # Sourcing files
+zsh_add_file "${HOME}/Dotfiles/shell-aliases"
 zsh_add_file "zsh-prompt"
 zsh_add_file "extract_archives.zsh"
 # Plugins
