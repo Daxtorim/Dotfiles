@@ -24,7 +24,7 @@ SAVEHIST=1500000
 
 # Function to source files if they exist
 function zsh_add_file() {
-	[ -f "$ZDOTDIR/$1" ] && source "$ZDOTDIR/$1"
+	[ -f "$ZDOTDIR/$1" ] && . "$ZDOTDIR/$1"
 }
 
 function zsh_add_plugin() {
