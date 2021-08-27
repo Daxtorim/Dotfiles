@@ -9,10 +9,26 @@ lvim.plugins = {
 	{
 	--Colorscheme
 	"marko-cerovac/material.nvim",
-	config=function()
-		vim.g.material_style="darker"
-		vim.g.material_italic_comments="true"
-	end,
+	config = function()
+		vim.g.material_style = "deep oceanic"
+		vim.g.material_contrast = "true"
+		vim.g.material_italic_comments = "true"
+		require('material').set()
+	end
+	},
+	{
+	"Pocco81/AutoSave.nvim",
+	config = function()
+		require("autosave").setup({
+			enabled = true,
+			execution_message = "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"),
+			events = {"InsertLeave", "TextChanged"},
+			write_all_buffers = false,
+			on_off_commands = false,
+			clean_command_line_interval = 0,
+			debounce_delay = 135,
+		})
+	end
 	},
 }
 
@@ -20,19 +36,23 @@ lvim.plugins = {
 lvim.builtin.treesitter.ensure_installed = "maintained"
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enabled = true
+
+lvim.builtin.dashboard.active = true
+
+lvim.builtin.terminal.active = true
+
+lvim.builtin.nvimtree.side = "left"
+lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.nvimtree.hide_dotfiles = 0
+
 
 -- ================= General Settings ======================
 
+-- Colorscheme
+lvim.colorscheme = "material"
+
 lvim.format_on_save = false
 lvim.lint_on_save = true
-lvim.colorscheme = 'material'
-
--- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.dashboard.active = true
-lvim.builtin.terminal.active = true
-lvim.builtin.nvimtree.side = "left"
-lvim.builtin.nvimtree.show_icons.git = 0
 
 
 -- ================= Formatters and Linters ================

@@ -23,7 +23,7 @@ HISTSIZE=2000000
 SAVEHIST=1500000
 
 # Function to source files if they exist
-function zsh_add_file() {
+function add_zsh_file() {
 	[ -f "$ZDOTDIR/$1" ] && . "$ZDOTDIR/$1"
 }
 
@@ -37,15 +37,17 @@ function zsh_add_plugin() {
 		git clone "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
 	fi
 
-	zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
-	zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"
+	add_zsh_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
+	add_zsh_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"
 }
 
 
 # Sourcing files
-zsh_add_file "${HOME}/Dotfiles/shell-aliases"
-zsh_add_file "zsh-prompt"
-zsh_add_file "extract_archives.zsh"
+add_zsh_file "zsh-prompt"
+add_zsh_file "extract_archives.zsh"
+# Not within the zsh directory
+[ -f "${HOME}/Dotfiles/shell-aliases" ] && . "${HOME}/Dotfiles/shell-aliases"
+
 # Plugins
 zsh_add_plugin "zsh-users/zsh-autosuggestions"
 zsh_add_plugin "zsh-users/zsh-syntax-highlighting"

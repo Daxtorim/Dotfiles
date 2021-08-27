@@ -76,8 +76,10 @@ set spelllang=en_us             "Default spell checking for american english
 set textwidth=0                 "Do not automatically break long lines
 
 " Display whitespace visually
-" set list listchars=tab:›\ ,trail:~,space:∙,nbsp:⍽,extends:>,precedes:<
-set list listchars=tab:›\ ,trail:~,space:⸱,nbsp:⍽,extends:>,precedes:<
+" Dot operator
+set list listchars=tab:›\ ,trail:~,space:⋅,nbsp:⍽,extends:>,precedes:<
+" Word separator middle dot
+" set list listchars=tab:›\ ,trail:~,space:⸱,nbsp:⍽,extends:>,precedes:<
 
 
 " Stop looking for a mapping/keycode after n milliseconds
