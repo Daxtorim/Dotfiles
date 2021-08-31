@@ -76,17 +76,18 @@ set spelllang=en_us             "Default spell checking for american english
 set textwidth=0                 "Do not automatically break long lines
 
 " Display whitespace visually
-" Dot operator
-set list listchars=tab:›\ ,trail:~,space:⋅,nbsp:⍽,extends:>,precedes:<
-" Word separator middle dot
-" set list listchars=tab:›\ ,trail:~,space:⸱,nbsp:⍽,extends:>,precedes:<
-
+set list listchars=tab:›\ ,space:⋅,trail:~,eol:↴,nbsp:⍽,extends:>,precedes:<
 
 " Stop looking for a mapping/keycode after n milliseconds
 set timeout timeoutlen=1000 ttimeoutlen=30
 
-" Do not automatically add a comment marker to new lines and do not wrap long comments
-autocmd BufRead,BufNew * setlocal formatoptions-=cro
+augroup vimrc
+	autocmd!
+	" Do not automatically add a comment marker to new lines and do not wrap long comments
+	autocmd BufWinEnter * setlocal formatoptions-=cro
+	" Do not hide ANY characters in markup files
+	autocmd BufWinEnter * setlocal conceallevel=0
+augroup END
 
 "}}}
 
@@ -101,7 +102,9 @@ set shiftwidth=0               "Number of spaces by which text is shifted (0=tab
 set noexpandtab                "Use actual tab characters, do not replace them with spaces
 
 " Override ftplugins that think they know better but let them still set tabstop and expandtab
-autocmd BufRead,BufNew * setlocal autoindent smartindent nosmarttab softtabstop=-1 shiftwidth=0
+augroup vimrc
+	autocmd BufWinEnter * setlocal autoindent smartindent nosmarttab softtabstop=-1 shiftwidth=0
+augroup END
 "}}}
 
 " ================ Folds =============================
@@ -113,7 +116,9 @@ set foldlevel=99                "Open all folds by default
 set foldcolumn=0                "Display foldlevel in n wide gutter
 
 " Filetype specific overrides
- autocmd FileType vim setlocal foldmethod=marker foldlevel=0
+augroup vimrc
+	autocmd BufWinEnter FileType vim setlocal foldmethod=marker foldlevel=0
+augroup END
 "}}}
 
 " ================ Scrolling =========================

@@ -30,6 +30,21 @@ lvim.plugins = {
 		})
 	end
 	},
+	{
+	"lukas-reineke/indent-blankline.nvim",
+	event = "BufRead",
+	config = function()
+		require('indent_blankline').setup({
+			enabled = true,
+			show_whitespace = true,
+			char = "|",
+			space_char_blankline = " ",
+			filetype_exclude = { "help", "terminal", "dashboard", "NvimTree" },
+			buftype_exclude = { "terminal" },
+			show_end_of_line = true,
+		})
+	end
+	},
 }
 
 -- Install certain parsers for treesitter by default
