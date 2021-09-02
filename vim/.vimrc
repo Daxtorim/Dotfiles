@@ -1,54 +1,3 @@
-" ================ Plugins ===========================
-"{{{
-
-" Neovim expects vim-plug in a different location, but with LunarVim it becomes unnecessary anyway
-if ! has('nvim')
-
-	" Install vim-plug if not found
-	if empty(glob('~/.vim/autoload/plug.vim'))
-		silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-		     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	endif
-
-	" Run PlugInstall if there are missing plugins
-	autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-	     \| PlugInstall --sync | source $MYVIMRC
-	\| endif
-
-	" Plugins will be downloaded under the specified directory.
-	call plug#begin('~/.vim/plugged')
-		Plug 'lifepillar/vim-gruvbox8'
-		Plug 'tpope/vim-commentary'
-		Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
-		Plug 'LunarWatcher/auto-pairs', { 'tag': '*' }
-		Plug 'itchyny/lightline.vim'
-		Plug 'machakann/vim-highlightedyank'
-	call plug#end()
-
-	"Plugin settings
-	let g:highlightedyank_highlight_duration = 300
-	let g:AutoPairsCompatibleMaps = 0
-	let g:AutoPairsShortcutFastWrap = '<C-e>'
-
-	set background=dark
-	colorscheme gruvbox8
-
-endif
-
-"}}}
-
-" ================ Display settings ==================
-"{{{
-
-" Blinking BAR in insert mode, blinking BLOCK elsewhere (GUI only)
-set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-              \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-              \,sm:block-blinkwait175-blinkoff150-blinkon175
-
-set guifont=FiraCode\ Nerd\ Font
-
-"}}}
-
 " ================ General Config ====================
 "{{{
 
@@ -77,6 +26,7 @@ set textwidth=0                 "Do not automatically break long lines
 
 " Display whitespace visually
 set list listchars=tab:›\ ,space:⋅,trail:~,eol:↴,nbsp:⍽,extends:>,precedes:<
+" set list listchars=tab:<->,space:⋅,trail:~,eol:↴,nbsp:⍽,extends:>,precedes:<
 
 " Stop looking for a mapping/keycode after n milliseconds
 set timeout timeoutlen=1000 ttimeoutlen=30
@@ -163,5 +113,56 @@ nnoremap <C-l> :nohl<CR><C-l>
 nmap <C-f> yiw/<C-r>"<CR>
 nmap <C-h> yiw:%s@<C-r>"@@g<left><left>
 vmap <C-h> yiw:s@<C-r>"@@g<left><left>
+
+"}}}
+
+" ================ Plugins ===========================
+"{{{
+
+" Neovim expects vim-plug in a different location, but with LunarVim it becomes unnecessary anyway
+if ! has('nvim')
+
+	" Install vim-plug if not found
+	if empty(glob('~/.vim/autoload/plug.vim'))
+		silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+		     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	endif
+
+	" Run PlugInstall if there are missing plugins
+	autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+	     \| PlugInstall --sync | source $MYVIMRC
+	\| endif
+
+	" Plugins will be downloaded under the specified directory.
+	call plug#begin('~/.vim/plugged')
+		Plug 'lifepillar/vim-gruvbox8'
+		Plug 'tpope/vim-commentary'
+		Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
+		Plug 'LunarWatcher/auto-pairs', { 'tag': '*' }
+		Plug 'itchyny/lightline.vim'
+		Plug 'machakann/vim-highlightedyank'
+	call plug#end()
+
+	"Plugin settings
+	let g:highlightedyank_highlight_duration = 300
+	let g:AutoPairsCompatibleMaps = 0
+	let g:AutoPairsShortcutFastWrap = '<C-e>'
+
+	set background=dark
+	colorscheme gruvbox8
+
+endif
+
+"}}}
+
+" ================ Display settings ==================
+"{{{
+
+" Blinking BAR in insert mode, blinking BLOCK elsewhere (GUI only)
+set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+              \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
+              \,sm:block-blinkwait175-blinkoff150-blinkon175
+
+set guifont=FiraCode\ Nerd\ Font
 
 "}}}

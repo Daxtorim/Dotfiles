@@ -1,5 +1,16 @@
 -- ================ Sourcing .vimrc ========================
+
 vim.cmd('source ${HOME}/.config/lvim/vimrc.original')
+
+-- ================= General Settings ======================
+
+-- !!! Colorscheme is set by plugin !!!
+
+-- Neovim specific listchars characters
+vim.opt.listchars:append({lead="."})
+
+lvim.format_on_save = false
+lvim.lint_on_save = true
 
 
 -- ================ Plugins ================================
@@ -7,17 +18,20 @@ vim.cmd('source ${HOME}/.config/lvim/vimrc.original')
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.plugins = {
 	{
-	--Colorscheme
+	-- !!! Colorscheme !!!
 	"marko-cerovac/material.nvim",
 	config = function()
 		vim.g.material_style = "deep oceanic"
-		vim.g.material_contrast = "true"
-		vim.g.material_italic_comments = "true"
-		require('material').set()
+		require('material').setup({
+				borders = true,
+				italics = { comments = true }
+			})
+		vim.cmd('colorscheme material')
 	end
 	},
 	{
 	"Pocco81/AutoSave.nvim",
+	event = "BufRead",
 	config = function()
 		require("autosave").setup({
 			enabled = true,
@@ -36,12 +50,10 @@ lvim.plugins = {
 	config = function()
 		require('indent_blankline').setup({
 			enabled = true,
-			show_whitespace = true,
-			char = "|",
+			show_end_of_line = true,
 			space_char_blankline = " ",
 			filetype_exclude = { "help", "terminal", "dashboard", "NvimTree" },
 			buftype_exclude = { "terminal" },
-			show_end_of_line = true,
 		})
 	end
 	},
@@ -59,15 +71,6 @@ lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.nvimtree.hide_dotfiles = 0
-
-
--- ================= General Settings ======================
-
--- Colorscheme
-lvim.colorscheme = "material"
-
-lvim.format_on_save = false
-lvim.lint_on_save = true
 
 
 -- ================= Formatters and Linters ================
