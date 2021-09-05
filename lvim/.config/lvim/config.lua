@@ -52,6 +52,8 @@ lvim.plugins = {
 			enabled = true,
 			show_end_of_line = true,
 			space_char_blankline = " ",
+			use_treesitter = true,
+			show_trailing_blankline_indent= false,
 			filetype_exclude = { "help", "terminal", "dashboard", "NvimTree" },
 			buftype_exclude = { "terminal" },
 		})
