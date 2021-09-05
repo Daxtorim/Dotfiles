@@ -6,8 +6,9 @@ vim.cmd('source ${HOME}/.config/lvim/vimrc.original')
 
 -- !!! Colorscheme is set by plugin !!!
 
--- Neovim specific listchars characters
+-- Neovim specific listchars characters, disable by default
 vim.opt.listchars:append({lead="."})
+vim.opt.list = false
 
 lvim.format_on_save = false
 lvim.lint_on_save = true

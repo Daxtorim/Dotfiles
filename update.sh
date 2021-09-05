@@ -8,16 +8,17 @@
 while [ "$#" -gt 0 ]; do
 	case "$1" in
 		--user=*)
-				user="${1#*=}"
-				;;
+			user="${1#*=}"
+			;;
 		--module-list=*)
-				module_list="${1#*=}"
-				;;
+			module_list="${1#*=}"
+			;;
 		*)
 			printf "***************************\n"
 			printf "* Error: Invalid argument!*\n"
 			printf "***************************\n"
 			exit 2
+			;;
 	esac
 	shift
 done
