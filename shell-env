@@ -14,3 +14,6 @@ fi
 if [ -x "$(command -v vim)" ];then
 	export MANPAGER='vim -c "%! col -b" -c "setlocal ft=man nomod nolist norelativenumber" -c "nmap q :q!" -'
 fi
+
+# Install new npm packages globally *for the user*
+export npm_config_prefix="$HOME/.local"
