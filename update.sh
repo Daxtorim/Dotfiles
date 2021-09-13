@@ -51,7 +51,7 @@ if [ -z "${module_list}" ]; then
 fi
 
 # Update Dotfiles
-git pull --quiet
+git pull --rebase --quiet
 [ ! "$(git stash list)" = "" ] && git stash pop --quiet
 
 # Get all files in the repo in a way that handles newlines in filenames gracefully (except .git directory)
