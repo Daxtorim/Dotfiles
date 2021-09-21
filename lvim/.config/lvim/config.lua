@@ -7,12 +7,11 @@ vim.cmd('source ${HOME}/.config/lvim/vimrc.original')
 -- !!! Colorscheme is set by plugin !!!
 
 -- Neovim specific listchars characters, disable by default
-vim.opt.listchars:append({lead="."})
+-- vim.opt.listchars:append({lead="."})
 vim.opt.list = false
 
 lvim.format_on_save = false
 lvim.lint_on_save = true
-
 
 -- ================ Plugins ================================
 
@@ -24,8 +23,8 @@ lvim.plugins = {
 	config = function()
 		vim.g.material_style = "deep oceanic"
 		require('material').setup({
-				borders = true,
-				italics = { comments = true }
+			borders = true,
+			italics = { comments = true },
 			})
 		vim.cmd('colorscheme material')
 	end
@@ -53,13 +52,37 @@ lvim.plugins = {
 			enabled = true,
 			show_end_of_line = true,
 			space_char_blankline = " ",
+			show_trailing_blankline_indent = false,
 			use_treesitter = true,
-			show_trailing_blankline_indent= false,
+			max_indent_increase = 1,
 			filetype_exclude = { "help", "terminal", "dashboard", "NvimTree" },
 			buftype_exclude = { "terminal" },
+			show_current_context = false,
+			context_patterns = {
+				"class",
+				"method",
+				"def",
+				"function",
+				"return",
+				"^if",
+				"^for",
+				"^while",
+				"jsx_element",
+			},
 		})
 	end
 	},
+	{
+	-- Paint background of #RRGGBB colors in the actual color
+	"norcalli/nvim-colorizer.lua",
+	config = function ()
+		require('colorizer').setup()
+	end
+	},
+	{
+	-- automatically find indent settings from file content
+	"Daxtorim/vim-auto-indent-settings",
+	}
 }
 
 -- Install certain parsers for treesitter by default

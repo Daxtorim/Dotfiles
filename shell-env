@@ -1,5 +1,8 @@
 #!/bin/sh
 
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+
+
 # Check for available editor
 if [ -x "$(command -v lvim)" ];then
 	# LunarVim
@@ -10,10 +13,13 @@ elif [ -x "$(command -v vim)" ];then
 	export VISUAL='vim'
 fi
 
+
 # Check for avaliable manpager
 if [ -x "$(command -v vim)" ];then
 	export MANPAGER='vim -c "%! col -b" -c "setlocal ft=man nomod nolist norelativenumber" -c "nmap q :q!" -'
 fi
 
-# Install new npm packages globally *for the user*
+
+# Install new npm packages globally *for the user* so it won't need `sudo'
 export npm_config_prefix="$HOME/.local"
+

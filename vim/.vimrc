@@ -8,7 +8,7 @@ set termguicolors               "Activate true color support
 syntax enable                   "Turn on syntax highlighting when applicable
 set belloff=all                 "Turn off the bell for all events, i.e. NO BEEP
 set number                      "Show line number of current line
-set relativenumber              "Show other line numbers relative to current line
+set norelativenumber            "Do not show other line numbers relative to current line
 set cursorline                  "Highlight line where the cursor is
 set wildmenu                    "Add menu for auto completion
 set wildmode=longest:full,full
@@ -41,36 +41,6 @@ augroup END
 
 "}}}
 
-" ================ Indentation =======================
-"{{{
-set autoindent                 "Keep new lines on the same level as previous line
-set smartindent                "Auto indent new lines after e.g '{'
-set nosmarttab                 "Use actual tab when using <TAB>, ignore whatever mess smarttab tries to create
-set tabstop=4                  "Maximum width of a tab character
-set softtabstop=-1             "Pretend this is tabstop for <BS> and <TAB> operations, switch between tabs and spaces when necessary, (0=off, negative=shiftwidth)
-set shiftwidth=0               "Number of spaces by which text is shifted (0=tabstop)
-set noexpandtab                "Use actual tab characters, do not replace them with spaces
-
-" Override ftplugins that think they know better but let them still set tabstop and expandtab
-augroup vimrc
-	autocmd BufWinEnter * setlocal autoindent smartindent nosmarttab softtabstop=-1 shiftwidth=0
-augroup END
-"}}}
-
-" ================ Folds =============================
-"{{{
-set foldenable                  "Fold by default
-set foldmethod=indent           "Fold based on indentation
-set foldignore=                 "Do not exclude any lines from folds
-set foldlevel=99                "Open all folds by default
-set foldcolumn=0                "Display foldlevel in n wide gutter
-
-" Filetype specific overrides
-augroup vimrc
-	autocmd BufWinEnter FileType vim setlocal foldmethod=marker foldlevel=0
-augroup END
-"}}}
-
 " ================ Scrolling =========================
 "{{{
 set scrolloff=5 sidescrolloff=0 "Start scrolling when n lines away from borders
@@ -85,6 +55,31 @@ set ignorecase                  "Ignore case when searching for all lowercase pa
 set smartcase                   "Do NOT ignore case when search pattern contains uppercase letters
 set hlsearch                    "Highlight matches
 set incsearch                   "Search while still typing
+"}}}
+
+" ================ Indentation =======================
+"{{{
+set autoindent                 "Keep new lines on the same level as previous line
+set smartindent                "Auto indent new lines after e.g '{'
+set nosmarttab                 "Use actual tab when using <TAB>, ignore whatever mess smarttab tries to create
+set tabstop=4                  "Maximum width of a tab character
+set softtabstop=-1             "Pretend this is tabstop for <BS> and <TAB> operations, switch between tabs and spaces when necessary, (0=off, negative=shiftwidth)
+set shiftwidth=0               "Number of spaces by which text is shifted (0=tabstop)
+set noexpandtab                "Use actual tab characters, do not replace them with spaces
+"}}}
+
+" ================ Folds =============================
+"{{{
+set foldenable                  "Fold by default
+set foldmethod=indent           "Fold based on indentation
+set foldignore=                 "Do not exclude any lines from folds
+set foldlevel=99                "Open all folds by default
+set foldcolumn=0                "Display foldlevel in n wide gutter
+
+" Filetype specific overrides
+augroup vimrc
+	autocmd FileType vim setlocal foldmethod=marker foldlevel=0
+augroup END
 "}}}
 
 " ================ Keybindings =======================
@@ -137,10 +132,9 @@ if ! has('nvim')
 	call plug#begin('~/.vim/plugged')
 		Plug 'lifepillar/vim-gruvbox8'
 		Plug 'tpope/vim-commentary'
-		Plug 'mg979/vim-visual-multi', { 'branch': 'master' }
 		Plug 'LunarWatcher/auto-pairs', { 'tag': '*' }
-		Plug 'itchyny/lightline.vim'
 		Plug 'machakann/vim-highlightedyank'
+		Plug 'Daxtorim/vim-auto-indent-settings'
 	call plug#end()
 
 	"Plugin settings
