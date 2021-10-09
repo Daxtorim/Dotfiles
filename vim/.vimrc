@@ -35,6 +35,8 @@ augroup vimrc
 	autocmd!
 	" Do not automatically add a comment marker to new lines and do not wrap long comments
 	autocmd BufWinEnter * setlocal formatoptions-=cro
+	" Insert hard newlines after 72 chars and reformat entire paragraphs automatically
+	autocmd FileType gitcommit setlocal tw=72 formatoptions=1pant
 	" Do not hide ANY characters in markup files
 	autocmd BufWinEnter * setlocal conceallevel=0
 augroup END

@@ -7,7 +7,7 @@ vim.cmd('source ${HOME}/.config/lvim/vimrc.original')
 -- !!! Colorscheme is set by plugin !!!
 
 -- Neovim specific listchars characters, disable by default
--- vim.opt.listchars:append({lead="."})
+vim.opt.listchars:append({lead = "."})
 vim.opt.list = false
 
 lvim.format_on_save = false
@@ -46,35 +46,35 @@ lvim.plugins = {
 	},
 	{
 	"lukas-reineke/indent-blankline.nvim",
-	event = "BufRead",
+	event = "BufWinEnter",
 	config = function()
+		-- vim.cmd [[highlight IndentBlanklineIndent1 guibg=#1f1f1f guifg=#383838 gui=nocombine]]
+		-- vim.cmd [[highlight IndentBlanklineIndent2 guibg=#1a1a1a guifg=#383838 gui=nocombine]]
 		require('indent_blankline').setup({
 			enabled = true,
-			show_end_of_line = true,
 			space_char_blankline = " ",
+			-- char = "",
+			-- char_highlight_list = {
+			-- 	"IndentBlanklineIndent1",
+			-- 	"IndentBlanklineIndent2",
+			-- },
+			-- space_char_highlight_list = {
+			-- 	"IndentBlanklineIndent1",
+			-- 	"IndentBlanklineIndent2",
+			-- },
+			show_end_of_line = true,
 			show_trailing_blankline_indent = false,
 			use_treesitter = true,
 			max_indent_increase = 1,
 			filetype_exclude = { "help", "terminal", "dashboard", "NvimTree" },
 			buftype_exclude = { "terminal" },
-			show_current_context = false,
-			context_patterns = {
-				"class",
-				"method",
-				"def",
-				"function",
-				"return",
-				"^if",
-				"^for",
-				"^while",
-				"jsx_element",
-			},
 		})
 	end
 	},
 	{
 	-- Paint background of #RRGGBB colors in the actual color
 	"norcalli/nvim-colorizer.lua",
+	event = "BufWinEnter",
 	config = function ()
 		require('colorizer').setup()
 	end
@@ -82,6 +82,7 @@ lvim.plugins = {
 	{
 	-- automatically find indent settings from file content
 	"Daxtorim/vim-auto-indent-settings",
+	event = "BufWinEnter",
 	}
 }
 
@@ -97,15 +98,3 @@ lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.nvimtree.hide_dotfiles = 0
-
-
--- ================= Formatters and Linters ================
-
-lvim.lang.python.formatters          = { { exe = "black" } }
-lvim.lang.python.linters             = { { exe = "flake8" } }
-lvim.lang.javascript.formatters      = { { exe = "prettier" } }
-lvim.lang.javascript.linters         = { { exe = "eslint_d" } }
-lvim.lang.typescript.formatters      = lvim.lang.javascript.formatters
-lvim.lang.typescriptreact.formatters = lvim.lang.typescript.formatters
-lvim.lang.typescript.linters         = lvim.lang.javascript.linters
-lvim.lang.typescriptreact.linters    = lvim.lang.typescript.linters
