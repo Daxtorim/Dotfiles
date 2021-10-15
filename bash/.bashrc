@@ -56,4 +56,4 @@ else
 fi
 
 export PS1="\n\[$white\]╭[\$?]-[\[$yellow\]\u\[$green\]@\[$blue\]\h\[$white\]]-[\[$magenta\]\w\[$white\]]\$(git_prompt_update)\n╰─╸\[$green\]\\$ \[$reset\]"
-export PS2="\[$white\]╰─╸\[$green\]\\$ \[$reset\]"
+export PS2="\[$white\]╺─╸\[$green\]\\$ \[$reset\]"
