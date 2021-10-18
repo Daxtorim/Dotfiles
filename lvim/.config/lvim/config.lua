@@ -6,9 +6,8 @@ vim.cmd('source ${HOME}/.config/lvim/vimrc.original')
 
 -- !!! Colorscheme is set by plugin !!!
 
--- Neovim specific listchars characters, disable by default
+-- Add Neovim specific listchars characters
 vim.opt.listchars:append({lead = "."})
-vim.opt.list = false
 
 lvim.format_on_save = false
 lvim.lint_on_save = true
@@ -98,3 +97,15 @@ lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.nvimtree.hide_dotfiles = 0
+
+local components = require("core.lualine.components")
+lvim.builtin.lualine.sections.lualine_x = {
+	components.lsp,
+	components.filetype,
+}
+lvim.builtin.lualine.sections.lualine_y = {
+	components.encoding,
+	{"fileformat", icons_enabled = false},
+	components.spaces,
+	components.location,
+}

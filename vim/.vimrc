@@ -25,7 +25,7 @@ set spelllang=en_us             "Default spell checking for american english
 set textwidth=0                 "Do not automatically break long lines
 
 " Display whitespace visually
-set list listchars=tab:›\ ,space:⋅,trail:~,eol:↴,nbsp:⍽,extends:>,precedes:<
+set list listchars=tab:›\ ,space:⋅,trail:~,nbsp:⍽,extends:>,precedes:<
 " set list listchars=tab:<->,space:⋅,trail:~,eol:↴,nbsp:⍽,extends:>,precedes:<
 
 " Stop looking for a mapping/keycode after n milliseconds
@@ -91,9 +91,6 @@ augroup END
 
 " DO NOT GO INTO EX MODE EVER !!!
 nmap Q <ESC>
-
-" Save file
-nmap <C-s> :w<CR>
 
 " Make Y yank to the end of line (act like D or C)
 nmap Y y$
