@@ -2,6 +2,7 @@
 update_info=kwin.upd:replace-scalein-with-scale,kwin.upd:port-minimizeanimation-effect-to-js,kwin.upd:port-scale-effect-to-js,kwin.upd:port-dimscreen-effect-to-js,kwin.upd:auto-bordersize,kwin.upd:animation-speed,kwin.upd:desktop-grid-click-behavior,kwin.upd:no-swap-encourage
 
 [Compositing]
+GLCore=true
 GLPreferBufferSwap=e
 OpenGLIsUnsafe=false
 
@@ -17,9 +18,10 @@ Id_7=228b1a5c-97d9-40ff-b080-7126605e6405
 Id_8=5ab1f998-b955-445f-bb72-6144900a08e8
 Id_9=b8d11a3c-cb05-46f6-8e1a-e1c05ae9543e
 Number=10
-Rows=5
+Rows=1
 
 [Effect-MouseMark]
+Color=255,128,0
 LineWidth=10
 
 [NightColor]
@@ -29,22 +31,31 @@ LongitudeAuto=8.7394
 NightTemperature=4000
 
 [Plugins]
+bismuthEnabled=true
 desktopchangeosdEnabled=false
-krohnkiteEnabled=true
+diminactiveEnabled=true
+kwin4_effect_dimscreenEnabled=true
 minimizeallEnabled=false
 mouseclickEnabled=true
 mousemarkEnabled=true
 synchronizeskipswitcherEnabled=false
 videowallEnabled=false
 
-[Script-krohnkite]
-directionalKeyDwm=false
-directionalKeyFocus=true
+[Script-bismuth]
+enableSpiralLayout=false
 enableSpreadLayout=false
 enableStairLayout=false
 enableThreeColumnLayout=false
-monocleMaximize=false
-newWindowAsMaster=true
+maximizeSoleTile=false
+screenGapBottom=6
+screenGapLeft=6
+screenGapRight=6
+screenGapTop=6
+tileLayoutGap=6
+
+[Script-desktopchangeosd]
+PopupHideDelay=500
+TextOnly=true
 
 [TabBox]
 DesktopLayout=org.kde.breeze.desktop
@@ -59,5 +70,3 @@ NextFocusPrefersMouse=true
 
 [org.kde.kdecoration2]
 BorderSizeAuto=false
-library=org.kde.kwin.aurorae
-theme=kwin4_decoration_qml_plastik

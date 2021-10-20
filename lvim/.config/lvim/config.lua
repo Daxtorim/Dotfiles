@@ -98,7 +98,7 @@ lvim.builtin.nvimtree.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.nvimtree.hide_dotfiles = 0
 
-local components = require("core.lualine.components")
+local components = require("lvim.core.lualine.components")
 lvim.builtin.lualine.sections.lualine_x = {
 	components.lsp,
 	components.filetype,

@@ -3,7 +3,7 @@ update_info=kwinrules.upd:replace-placement-string-to-enum
 
 [1]
 Description=Unrestrict minimum size
-minsize=0,0
+minsize=20,20
 minsizerule=2
 types=1
 
