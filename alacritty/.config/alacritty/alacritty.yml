@@ -93,6 +93,15 @@ window:
   # and `light`. Set this to `None` to use the default theme variant.
   #gtk_theme_variant: None
 
+  # Background opacity (version > 0.9.0)
+  #
+  # Window opacity as a floating point number from `0.0` to `1.0`.
+  # The value `0.0` is completely transparent and `1.0` is opaque.
+  # background_opacity: 0.5
+
+# Background opacity (version <= 0.9.0)
+background_opacity: 0.9
+
 scrolling:
   # Maximum number of lines in the scrollback buffer.
   # Specifying '0' will disable scrolling.
@@ -151,7 +160,7 @@ font:
     # style: BoldItalic
 
   # Point size
-  size: 11.0
+  size: 10.0
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
@@ -335,12 +344,6 @@ bell:
   #     args: ["Hello, World!"]
   #
   command: None
-
-# Background opacity
-#
-# Window opacity as a floating point number from `0.0` to `1.0`.
-# The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 0.9
 
 #selection:
   # This string contains all characters that are used as separators for

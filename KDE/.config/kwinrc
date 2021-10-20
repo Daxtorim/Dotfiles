@@ -2,9 +2,9 @@
 update_info=kwin.upd:replace-scalein-with-scale,kwin.upd:port-minimizeanimation-effect-to-js,kwin.upd:port-scale-effect-to-js,kwin.upd:port-dimscreen-effect-to-js,kwin.upd:auto-bordersize,kwin.upd:animation-speed,kwin.upd:desktop-grid-click-behavior,kwin.upd:no-swap-encourage
 
 [Compositing]
-GLCore=true
-GLPreferBufferSwap=e
+GLTextureFilter=0
 OpenGLIsUnsafe=false
+WindowsBlockCompositing=false
 
 [Desktops]
 Id_1=cc44bd12-7861-409a-9325-6bf95dfe0339
