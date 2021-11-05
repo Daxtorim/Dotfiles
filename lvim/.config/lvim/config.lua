@@ -34,7 +34,7 @@ lvim.plugins = {
 	config = function()
 		require("autosave").setup({
 			enabled = true,
-			execution_message = "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"),
+			execution_message = "AutoSave: saved at " .. vim.fn.strftime("%Hh%Mm%Ss"),
 			events = {"InsertLeave", "TextChanged"},
 			write_all_buffers = false,
 			on_off_commands = false,
@@ -80,8 +80,7 @@ lvim.plugins = {
 	},
 	{
 	-- automatically find indent settings from file content
-	"Daxtorim/vim-auto-indent-settings",
-	event = "BufWinEnter",
+	"Daxtorim/vim-auto-indent-settings"
 	}
 }
 

@@ -7,5 +7,11 @@ minsize=20,20
 minsizerule=2
 types=1
 
+[2]
+Description=Prevent windows from starting maximized
+maximizehorizrule=3
+maximizevertrule=3
+types=1
+
 [General]
-count=1
+count=2

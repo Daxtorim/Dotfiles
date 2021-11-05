@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="96"
+   height="48"
+   stroke-width="3"
+   id="svg50"
+   sodipodi:docname="shade.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs54" />
+  <sodipodi:namedview
+     id="namedview52"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="5.1316815"
+     inkscape:cx="49.399013"
+     inkscape:cy="-7.4049803"
+     inkscape:current-layer="svg50" />
+  <!--standard-->
+  <g
+     id="g12">
+    <g
+       id="active-center"
+       stroke="#bbbbbb">
+      <circle
+         cx="12"
+         cy="12"
+         r="12"
+         opacity="0"
+         id="circle2" />
+      <g
+         id="g1738"
+         transform="translate(-0.02958585,-0.52309631)">
+        <line
+           x1="5.0295854"
+           y1="7.9408092"
+           x2="19.029587"
+           y2="7.9408092"
+           id="line1734" />
+        <polyline
+           points="18,15 12,9 6,15"
+           id="polyline1736"
+           transform="translate(0.02958585,2.5447232)"
+           style="fill:none" />
+      </g>
+    </g>
+    <g
+       id="inactive-center"
+       transform="translate(0,24)"
+       stroke="#888888">
+      <circle
+         cx="12"
+         cy="12"
+         r="12"
+         opacity="0"
+         id="circle7" />
+      <g
+         id="g1747"
+         transform="translate(-0.02958585,-0.52309631)">
+        <line
+           x1="5.0295854"
+           y1="7.9408092"
+           x2="19.029587"
+           y2="7.9408092"
+           id="line1743" />
+        <polyline
+           points="18,15 12,9 6,15"
+           id="polyline1745"
+           transform="translate(0.02958585,2.5447232)"
+           style="fill:none" />
+      </g>
+    </g>
+  </g>
+  <!--hover-->
+  <g
+     id="g24">
+    <g
+       id="hover-center"
+       transform="translate(24)"
+       stroke="#000000">
+      <circle
+         cx="12"
+         cy="12"
+         r="12"
+         fill="#bbbbbb"
+         stroke="none"
+         id="circle14" />
+      <g
+         id="g1649"
+         transform="translate(-0.02958585,-0.52309631)"
+         sodipodi:insensitive="true">
+        <line
+           x1="5.0295854"
+           y1="7.9408092"
+           x2="19.029587"
+           y2="7.9408092"
+           id="line1645" />
+        <polyline
+           points="18,15 12,9 6,15"
+           id="polyline1647"
+           transform="translate(0.02958585,2.5447232)"
+           style="fill:none" />
+      </g>
+    </g>
+    <g
+       id="hover-inactive-center"
+       transform="translate(24,24)"
+       stroke="#000000">
+      <circle
+         cx="12"
+         cy="12"
+         r="12"
+         fill="#666666"
+         stroke="none"
+         id="circle19" />
+      <g
+         id="g1560"
+         transform="translate(-0.02958585,-0.52309631)">
+        <line
+           x1="5.0295854"
+           y1="7.9408092"
+           x2="19.029587"
+           y2="7.9408092"
+           id="line1556" />
+        <polyline
+           points="18,15 12,9 6,15"
+           id="polyline1558"
+           transform="translate(0.02958585,2.5447232)"
+           style="fill:none" />
+      </g>
+    </g>
+  </g>
+  <!--pressed-->
+  <g
+     id="g36">
+    <g
+       id="pressed-center"
+       transform="translate(48)"
+       stroke="#ffffff">
+      <circle
+         cx="12"
+         cy="12"
+         r="12"
+         fill="#3daee9"
+         stroke="none"
+         id="circle26" />
+      <g
+         id="g1471"
+         transform="translate(-0.02958585,-0.52309631)">
+        <line
+           x1="5.0295854"
+           y1="7.9408092"
+           x2="19.029587"
+           y2="7.9408092"
+           id="line1467" />
+        <polyline
+           points="18,15 12,9 6,15"
+           id="polyline1469"
+           transform="translate(0.02958585,2.5447232)"
+           style="fill:none" />
+      </g>
+    </g>
+    <g
+       id="pressed-inactive-center"
+       transform="translate(48,24)"
+       stroke="#bbbbbb">
+      <circle
+         cx="12"
+         cy="12"
+         r="12"
+         fill="#1e57a8"
+         stroke="none"
+         id="circle31" />
+      <g
+         id="g1382"
+         transform="translate(-0.02958585,-0.52309631)">
+        <line
+           x1="5.0295854"
+           y1="7.9408092"
+           x2="19.029587"
+           y2="7.9408092"
+           id="line1378" />
+        <polyline
+           points="18,15 12,9 6,15"
+           id="polyline1380"
+           transform="translate(0.02958585,2.5447232)"
+           style="fill:none" />
+      </g>
+    </g>
+  </g>
+  <!--disabled-->
+  <g
+     id="g48">
+    <g
+       id="deactivated-center"
+       transform="translate(72)"
+       stroke="#666666">
+      <circle
+         cx="12"
+         cy="12"
+         r="12"
+         opacity="0"
+         id="circle38" />
+      <g
+         id="g1287"
+         transform="translate(-0.02958585,-0.52309631)">
+        <line
+           x1="5.0295854"
+           y1="7.9408092"
+           x2="19.029587"
+           y2="7.9408092"
+           id="line40" />
+        <polyline
+           points="18,15 12,9 6,15"
+           id="polyline1246"
+           transform="translate(0.02958585,2.5447232)"
+           style="fill:none" />
+      </g>
+    </g>
+    <g
+       id="deactivated-inactive-center"
+       transform="translate(72,24)"
+       stroke="#666666">
+      <circle
+         cx="12"
+         cy="12"
+         r="12"
+         opacity="0"
+         id="circle43" />
+      <g
+         id="g1293"
+         transform="translate(-0.02958585,-0.52309631)">
+        <line
+           x1="5.0295854"
+           y1="7.9408092"
+           x2="19.029587"
+           y2="7.9408092"
+           id="line1289" />
+        <polyline
+           points="18,15 12,9 6,15"
+           id="polyline1291"
+           transform="translate(0.02958585,2.5447232)"
+           style="fill:none" />
+      </g>
+    </g>
+  </g>
+</svg>
