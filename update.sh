@@ -68,4 +68,4 @@ do
 done < <(find "/home/${USER}/Dotfiles" -path "/home/${USER}/Dotfiles/.git" -prune -o -type f -print0)
 
 # Prune potentially dead symlinks and add new ones
-stow --dir="/home/${USER}/Dotfiles" --target="/home/${USER}" --no-folding --restow "${module_list}"
+stow --dir="/home/${USER}/Dotfiles" --target="/home/${USER}" --no-folding --restow ${module_list}
