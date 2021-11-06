@@ -1,60 +1,43 @@
 #!/usr/bin/env bash
 
-
 # Only allow one instance of this script (Boilerplate taken from `man flock')
 [ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -en "$0" "$0" "$@" || :
+[ -d "/home/${USER}/Dotfiles" ] || exit 1
 
-# Parse Command Line Arguments
-while [ "$#" -gt 0 ]; do
-	case "$1" in
-		--user=*)
-			user="${1#*=}"
-			;;
-		--module-list=*)
-			module_list="${1#*=}"
-			;;
-		*)
-			printf "***************************\n"
-			printf "* Error: Invalid argument!*\n"
-			printf "***************************\n"
-			exit 2
-			;;
-	esac
-	shift
-done
+# Check if cron job exists and update it if not
+cronjob="#>>>>>> Dotfile-Update
+@hourly /home/${USER}/Dotfiles/update.sh &>/dev/null 2>&1
+@reboot /home/${USER}/Dotfiles/update.sh &>/dev/null 2>&1
+#<<<<<< Dotfile-Update"
+found_jobs="$(crontab -l | grep -zoE '#>>>>> Dotfile-Update.*#<<<<< Dotfile-Update' | tr -d '\0')"
+
+if [[ ! "${found_jobs}" == "${cronjob}" ]]; then
+	echo -e "$(crontab -l | sed -e '/#>>>>>> Dotfile-Update/,/#<<<<<< Dotfile-Update/d')\n${cronjob}" | crontab -
+fi
 
 # Wait for networking
-while ! ping -c1 github.com &>/dev/null
+while ! ping -c1 github.com &>/dev/null 2>&1
 do
-	sleep 1
+	sleep 60
 done
 
-user=${user:=$USER}
-[ -d "/home/${user}/Dotfiles" ] || exit 3
-
 # Stash uncommited changes to preserve machine dependent modifications
-cd "/home/${user}/Dotfiles"
-git remote update &>/dev/null
+cd "/home/${USER}/Dotfiles" || exit 2
+git remote update &>/dev/null || exit 3
 git stash push --quiet
 
 
-# Only allow skip when no modules where specified on the commandline
-if [ -z "${module_list}" ]; then
-	# And there is no update to the repo
-	if git diff --quiet @{u}; then
-		# Nothing to do, pop stash, exit early
-		[ ! "$(git stash list)" = "" ] && git stash pop --quiet
-		#######
-		exit
-		#######
-	fi
+if git diff --quiet "@{u}"; then
+	# No changes, nothing to do, pop stash, exit early
+	[ -n "$(git stash list)" ] && git stash pop --quiet
+	exit 0
 fi
 
-# Update Dotfiles
+# Update Dotfiles, apply local changes (stash) again
 git pull --rebase --quiet
-[ ! "$(git stash list)" = "" ] && git stash pop --quiet
+[ -n "$(git stash list)" ] && git stash pop --quiet
 
-# Get all files in the repo in a way that handles newlines in filenames gracefully (except .git directory)
+# Get all files in the repo (except .git directory)
 while IFS= read -r -d $'\0' repo_filename
 do
 	# Replace newlines in filenames with placeholder for commands that work on a line by line basis
@@ -64,12 +47,12 @@ do
 	tmp_module=$(cut -d'/' -f5- <<< "${sane_filename}")
 	module=$(cut -d'/' -f-1 <<< "${tmp_module}")
 
-	# Cut "/home/$user/Dotfiles/$module/" out of filename (gets rid of files outside of modules as well)
+	# Cut "/home/${USER}/Dotfiles/$module/" out of filename (gets rid of files outside of modules as well)
 	tmp_filename=$(cut -d'/' -f6- <<< "${sane_filename}")
 	if [ -n "${tmp_filename}" ]; then
 		# Get real filename again
 		rel_filename=$(sed -z 's/@NEWLINE@/\n/' <<< "${tmp_filename}")
-		abs_filename="/home/${user}/${rel_filename}"
+		abs_filename="/home/${USER}/${rel_filename}"
 
 		if [ -e "${abs_filename}" ]; then
 			# Delete actual files so they can be replaced by appropriate symlinks
@@ -77,12 +60,12 @@ do
 				rm -f "${abs_filename}"
 			fi
 			# Add module to the update list when the real file exists
-			if [ -z "$(grep ${module} <<< ${module_list})" ]; then
+			if ! grep -q "${module}" <<< "${module_list}"; then
 				module_list=$(printf '%s %s' "${module_list}" "${module}")
 			fi
 		fi
 	fi
-done < <(find "/home/${user}/Dotfiles" -path "/home/${user}/Dotfiles/.git" -prune -o -type f -print0)
+done < <(find "/home/${USER}/Dotfiles" -path "/home/${USER}/Dotfiles/.git" -prune -o -type f -print0)
 
 # Prune potentially dead symlinks and add new ones
-stow --dir="/home/${user}/Dotfiles" --target="/home/${user}" --no-folding --restow $module_list
+stow --dir="/home/${USER}/Dotfiles" --target="/home/${USER}" --no-folding --restow "${module_list}"
