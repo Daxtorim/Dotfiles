@@ -40,7 +40,7 @@ function zsh_add_plugin() {
 	
 	PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
 	if [ ! -d "$ZDOTDIR/plugins/$PLUGIN_NAME" ]; then
-		git clone "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
+		git clone --depth=1 "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
 	fi
 
 	add_zsh_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
