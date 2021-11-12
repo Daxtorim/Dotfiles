@@ -31,7 +31,7 @@
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="decoration-left">
+     inkscape:current-layer="layer1">
     <inkscape:grid
        type="xygrid"
        id="grid9"
@@ -75,25 +75,11 @@
            x="59"
            y="541" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect6822"
            width="1"
            height="1"
            x="55"
-           y="544" />
-        <rect
-           style="fill:#000000"
-           id="rect6824"
-           width="2"
-           height="1"
-           x="55"
-           y="543" />
-        <rect
-           style="fill:#000000"
-           id="rect6826"
-           width="1"
-           height="1"
-           x="56"
            y="544" />
       </g>
       <g
@@ -121,25 +107,11 @@
            x="59"
            y="541" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect6916"
            width="1"
            height="1"
            x="55"
-           y="544" />
-        <rect
-           style="fill:#000000"
-           id="rect6918"
-           width="2"
-           height="1"
-           x="55"
-           y="543" />
-        <rect
-           style="fill:#000000"
-           id="rect6920"
-           width="1"
-           height="1"
-           x="56"
            y="544" />
       </g>
       <g
@@ -167,25 +139,11 @@
            x="59"
            y="541" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect16494"
            width="1"
            height="1"
            x="55"
-           y="544" />
-        <rect
-           style="fill:#000000"
-           id="rect16496"
-           width="2"
-           height="1"
-           x="55"
-           y="543" />
-        <rect
-           style="fill:#000000"
-           id="rect16498"
-           width="1"
-           height="1"
-           x="56"
            y="544" />
       </g>
       <g
@@ -213,25 +171,11 @@
            x="59"
            y="541" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect7036"
            width="1"
            height="1"
            x="55"
-           y="544" />
-        <rect
-           style="fill:#000000"
-           id="rect7038"
-           width="2"
-           height="1"
-           x="55"
-           y="543" />
-        <rect
-           style="fill:#000000"
-           id="rect7040"
-           width="1"
-           height="1"
-           x="56"
            y="544" />
       </g>
       <g
@@ -253,18 +197,11 @@
            x="54"
            y="550" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect16482"
            width="1"
            height="15"
            x="50"
-           y="550" />
-        <rect
-           style="fill:#000000"
-           id="rect16484"
-           width="1"
-           height="15"
-           x="51"
            y="550" />
       </g>
       <g
@@ -286,18 +223,11 @@
            x="54"
            y="550" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect7240"
            width="1"
            height="15"
            x="50"
-           y="550" />
-        <rect
-           style="fill:#000000"
-           id="rect7242"
-           width="1"
-           height="15"
-           x="51"
            y="550" />
       </g>
       <g
@@ -319,18 +249,11 @@
            x="54"
            y="550" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect7230"
            width="1"
            height="15"
            x="50"
-           y="550" />
-        <rect
-           style="fill:#000000"
-           id="rect7232"
-           width="1"
-           height="15"
-           x="51"
            y="550" />
       </g>
       <g
@@ -351,19 +274,12 @@
            x="35"
            y="545" />
         <rect
-           style="fill:#999999"
+           style="fill:#000000"
            id="rect16472"
            width="15"
            height="1"
            x="35"
            y="549" />
-        <rect
-           style="fill:#000000;stroke:none"
-           id="rect16474"
-           width="15"
-           height="1"
-           x="35"
-           y="548" />
       </g>
       <rect
          style="opacity:1;fill:#1a1a1a;stroke-width:1.26666"
@@ -468,28 +384,12 @@
            x="59"
            y="541" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect2605"
            width="1.0000089"
            height="0.99999797"
            x="54.999992"
            y="544" />
-        <rect
-           style="fill:#000000"
-           id="rect2266"
-           width="1"
-           height="2"
-           x="-544"
-           y="54.999989"
-           transform="rotate(-90)" />
-        <rect
-           style="fill:#000000"
-           id="rect2290"
-           width="1"
-           height="1"
-           x="-545"
-           y="55.999989"
-           transform="rotate(-90)" />
       </g>
       <g
          id="decoration-bottomleft"
@@ -516,28 +416,12 @@
            x="59"
            y="541" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect2579"
            width="1"
            height="1"
            x="55"
            y="544" />
-        <rect
-           style="fill:#000000"
-           id="rect2080"
-           width="1"
-           height="2"
-           x="-57.000004"
-           y="-545"
-           transform="scale(-1)" />
-        <rect
-           style="fill:#000000"
-           id="rect2104"
-           width="1"
-           height="1"
-           x="-56.000004"
-           y="-544"
-           transform="scale(-1)" />
       </g>
       <g
          id="decoration-topright"
@@ -564,25 +448,11 @@
            x="59"
            y="541" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect2151"
            width="1"
            height="1"
            x="55"
-           y="544" />
-        <rect
-           style="fill:#000000"
-           id="rect1524"
-           width="2"
-           height="1"
-           x="55"
-           y="543" />
-        <rect
-           style="fill:#000000"
-           id="rect1526"
-           width="1"
-           height="1"
-           x="56"
            y="544" />
       </g>
       <g
@@ -610,28 +480,12 @@
            x="59"
            y="541" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect2553"
            width="1"
            height="1"
            x="55"
            y="544" />
-        <rect
-           style="fill:#000000"
-           id="rect1364"
-           width="1"
-           height="2"
-           x="543"
-           y="-57.000011"
-           transform="rotate(90)" />
-        <rect
-           style="fill:#000000"
-           id="rect1366"
-           width="1"
-           height="1"
-           x="544"
-           y="-57.000011"
-           transform="rotate(90)" />
       </g>
       <g
          id="decoration-left"
@@ -651,20 +505,12 @@
            x="35"
            y="545" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect2829"
            width="15"
            height="1"
            x="35"
            y="549" />
-        <rect
-           style="fill:#000000"
-           id="rect84"
-           width="1"
-           height="15"
-           x="548"
-           y="-50.000011"
-           transform="rotate(90)" />
       </g>
       <g
          id="decoration-right"
@@ -685,18 +531,11 @@
            x="54"
            y="550" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect668"
            width="1"
            height="15"
            x="50"
-           y="550" />
-        <rect
-           style="fill:#000000"
-           id="rect357"
-           width="1"
-           height="15"
-           x="51"
            y="550" />
       </g>
       <g
@@ -717,19 +556,12 @@
            x="35"
            y="545" />
         <rect
-           style="fill:#999999;stroke:none"
+           style="fill:#000000;stroke:none"
            id="rect2837"
            width="15"
            height="1"
            x="35"
            y="549" />
-        <rect
-           style="fill:#000000"
-           id="rect232"
-           width="15"
-           height="1"
-           x="35"
-           y="548" />
       </g>
       <g
          id="decoration-top"
@@ -749,19 +581,12 @@
            x="35"
            y="545" />
         <rect
-           style="fill:#999999"
+           style="fill:#000000"
            id="rect524"
            width="15"
            height="1"
            x="35"
            y="549" />
-        <rect
-           style="fill:#000000;stroke:none"
-           id="rect288"
-           width="15"
-           height="1"
-           x="35"
-           y="548" />
       </g>
       <rect
          style="opacity:1;fill:#1a1a1a;stroke-width:1.26666"

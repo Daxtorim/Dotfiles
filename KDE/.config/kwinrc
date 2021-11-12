@@ -63,7 +63,6 @@ FocusPolicy=FocusFollowsMouse
 NextFocusPrefersMouse=true
 
 [org.kde.kdecoration2]
-BorderSizeAuto=false
 ButtonsOnLeft=MNSLB
 ButtonsOnRight=HFIAX
 library=org.kde.kwin.aurorae
