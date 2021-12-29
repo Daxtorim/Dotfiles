@@ -1,5 +1,5 @@
 [$Version]
-update_info=kwin.upd:replace-scalein-with-scale,kwin.upd:port-minimizeanimation-effect-to-js,kwin.upd:port-scale-effect-to-js,kwin.upd:port-dimscreen-effect-to-js,kwin.upd:auto-bordersize,kwin.upd:animation-speed,kwin.upd:desktop-grid-click-behavior,kwin.upd:no-swap-encourage
+update_info=kwin.upd:replace-scalein-with-scale,kwin.upd:port-minimizeanimation-effect-to-js,kwin.upd:port-scale-effect-to-js,kwin.upd:port-dimscreen-effect-to-js,kwin.upd:auto-bordersize,kwin.upd:animation-speed,kwin.upd:desktop-grid-click-behavior,kwin.upd:no-swap-encourage,kwin.upd:make-translucency-effect-disabled-by-default,kwin.upd:remove-flip-switch-effect,kwin.upd:remove-cover-switch-effect,kwin.upd:remove-cubeslide-effect,kwin.upd:remove-xrender-backend
 
 [Compositing]
 GLTextureFilter=0
@@ -7,21 +7,28 @@ OpenGLIsUnsafe=false
 
 [Desktops]
 Id_1=cc44bd12-7861-409a-9325-6bf95dfe0339
-Id_10=b8af0598-1abb-4ca5-a6f8-d6cc19c6d3bf
 Id_2=70dab0fe-027c-4366-9899-e25af57f149e
 Id_3=d07f14c9-ad94-4b99-b4e6-f55e814a1e53
 Id_4=f583d14c-d6d7-4335-80e9-82c3a2cb7820
-Id_5=f216f326-f282-4000-a724-0e7e4075a849
-Id_6=0d82830c-17b9-412c-beb4-464309272cac
-Id_7=228b1a5c-97d9-40ff-b080-7126605e6405
-Id_8=5ab1f998-b955-445f-bb72-6144900a08e8
-Id_9=b8d11a3c-cb05-46f6-8e1a-e1c05ae9543e
-Number=10
+Number=4
 Rows=1
+
+[Effect-DimInactive]
+DimFullScreen=false
+Strength=10
 
 [Effect-MouseMark]
 Color=255,128,0
 LineWidth=10
+
+[Effect-Overview]
+LayoutMode=0
+
+[Effect-PresentWindows]
+LayoutMode=1
+
+[Effect-Slide]
+SlideBackground=false
 
 [NightColor]
 Active=true
@@ -35,8 +42,10 @@ desktopchangeosdEnabled=false
 diminactiveEnabled=true
 kwin4_effect_dimscreenEnabled=true
 minimizeallEnabled=false
-mouseclickEnabled=true
 mousemarkEnabled=true
+overviewEnabled=true
+presentwindowsEnabled=false
+slideEnabled=false
 synchronizeskipswitcherEnabled=false
 videowallEnabled=false
 
@@ -45,21 +54,15 @@ enableSpiralLayout=false
 enableSpreadLayout=false
 enableStairLayout=false
 enableThreeColumnLayout=false
-newWindowAsMaster=true
 
 [Script-desktopchangeosd]
-PopupHideDelay=500
-TextOnly=true
-
-[TabBox]
-DesktopLayout=org.kde.breeze.desktop
-DesktopListLayout=org.kde.breeze.desktop
-LayoutName=org.kde.breeze.desktop
+PopupHideDelay=300
 
 [Windows]
 ActiveMouseScreen=true
 DelayFocusInterval=100
 FocusPolicy=FocusFollowsMouse
+FocusStealingPreventionLevel=0
 NextFocusPrefersMouse=true
 
 [org.kde.kdecoration2]

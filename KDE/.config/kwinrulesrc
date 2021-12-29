@@ -1,17 +1,27 @@
 [$Version]
-update_info=kwinrules.upd:replace-placement-string-to-enum
+update_info=kwinrules.upd:replace-placement-string-to-enum,kwinrules.upd:use-virtual-desktop-ids
 
 [1]
-Description=Unrestrict minimum size
+Description=Application settings for thunderbird
+desktop=4
+desktops=f583d14c-d6d7-4335-80e9-82c3a2cb7820
+desktopsrule=3
+wmclass=mail thunderbird
+wmclasscomplete=true
+wmclassmatch=1
+
+[2]
+Description=Lower minimum size restriction
 minsize=20,20
 minsizerule=2
 types=1
 
-[2]
+[3]
 Description=Prevent windows from starting maximized
 maximizehorizrule=3
 maximizevertrule=3
 types=1
 
 [General]
-count=2
+count=3
+rules=1,2,3

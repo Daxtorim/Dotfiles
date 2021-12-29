@@ -2,7 +2,6 @@
 
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
-
 # Check for available editor
 if [ -x "$(command -v lvim)" ];then
 	# LunarVim
