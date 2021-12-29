@@ -73,10 +73,40 @@ lvim.plugins = {
 	{
 	-- Paint background of #RRGGBB colors in the actual color
 	"norcalli/nvim-colorizer.lua",
-	event = "BufWinEnter",
-	config = function ()
+	config = function()
 		require('colorizer').setup()
 	end
+	},
+	{
+	"blackCauldron7/surround.nvim",
+	config = function()
+		require("surround").setup({mappings_style = "sandwich"})
+	end
+	},
+	{
+	"p00f/nvim-ts-rainbow",
+	event = "BufWinEnter",
+	config = function()
+		require("nvim-treesitter.configs").setup({
+			rainbow = {
+				enable = true,
+				-- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+				extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+				max_file_lines = nil, -- Do not enable for files with more than n lines, int
+				colors = {
+					"#b16286",
+					"#0aaaaa",
+					"#a89984",
+					"#d79921",
+					"#689d6a",
+					"#d65d0e",
+					"#458588"
+				}, -- table of hex strings
+				-- termcolors = {} -- table of colour name strings
+			}
+		})
+	end
+
 	},
 	{
 	-- automatically find indent settings from file content
