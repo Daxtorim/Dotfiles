@@ -48,7 +48,8 @@ function zsh_add_plugin() {
 }
 
 # System specific options
-add_zsh_file "zshrc_local"
+add_zsh_file "zshrc_local.zsh"
+add_zsh_file "zsh_command_info.zsh"
 
 add_zsh_file "extract_archives.zsh"
 # Not within the zsh directory
