@@ -29,7 +29,7 @@ HISTSIZE=2000000
 SAVEHIST=1500000
 
 # Function to source files if they exist
-function add_zsh_file() {
+function zsh_add_file() {
 	[ -f "$ZDOTDIR/$1" ] && . "$ZDOTDIR/$1"
 }
 
@@ -43,17 +43,19 @@ function zsh_add_plugin() {
 		git clone --depth=1 "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
 	fi
 
-	add_zsh_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
-	add_zsh_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"
+	zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
+	zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"
 }
 
-# System specific options
-add_zsh_file "zshrc_local.zsh"
-add_zsh_file "zsh_command_info.zsh"
-
-add_zsh_file "extract_archives.zsh"
-# Not within the zsh directory
+# General shell agnostic aliases (not within the zsh directory)
 [ -f "${HOME}/Dotfiles/shell-aliases" ] && . "${HOME}/Dotfiles/shell-aliases"
+
+# System specific options
+zsh_add_file "zshrc_local.zsh"
+
+# General files
+zsh_add_file "extract_archives.zsh"
+zsh_add_file "zsh_command_info.zsh"
 
 # Plugins
 zsh_add_plugin "zsh-users/zsh-autosuggestions"
@@ -61,10 +63,9 @@ zsh_add_plugin "zsh-users/zsh-syntax-highlighting"
 
 # Prompt
 zsh_add_plugin "romkatv/powerlevel10k"
-add_zsh_file "plugins/powerlevel10k/powerlevel10k.zsh-theme"
+zsh_add_file "plugins/powerlevel10k/powerlevel10k.zsh-theme"
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
-
+zsh_add_file ".p10k.zsh"
 
 # Keybindings
 bindkey "^R" history-incremental-pattern-search-backward

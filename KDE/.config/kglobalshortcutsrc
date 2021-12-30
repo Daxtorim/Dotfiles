@@ -306,6 +306,7 @@ activate widget 2=Alt+F1,none,Activate Application Launcher Widget
 activate widget 46=none,none,Activate Digital Clock Widget
 activate widget 63=none,none,Activate Task Manager Widget
 activate widget 67=Meta+F1,none,Activate Application Launcher Widget
+activate widget 75=none,none,Activate Total CPU Use Widget
 clear-history=none,none,Clear Clipboard History
 clipboard_action=Ctrl+Alt+X,Ctrl+Alt+X,Enable Clipboard Actions
 cycleNextAction=none,none,Next History Item

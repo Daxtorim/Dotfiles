@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env zsh
 
 autoload -U colors && colors
 
@@ -8,67 +8,69 @@ _cust_time_preexec() {
 
 _cust_time_precmd() {
 	if [ $ZSH_COMMAND_TIME_START ]; then
-		execution_time_mil=$(($(date "+%s%1N") - $ZSH_COMMAND_TIME_START))
-		execution_time_sec=$((${execution_time_mil}/10))
+		local execution_time_mil=$(( $(date "+%s%1N") - ${ZSH_COMMAND_TIME_START} ))
+		local execution_time_sec=$(( ${execution_time_mil} / 10 ))
 
-		hrs=$((${execution_time_sec}/3600))
-		min=$((${execution_time_sec}%3600/60))
-		sec=$((${execution_time_sec}%60))
-		mil=$((${execution_time_mil}%10))
+		local hrs=$(( ${execution_time_sec} / 3600 ))
+		local min=$(( ${execution_time_sec} / 60 % 60 ))
+		local sec=$(( ${execution_time_sec} % 60 ))
+		local mil=$(( ${execution_time_mil} % 10 ))
 
-		if [ $hrs -gt 0 ]; then
-			timer_display=$(printf "%sh %sm %ss" "$hrs" "$min" "$sec")
-		elif [ $min -gt 0 ]; then
-			timer_display=$(printf "%sm %ss" "$min" "$sec")
+		local timer_display=""
+		if [ ${hrs} -gt 0 ]; then
+			timer_display=$(printf "%dh %dm %ds" "$hrs" "$min" "$sec")
+		elif [ ${min} -gt 0 ]; then
+			timer_display=$(printf "%dm %ds" "$min" "$sec")
 		else
-			timer_display=$(printf "%s.%ss" "$sec" "$mil")
+			timer_display=$(printf "%d.%ds" "$sec" "$mil")
 		fi
 
-		COMMAND_TIME_INFO="%101F ${timer_display}"
+		COMMAND_TIME_INFO="%101F ${timer_display}%f"
 		unset ZSH_COMMAND_TIME_START
 	fi
 }
 
 _cust_status_precmd() {
-	ec=$?
-	tmp_pipestatus=("$pipestatus[@]")
+	# save exit codes in variable because "local" is a command and overwrites $? and $pipestatus
+	local exit_codes=("${pipestatus[@]}")
 
-	unset status_info
-	for ((i=1; i <= $#tmp_pipestatus; i++)); do
-		stat="${tmp_pipestatus[i]}"
+	local status_info=""
+	local status_color=""
+	local ec_not_zero=0
 
-		if [ $stat -gt 0 ]; then
+	local stat
+	for stat in ${exit_codes}; do
+		if [ ${stat} -gt 0 ]; then
+			# Remember error for later
 			ec_not_zero=1
 		fi
 
 		if [ ${stat} -gt 128 ];then
-			stat=$(kill -l $stat)
+			# process recieved signal, get signal name from exit code
+			stat=$(kill -l ${stat})
 		fi
 
-		if [ $i -gt 1 ]; then
-			stat="|${stat}"
-		fi
-		status_info="${status_info}${stat}"
+		status_info="${status_info}|${stat}"
 	done
 
-	if [ $ec -eq 0 ]; then
+	# Base success on the pipe's last command
+	if [ ${exit_codes[${#exit_codes}]} -eq 0 ]; then
 		status_color="✅%70F"
 	else
 		status_color="❌%160F"
 	fi
 
-	if [ $ec_not_zero ]; then
-		unset ec_not_zero
-		COMMAND_STATUS_INFO="${status_color} ${status_info}"
+	if [ ${ec_not_zero} -eq 1 ]; then
+		# Remove leading "|" from $status_info
+		COMMAND_STATUS_INFO="${status_color} ${status_info#\|}%f"
 	else
-		COMMAND_STATUS_INFO="${status_color}"
+		COMMAND_STATUS_INFO="${status_color}%f"
 	fi
 }
 
 _cust_print_cmd_info() {
-
 	if [ $COMMAND_TIME_INFO ]; then
-		print -P "─╸\[${COMMAND_STATUS_INFO}%f\]\-\[${COMMAND_TIME_INFO}%f\]\-\[ %T\]"
+		print -P "─╸\[${COMMAND_STATUS_INFO}\]\-\[${COMMAND_TIME_INFO}\]\-\[ %T\]"
 	fi
 
 	unset COMMAND_TIME_INFO
@@ -76,8 +78,8 @@ _cust_print_cmd_info() {
 
 preexec_functions+=(_cust_time_preexec)
 
-# make sure status check is the first element to preserve exit codes and pipestatus of cmdline
-precmd_functions=("_cust_status_precmd" "${precmd_functions[@]}")
+# status check MUST be the first element to preserve $pipestatus (exit codes) of cmdline
+precmd_functions=(_cust_status_precmd "${precmd_functions[@]}")
 precmd_functions+=(_cust_time_precmd)
 precmd_functions+=(_cust_print_cmd_info)
 
