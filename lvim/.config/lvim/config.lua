@@ -34,7 +34,7 @@ lvim.plugins = {
 	config = function()
 		require("autosave").setup({
 			enabled = true,
-			execution_message = "AutoSave: saved at " .. vim.fn.strftime("%Hh%Mm%Ss"),
+			execution_message = "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"),
 			events = {"InsertLeave", "TextChanged"},
 			write_all_buffers = false,
 			on_off_commands = false,

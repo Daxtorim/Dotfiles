@@ -6,17 +6,17 @@
 
 # Check if cron job exists and update it if not
 cronjob="#>>>>>> Dotfile-Update
-@hourly /home/${USER}/Dotfiles/update.sh &>/dev/null 2>&1
-@reboot /home/${USER}/Dotfiles/update.sh &>/dev/null 2>&1
+@hourly /home/${USER}/Dotfiles/update.sh &>/dev/null
+@reboot /home/${USER}/Dotfiles/update.sh &>/dev/null
 #<<<<<< Dotfile-Update"
 found_jobs="$(crontab -l | grep -zoE '#>>>>> Dotfile-Update.*#<<<<< Dotfile-Update' | tr -d '\0')"
 
-if [[ ! "${found_jobs}" == "${cronjob}" ]]; then
+if [[ "${found_jobs}" != "${cronjob}" ]]; then
 	echo -e "$(crontab -l | sed -e '/#>>>>>> Dotfile-Update/,/#<<<<<< Dotfile-Update/d')\n${cronjob}" | crontab -
 fi
 
 # Wait for networking
-while ! ping -c1 github.com &>/dev/null 2>&1
+while ! ping -c1 github.com &>/dev/null
 do
 	sleep 60
 done
