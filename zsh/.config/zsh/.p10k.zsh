@@ -36,6 +36,7 @@
     # command_execution_time  # duration of the last command
     # os_icon                 # os identifier
     context                 # user@hostname
+    anaconda
     dir                     # current directory
     vcs                     # git status
     background_jobs         # presence of background jobs
