@@ -61,13 +61,13 @@ set incsearch                   "Search while still typing
 
 " ================ Indentation =======================
 "{{{
-set autoindent                 "Keep new lines on the same level as previous line
-set smartindent                "Auto indent new lines after e.g '{'
-set nosmarttab                 "Use actual tab when using <TAB>, ignore whatever mess smarttab tries to create
-set tabstop=4                  "Maximum width of a tab character
-set softtabstop=-1             "Pretend this is tabstop for <BS> and <TAB> operations, switch between tabs and spaces when necessary, (0=off, negative=shiftwidth)
-set shiftwidth=0               "Number of spaces by which text is shifted (0=tabstop)
-set noexpandtab                "Use actual tab characters, do not replace them with spaces
+set autoindent                  "Keep new lines on the same level as previous line
+set smartindent                 "Auto indent new lines after e.g '{'
+set nosmarttab                  "Use actual tab when using <TAB>, ignore whatever mess smarttab tries to create
+set tabstop=4                   "Maximum width of a tab character
+set softtabstop=-1              "Pretend this is tabstop for <BS> and <TAB> operations, switch between tabs and spaces when necessary, (0=off, negative=shiftwidth)
+set shiftwidth=0                "Number of spaces by which text is shifted (0=tabstop)
+set noexpandtab                 "Use actual tab characters, do not replace them with spaces
 "}}}
 
 " ================ Folds =============================
@@ -89,6 +89,9 @@ augroup END
 " Avoid meta (alt) key, not reliable
 " Capitalization does NOT matter with CTRL
 
+" Space as <leader> key
+let mapleader = " "
+
 " DO NOT GO INTO EX MODE EVER !!!
 nmap Q <ESC>
 
@@ -100,14 +103,15 @@ nmap Y y$
 nnoremap j gj
 nnoremap k gk
 
-" Use CTRL+l to remove highlighting until next search
-nnoremap <C-l> :nohl<CR><C-l>
+" Remove highlighting and redraw the screen
+nmap <leader>h :nohl<CR>:redraw<CR>
 
-"Search and Replace shortcuts
-nmap <C-f> yiw/<C-r>"<CR>
-nmap <C-h> yiw:%s@<C-r>"@@g<left><left>
-vmap <C-h> yiw:s@<C-r>"@@g<left><left>
+" Search and Replace shortcuts
+nmap <leader>sw yiw/<C-r>"<CR>N
+nmap <leader>se :%s@<C-r>"@@g<Left><Left>
+vmap <leader>se :s@<C-r>"@@g<Left><Left>
 
+nmap <leader>v :vsplit<CR>
 "}}}
 
 " ================ Plugins ===========================

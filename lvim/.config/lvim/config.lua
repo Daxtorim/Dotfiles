@@ -30,10 +30,9 @@ lvim.plugins = {
 	},
 	{
 	"Pocco81/AutoSave.nvim",
-	event = "BufRead",
 	config = function()
 		require("autosave").setup({
-			enabled = true,
+			enabled = false,
 			execution_message = "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"),
 			events = {"InsertLeave", "TextChanged"},
 			write_all_buffers = false,
@@ -80,12 +79,19 @@ lvim.plugins = {
 	{
 	"blackCauldron7/surround.nvim",
 	config = function()
-		require("surround").setup({mappings_style = "sandwich"})
+		require("surround").setup({
+			mappings_style = "sandwich",
+			-- space_on_alias = true,
+			-- pairs = {
+			-- 	nestable = { a = {"[}{]//[}{]","[æſodgasdf]"}, D = {"<div>","</div>"}, h = {"<thead>","</thead>"} },
+			-- 	linear = { Q = {'"""','"""'} }
+			-- }
+		})
 	end
 	},
 	{
 	"p00f/nvim-ts-rainbow",
-	event = "BufWinEnter",
+	event = "BufRead",
 	config = function()
 		require("nvim-treesitter.configs").setup({
 			rainbow = {
@@ -106,7 +112,6 @@ lvim.plugins = {
 			}
 		})
 	end
-
 	},
 	{
 	-- automatically find indent settings from file content
@@ -125,7 +130,7 @@ lvim.builtin.terminal.active = true
 
 lvim.builtin.nvimtree.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
-lvim.builtin.nvimtree.hide_dotfiles = 0
+lvim.builtin.nvimtree.setup.hide_dotfiles = 0
 
 local components = require("lvim.core.lualine.components")
 lvim.builtin.lualine.sections.lualine_x = {

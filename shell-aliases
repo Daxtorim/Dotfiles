@@ -13,6 +13,7 @@ fi
 
 alias grep='grep --color=auto'
 alias cgrep="grep -v '^#\|^$' -R"
+alias gitgrep="git grep --heading --line-number --show-function --break"
 
 # Use correct extraction program based on file extension
 function extract()
