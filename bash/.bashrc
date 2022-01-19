@@ -1,9 +1,11 @@
+#!/bin/bash
+# shellcheck disable=1091,2034
+
 # If not running interactively, don't do anything
 case $- in
 	*i*) ;;
-	  *) return;;
+	*) return ;;
 esac
-
 
 # ================= General Settings ======================
 
@@ -33,19 +35,18 @@ shopt -s checkwinsize
 # ================== PROMPT ===============================
 
 # color names for readability
-	reset='\033[00m'
-	black='\033[30m'
-	red='\033[31m'
-	green='\033[32m'
-	yellow='\033[33m'
-	blue='\033[34m'
-	magenta='\033[35m'
-	cyan='\033[36m'
-	white='\033[37m'
-
+reset='\033[00m'
+black='\033[30m'
+red='\033[31m'
+green='\033[32m'
+yellow='\033[33m'
+blue='\033[34m'
+magenta='\033[35m'
+cyan='\033[36m'
+white='\033[37m'
 
 # Git integration in prompt
-if [ "$(command -v __git_ps1)" ];then
+if [ "$(command -v __git_ps1)" ]; then
 	GIT_PS1_SHOWDIRTYSTATE=1
 	GIT_PS1_SHOWUNTRACKEDFILES=1
 	GIT_PS1_SHOWSTASHSTATE=1

@@ -16,16 +16,14 @@ if [[ "${found_jobs}" != "${cronjob}" ]]; then
 fi
 
 # Wait for networking
-while ! ping -c1 github.com &>/dev/null
-do
+while ! ping -c1 github.com &> /dev/null; do
 	sleep 60
 done
 
 # Stash uncommited changes to preserve machine dependent modifications
 cd "/home/${USER}/Dotfiles" || exit 2
-git remote update &>/dev/null || exit 3
+git remote update &> /dev/null || exit 3
 git stash push --quiet
-
 
 if git diff --quiet "@{u}"; then
 	# No changes, nothing to do, pop stash, exit early
@@ -38,8 +36,7 @@ git pull --rebase --quiet
 [ -n "$(git stash list)" ] && git stash pop --quiet
 
 # Get all files in the repo (except .git directory)
-while IFS= read -r -d $'\0' repo_filename
-do
+while IFS= read -r -d $'\0' repo_filename; do
 	# Replace newlines in filenames with placeholder for commands that work on a line by line basis
 	sane_filename=$(sed -z 's/\n/@NEWLINE@/' <<< "${repo_filename}")
 
