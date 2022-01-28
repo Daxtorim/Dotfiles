@@ -142,7 +142,15 @@ lvim.plugins = {
 				show_trailing_blankline_indent = false,
 				use_treesitter = true,
 				max_indent_increase = 2,
-				filetype_exclude = { "help", "terminal", "dashboard", "NvimTree", "lspinfo", "lsp-installer" },
+				filetype_exclude = {
+					"help",
+					"terminal",
+					"dashboard",
+					"NvimTree",
+					"packer",
+					"lspinfo",
+					"lsp-installer",
+				},
 				buftype_exclude = { "terminal" },
 			})
 		end,
@@ -160,6 +168,7 @@ lvim.plugins = {
 			require("surround").setup({
 				mappings_style = "surround",
 				space_on_alias = true,
+				pairs = { nestable = { D = { "<div>", "</div>" }, a = { "<head>", "</head>" } } },
 			})
 		end,
 	},

@@ -6,8 +6,8 @@
 
 # Check if cron job exists and update it if not
 cronjob="#>>>>>> Dotfile-Update
-@hourly /home/${USER}/Dotfiles/update.sh &>/dev/null
-@reboot /home/${USER}/Dotfiles/update.sh &>/dev/null
+@hourly /home/${USER}/Dotfiles/update.sh &> /dev/null
+@reboot /home/${USER}/Dotfiles/update.sh &> /dev/null
 #<<<<<< Dotfile-Update"
 found_jobs="$(crontab -l | grep -zoE '#>>>>> Dotfile-Update.*#<<<<< Dotfile-Update' | tr -d '\0')"
 
@@ -64,5 +64,6 @@ while IFS= read -r -d $'\0' repo_filename; do
 	fi
 done < <(find "/home/${USER}/Dotfiles" -path "/home/${USER}/Dotfiles/.git" -prune -o -type f -print0)
 
-# Prune potentially dead symlinks and add new ones
+# Prune potentially dead symlinks and add new ones (we actually *want* word splitting here)
+# shellcheck disable=2086
 stow --dir="/home/${USER}/Dotfiles" --target="/home/${USER}" --no-folding --restow ${module_list}
