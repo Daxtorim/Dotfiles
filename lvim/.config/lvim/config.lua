@@ -31,8 +31,8 @@ lvim.builtin.lualine.options = {
 	always_divide_middle = true,
 }
 lvim.builtin.lualine.sections = {
-	lualine_a = { "mode", "branch" },
-	lualine_b = { components.diff, "diagnostics" },
+	lualine_a = { "mode" },
+	lualine_b = { "branch", components.diff, "diagnostics" },
 	lualine_c = { components.lsp },
 	lualine_x = { components.spaces },
 	lualine_y = { "encoding", "fileformat", "filetype" },
