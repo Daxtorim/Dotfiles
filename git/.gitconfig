@@ -1,0 +1,14 @@
+# This is Git's per-user configuration file.
+[user]
+	name = Fabian Preuß
+	email = preuss_fabian@gmx.de
+
+[core]
+	pager = "pre=$(command -v delta); ${pre:-cat | less --tabs=4 -RFX}"
+
+[merge]
+	conflictstyle = merge
+
+[delta]
+	navigate= true  # use n and N to move between diff sections
+	side-by-side = true

@@ -150,6 +150,7 @@ lvim.plugins = {
 					"packer",
 					"lspinfo",
 					"lsp-installer",
+					"Outline",
 				},
 				buftype_exclude = { "terminal" },
 			})
@@ -186,6 +187,32 @@ lvim.plugins = {
 					-- termcolors = {} -- table of colour name strings
 				},
 			})
+		end,
+	},
+	{
+		"simrat39/symbols-outline.nvim",
+		event = "BufWinEnter",
+		setup = function()
+			vim.g.symbols_outline = {
+				highlight_hovered_item = true,
+				show_guides = true,
+				auto_preview = false,
+				position = "right",
+				relative_width = true,
+				width = 25,
+				show_symbol_details = true,
+				keymaps = {
+					close = { "<ESC>", "q" },
+					goto_location = "<CR>",
+					focus_location = "o",
+					hover_symbol = "K",
+					toggle_preview = "<C-space>",
+					rename_symbol = "r",
+					code_actions = "a",
+				},
+			}
+			vim.cmd("autocmd! FileType Outline setlocal nolist")
+			vim.api.nvim_set_keymap("n", "<leader>S", "<CMD>SymbolsOutline<CR>", { noremap = true })
 		end,
 	},
 	{
