@@ -94,13 +94,12 @@ window:
   #gtk_theme_variant: None
 
   # Background opacity (version > 0.9.0)
-  #
   # Window opacity as a floating point number from `0.0` to `1.0`.
   # The value `0.0` is completely transparent and `1.0` is opaque.
-  # background_opacity: 0.5
+  opacity: 0.9
 
 # Background opacity (version <= 0.9.0)
-background_opacity: 0.9
+# background_opacity: 0.9
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.

@@ -54,6 +54,7 @@ enableSpiralLayout=false
 enableSpreadLayout=false
 enableStairLayout=false
 enableThreeColumnLayout=false
+monocleMaximize=false
 
 [Script-desktopchangeosd]
 PopupHideDelay=300

@@ -1023,6 +1023,7 @@ Type=GESTURE
 dir_pixmap[$d]
 
 [General]
+AccentColor[$d]
 BrowserApplication[$d]
 ColorScheme[$d]
 Name[$d]

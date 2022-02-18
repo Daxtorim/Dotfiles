@@ -49,6 +49,7 @@ null_ls.setup({
 	sources = {
 		-- python
 		fo.black.with({ extra_args = { "--fast" } }),
+		fo.isort,
 		di.flake8.with({ extra_args = { "--ignore", "E302,E501,W503" } }),
 		-- JS
 		fo.prettier,
@@ -69,17 +70,6 @@ null_ls.setup({
 
 -- After changing plugin config exit and reopen LunarVim, Run :PackerSync :PackerCompile
 lvim.plugins = {
-	{
-		-- Colorscheme
-		"marko-cerovac/material.nvim",
-		config = function()
-			vim.g.material_style = "deep oceanic"
-			require("material").setup({
-				borders = true,
-				italics = { comments = true },
-			})
-		end,
-	},
 	{
 		-- Colorscheme
 		"EdenEast/nightfox.nvim",
