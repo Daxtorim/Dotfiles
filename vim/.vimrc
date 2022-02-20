@@ -9,19 +9,20 @@ syntax enable                   "Turn on syntax highlighting when applicable
 set belloff=all                 "Turn off the bell for all events, i.e. NO BEEP
 set number                      "Show line number of current line
 set norelativenumber            "Do not show other line numbers relative to current line
+set signcolumn=auto             "Only display a signcolumn when there are signes set
 set cursorline                  "Highlight line where the cursor is
 set wildmenu                    "Add menu for auto completion
 set wildmode=longest:full,full
-set laststatus=2                "Always display the status line, even if only one window is displayed
-set cmdheight=2                 "Set the height of the cmd line at the bottom to 2 lines
-set splitbelow splitright       "Open new split panes to right and bottom, which feels more natural
-set backspace=indent,eol,start  "Generally expected backspace behavior in insert mode
 set history=1000                "Store cmd history
 set showcmd                     "Show incomplete commands at the bottom right
+set cmdheight=2                 "Set the height of the cmd line at the bottom to 2 lines
+set laststatus=2                "Always display the status line, even if only one window is displayed
+set splitbelow splitright       "Open new split panes to right and bottom, which feels more natural
+set backspace=indent,eol,start  "Generally expected backspace behavior in insert mode
 set autoread                    "Reload files changed outside vim
 set hidden                      "Allow buffers to exist in the background without being in a window
 set encoding=utf-8              "Set default display encoding to utf-8
-set spelllang=en_us             "Default spell checking for american english
+set spelllang=en                "Default spell checking for english
 set textwidth=0                 "Do not automatically break long lines
 
 " Display whitespace visually
@@ -109,7 +110,7 @@ nmap <leader>h :nohl<CR>:redraw<CR>
 " Search and Replace shortcuts
 nmap <leader>sw yiw/<C-r>"<CR>N
 nmap <leader>se :%s@<C-r>"@@g<Left><Left>
-vmap <leader>se :s@<C-r>"@@g<Left><Left>
+xmap <leader>se :s@<C-r>"@@g<Left><Left>
 
 nmap <leader>v :vsplit<CR>
 "}}}
@@ -135,6 +136,7 @@ if ! has('nvim')
 	call plug#begin('~/.vim/plugged')
 		Plug 'lifepillar/vim-gruvbox8'
 		Plug 'tpope/vim-commentary'
+		Plug 'tpope/vim-surround'
 		Plug 'LunarWatcher/auto-pairs', { 'tag': '*' }
 		Plug 'machakann/vim-highlightedyank'
 		Plug 'Daxtorim/vim-auto-indent-settings'

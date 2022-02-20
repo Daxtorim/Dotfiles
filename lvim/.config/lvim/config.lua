@@ -12,14 +12,23 @@ vim.opt.listchars:append({ lead = "." })
 lvim.format_on_save = false
 lvim.lint_on_save = true
 
--- Install certain parsers for treesitter by default
+lvim.builtin.gitsigns.opts.signcolumn = false
+lvim.builtin.gitsigns.opts.numhl = true
+
 lvim.builtin.treesitter.ensure_installed = "maintained"
 lvim.builtin.treesitter.highlight.enabled = true
+
 lvim.builtin.dashboard.active = true
+
 lvim.builtin.terminal.active = true
+lvim.builtin.terminal.direction = "horizontal"
+lvim.builtin.terminal.size = 10
+
 lvim.builtin.nvimtree.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.nvimtree.setup.hide_dotfiles = 0
+
+-- ================ Statusline =============================
 
 local components = require("lvim.core.lualine.components")
 lvim.builtin.lualine.options = {
@@ -42,27 +51,25 @@ lvim.builtin.lualine.sections = {
 -- ================ LSP Settings ===========================
 
 local null_ls = require("null-ls")
-local fo = null_ls.builtins.formatting
-local di = null_ls.builtins.diagnostics
-local ca = null_ls.builtins.code_actions
+local f = null_ls.builtins.formatting
+local d = null_ls.builtins.diagnostics
+local a = null_ls.builtins.code_actions
 null_ls.setup({
 	sources = {
 		-- python
-		fo.black.with({ extra_args = { "--fast" } }),
-		fo.isort,
-		di.flake8.with({ extra_args = { "--ignore", "E302,E501,W503" } }),
+		f.black.with({ extra_args = { "--fast" } }),
+		f.isort,
+		d.flake8.with({ extra_args = { "--ignore", "E302,E501,W503" } }),
 		-- JS
-		fo.prettier,
-		di.eslint_d,
-		ca.eslint_d,
+		f.prettier,
+		d.eslint_d,
+		a.eslint_d,
 		-- lua
-		fo.stylua,
+		f.stylua,
 		-- shell
-		fo.shfmt.with({ extra_args = { "-i=0", "-ci", "-bn", "-fn", "-sr" } }),
-		di.shellcheck,
-		ca.shellcheck,
-		-- other
-		ca.gitsigns,
+		f.shfmt.with({ extra_args = { "-i=0", "-ci", "-bn", "-fn", "-sr" } }),
+		d.shellcheck,
+		a.shellcheck,
 	},
 })
 
@@ -70,6 +77,9 @@ null_ls.setup({
 
 -- After changing plugin config exit and reopen LunarVim, Run :PackerSync :PackerCompile
 lvim.plugins = {
+	{ "ellisonleao/gruvbox.nvim" },
+	{ "tpope/vim-surround" },
+	{ "Daxtorim/vim-auto-indent-settings" },
 	{
 		-- Colorscheme
 		"EdenEast/nightfox.nvim",
@@ -154,16 +164,7 @@ lvim.plugins = {
 		end,
 	},
 	{
-		"blackCauldron7/surround.nvim",
-		config = function()
-			require("surround").setup({
-				mappings_style = "surround",
-				space_on_alias = true,
-				pairs = { nestable = { D = { "<div>", "</div>" }, a = { "<head>", "</head>" } } },
-			})
-		end,
-	},
-	{
+		-- Paint pairs of brackets in different colors
 		"p00f/nvim-ts-rainbow",
 		event = "BufRead",
 		config = function()
@@ -188,8 +189,8 @@ lvim.plugins = {
 				show_guides = true,
 				auto_preview = false,
 				position = "right",
-				relative_width = true,
-				width = 25,
+				relative_width = false,
+				width = 50,
 				show_symbol_details = true,
 				keymaps = {
 					close = { "<ESC>", "q" },
@@ -204,9 +205,5 @@ lvim.plugins = {
 			vim.cmd("autocmd! FileType Outline setlocal nolist")
 			vim.api.nvim_set_keymap("n", "<leader>S", "<CMD>SymbolsOutline<CR>", { noremap = true })
 		end,
-	},
-	{
-		-- automatically find indent settings from file content
-		"Daxtorim/vim-auto-indent-settings",
 	},
 }
