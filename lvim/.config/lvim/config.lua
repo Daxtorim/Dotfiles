@@ -9,29 +9,33 @@ vim.opt.listchars:append({ lead = "." })
 
 -- ================ LunarVim Settings ======================
 
+local b = lvim.builtin
+
 lvim.format_on_save = false
 lvim.lint_on_save = true
 
-lvim.builtin.gitsigns.opts.signcolumn = false
-lvim.builtin.gitsigns.opts.numhl = true
+b.dashboard.active = true
 
-lvim.builtin.treesitter.ensure_installed = "maintained"
-lvim.builtin.treesitter.highlight.enabled = true
+b.gitsigns.opts.signcolumn = false
+b.gitsigns.opts.numhl = true
 
-lvim.builtin.dashboard.active = true
+b.nvimtree.side = "left"
+b.nvimtree.show_icons.git = 0
+b.nvimtree.setup.hide_dotfiles = 0
 
-lvim.builtin.terminal.active = true
-lvim.builtin.terminal.direction = "horizontal"
-lvim.builtin.terminal.size = 10
+b.notify.active = true
 
-lvim.builtin.nvimtree.side = "left"
-lvim.builtin.nvimtree.show_icons.git = 0
-lvim.builtin.nvimtree.setup.hide_dotfiles = 0
+b.terminal.active = true
+b.terminal.direction = "horizontal"
+b.terminal.size = 10
+
+b.treesitter.ensure_installed = "maintained"
+b.treesitter.highlight.enabled = true
 
 -- ================ Statusline =============================
 
 local components = require("lvim.core.lualine.components")
-lvim.builtin.lualine.options = {
+b.lualine.options = {
 	icons_enabled = true,
 	theme = "auto",
 	component_separators = { left = "", right = "" },
@@ -39,7 +43,7 @@ lvim.builtin.lualine.options = {
 	disabled_filetypes = {},
 	always_divide_middle = true,
 }
-lvim.builtin.lualine.sections = {
+b.lualine.sections = {
 	lualine_a = { "mode" },
 	lualine_b = { "branch", components.diff, "diagnostics" },
 	lualine_c = { components.lsp },
@@ -50,28 +54,30 @@ lvim.builtin.lualine.sections = {
 
 -- ================ LSP Settings ===========================
 
-local null_ls = require("null-ls")
-local f = null_ls.builtins.formatting
-local d = null_ls.builtins.diagnostics
-local a = null_ls.builtins.code_actions
-null_ls.setup({
-	sources = {
-		-- python
-		f.black.with({ extra_args = { "--fast" } }),
-		f.isort,
-		d.flake8.with({ extra_args = { "--ignore", "E302,E501,W503" } }),
-		-- JS
-		f.prettier,
-		d.eslint_d,
-		a.eslint_d,
-		-- lua
-		f.stylua,
-		-- shell
-		f.shfmt.with({ extra_args = { "-i=0", "-ci", "-bn", "-fn", "-sr" } }),
-		d.shellcheck,
-		a.shellcheck,
-	},
-})
+local ok, null_ls = pcall(require, "null-ls")
+if ok then
+	local f = null_ls.builtins.formatting
+	local d = null_ls.builtins.diagnostics
+	local a = null_ls.builtins.code_actions
+	null_ls.setup({
+		sources = {
+			-- python
+			f.black.with({ extra_args = { "--fast" } }),
+			f.isort,
+			d.flake8.with({ extra_args = { "--ignore", "E302,E501,W503" } }),
+			-- JS
+			f.prettier,
+			d.eslint_d,
+			a.eslint_d,
+			-- lua
+			f.stylua,
+			-- shell
+			f.shfmt.with({ extra_args = { "-i=0", "-ci", "-bn", "-fn", "-sr" } }),
+			d.shellcheck,
+			a.shellcheck,
+		},
+	})
+end
 
 -- ================ Plugins ================================
 
@@ -91,16 +97,18 @@ lvim.plugins = {
 				alt_nc = true, -- Non current window bg to alt color see `hl-NormalNC`
 				terminal_colors = true, -- Configure the colors used when opening :terminal
 				styles = {
-					comments = "italic", -- Style that is applied to comments: see `highlight-args` for options
-					functions = "NONE", -- Style that is applied to functions: see `highlight-args` for options
-					keywords = "NONE", -- Style that is applied to keywords: see `highlight-args` for options
-					strings = "NONE", -- Style that is applied to strings: see `highlight-args` for options
-					variables = "NONE", -- Style that is applied to variables: see `highlight-args` for options
+					-- Style that is applied to category: see `highlight-args` for options
+					comments = "italic",
+					functions = "NONE",
+					keywords = "bold",
+					strings = "italic",
+					variables = "NONE",
 				},
 				inverse = {
-					match_paren = false, -- Enable/Disable inverse highlighting for match parens
-					visual = false, -- Enable/Disable inverse highlighting for visual selection
-					search = true, -- Enable/Disable inverse highlights for search highlights
+					-- Enable/Disable inverse highlighting for category
+					match_paren = false,
+					visual = false,
+					search = true,
 				},
 			})
 			nightfox.load()
@@ -124,20 +132,9 @@ lvim.plugins = {
 		"lukas-reineke/indent-blankline.nvim",
 		event = "BufWinEnter",
 		config = function()
-			-- vim.cmd("highlight IndentBlanklineIndent1 guibg=#1f1f1f guifg=#383838 gui=nocombine")
-			-- vim.cmd("highlight IndentBlanklineIndent2 guibg=#1a1a1a guifg=#383838 gui=nocombine")
 			require("indent_blankline").setup({
 				enabled = true,
 				space_char_blankline = " ",
-				-- char = "",
-				-- char_highlight_list = {
-				-- 	"IndentBlanklineIndent1",
-				-- 	"IndentBlanklineIndent2",
-				-- },
-				-- space_char_highlight_list = {
-				-- 	"IndentBlanklineIndent1",
-				-- 	"IndentBlanklineIndent2",
-				-- },
 				show_end_of_line = true,
 				show_trailing_blankline_indent = false,
 				use_treesitter = true,
