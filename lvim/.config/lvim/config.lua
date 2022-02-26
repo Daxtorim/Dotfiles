@@ -8,7 +8,7 @@ vim.cmd("source ${HOME}/.config/lvim/vimrc.original")
 vim.opt.listchars:append({ lead = "." })
 
 -- ================ LunarVim Settings ======================
-
+-- {{{
 local b = lvim.builtin
 
 lvim.format_on_save = false
@@ -25,15 +25,83 @@ b.nvimtree.setup.hide_dotfiles = 0
 
 b.notify.active = true
 
+b.treesitter.ensure_installed = "maintained"
+b.treesitter.highlight.enabled = true
+-- }}}
+
+-- ================ Toggleterm =============================
+-- {{{
 b.terminal.active = true
 b.terminal.direction = "horizontal"
 b.terminal.size = 10
+b.terminal.close_on_exit = false
 
-b.treesitter.ensure_installed = "maintained"
-b.treesitter.highlight.enabled = true
+-- {{{ on_exit(), on_stdout(), on_stderr()
+local function on_exit(term, _, exit_code, _)
+	if not term:is_open() then
+		local out = { text = "Success!", level = "info" }
+		if exit_code ~= 0 then
+			out = { text = "Failure!", level = "error" }
+		end
+		vim.notify("Job exited: " .. out.text, out.level, { title = term.name })
+	end
+end
 
--- ================ Statusline =============================
+local function on_stdout(term, _, data, _)
+	if not data then
+		return
+	end
+	if not term:is_open() then
+		local str = data[1]
+		-- ─╸[✅]-[ 1.3s]-[ 15:32]
+		if str:match("─╸%[[✅❌].*.*") then
+			local out = { text = "Success!", level = "info" }
+			if str:match("─╸%[❌") then
+				out = { text = "Failure!", level = "error" }
+			end
+			vim.notify("Job finished: " .. out.text, out.level, { title = term.name })
+		end
+	end
+end
+-- }}}
 
+b.terminal.on_exit = on_exit
+b.terminal.on_stdout = on_stdout
+
+local ok_tog, toggleterm = pcall(require, "toggleterm")
+if ok_tog then
+	toggleterm.setup(b.terminal)
+
+	local Term = require("toggleterm.terminal").Terminal
+	local cmd_count = 1001
+	local cmd_term = Term:new({ count = cmd_count })
+
+	function _G._VIMRC_TOGGLETERM_EXECUTE_FILE()
+		local win = vim.api.nvim_get_current_win()
+		cmd_term:shutdown()
+		cmd_term.cmd = vim.fn.expand("%:p")
+		cmd_term:open()
+		cmd_term.cmd = nil -- do not do anything when toggled before execution
+		vim.api.nvim_set_current_win(win)
+		vim.cmd("stopinsert")
+	end
+
+	vim.api.nvim_set_keymap("n", "<leader>t", "<cmd>lua require('toggleterm').toggle(1000)<CR>", { silent = true })
+	vim.api.nvim_set_keymap("n", "<leader>rr", "<cmd>lua _G._VIMRC_TOGGLETERM_EXECUTE_FILE()<CR>", { silent = true })
+	vim.api.nvim_set_keymap(
+		"n",
+		"<leader>rt",
+		"<cmd>lua require('toggleterm').toggle(" .. cmd_count .. ")<CR>",
+		{ silent = true }
+	)
+else
+	print("Could not load Toggleterm configuration! Try reopening neovim.")
+	print(toggleterm)
+end
+-- }}}
+
+-- ================ Lualine ================================
+-- {{{
 local components = require("lvim.core.lualine.components")
 b.lualine.options = {
 	icons_enabled = true,
@@ -51,11 +119,12 @@ b.lualine.sections = {
 	lualine_y = { "encoding", "fileformat", "filetype" },
 	lualine_z = { "location", "progress" },
 }
+-- }}}
 
 -- ================ LSP Settings ===========================
-
-local ok, null_ls = pcall(require, "null-ls")
-if ok then
+-- {{{
+local ok_null, null_ls = pcall(require, "null-ls")
+if ok_null then
 	local f = null_ls.builtins.formatting
 	local d = null_ls.builtins.diagnostics
 	local a = null_ls.builtins.code_actions
@@ -78,9 +147,10 @@ if ok then
 		},
 	})
 end
+-- }}}
 
 -- ================ Plugins ================================
-
+-- {{{
 -- After changing plugin config exit and reopen LunarVim, Run :PackerSync :PackerCompile
 lvim.plugins = {
 	{ "ellisonleao/gruvbox.nvim" },
@@ -204,3 +274,6 @@ lvim.plugins = {
 		end,
 	},
 }
+-- }}}
+
+-- vim:fdm=marker:fdl=0:

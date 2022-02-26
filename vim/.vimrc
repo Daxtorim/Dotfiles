@@ -46,7 +46,7 @@ augroup END
 
 " ================ Scrolling =========================
 "{{{
-set scrolloff=5 sidescrolloff=0 "Start scrolling when n lines away from borders
+set scrolloff=3 sidescrolloff=0 "Start scrolling when n lines away from borders
 set sidescroll=0                "Put cursor back to the middle of the screen when scrolling off horizontally
 set nowrap                      "Do not Wrap long lines
 set linebreak                   "Break lines at convenient points when 'wrap' is enabled
@@ -78,11 +78,6 @@ set foldmethod=indent           "Fold based on indentation
 set foldignore=                 "Do not exclude any lines from folds
 set foldlevel=99                "Open all folds by default
 set foldcolumn=0                "Display foldlevel in n wide gutter
-
-" Filetype specific overrides
-augroup vimrc
-	autocmd FileType vim setlocal foldmethod=marker foldlevel=0
-augroup END
 "}}}
 
 " ================ Keybindings =======================
@@ -95,6 +90,9 @@ let mapleader = " "
 
 " DO NOT GO INTO EX MODE EVER !!!
 nmap Q <ESC>
+
+" Shortcut to leave Terminal mode
+tmap <Esc> <C-\><C-n>
 
 " Make Y yank to the end of line (act like D or C)
 nmap Y y$
@@ -165,3 +163,5 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 set guifont=FiraCode\ Nerd\ Font
 
 "}}}
+
+" vim:fdm=marker:fdl=0:
