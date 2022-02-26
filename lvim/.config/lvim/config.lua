@@ -34,33 +34,32 @@ b.treesitter.highlight.enabled = true
 b.terminal.active = true
 b.terminal.direction = "horizontal"
 b.terminal.size = 10
-b.terminal.close_on_exit = false
+b.terminal.close_on_exit = true
 
 -- {{{ on_exit(), on_stdout(), on_stderr()
 local function on_exit(term, _, exit_code, _)
-	if not term:is_open() then
-		local out = { text = "Success!", level = "info" }
-		if exit_code ~= 0 then
-			out = { text = "Failure!", level = "error" }
-		end
-		vim.notify("Job exited: " .. out.text, out.level, { title = term.name })
+	if term:is_open() then
+		return
 	end
+	local out = { text = "Success!", level = "info" }
+	if exit_code ~= 0 then
+		out = { text = "Failure!", level = "error" }
+	end
+	vim.notify("Job exited: " .. out.text, out.level, { title = term.name })
 end
 
 local function on_stdout(term, _, data, _)
-	if not data then
+	if term:is_open() then
 		return
 	end
-	if not term:is_open() then
-		local str = data[1]
-		-- ─╸[✅]-[ 1.3s]-[ 15:32]
-		if str:match("─╸%[[✅❌].*.*") then
-			local out = { text = "Success!", level = "info" }
-			if str:match("─╸%[❌") then
-				out = { text = "Failure!", level = "error" }
-			end
-			vim.notify("Job finished: " .. out.text, out.level, { title = term.name })
+	local str = data[1]
+	-- ─╸[✅]-[ 1.3s]-[ 15:32]
+	if str:match("─╸%[[✅❌].*.*") then
+		local out = { text = "Success!", level = "info" }
+		if str:match("─╸%[❌") then
+			out = { text = "Failure!", level = "error" }
 		end
+		vim.notify("Job finished: " .. out.text, out.level, { title = term.name })
 	end
 end
 -- }}}
@@ -68,36 +67,26 @@ end
 b.terminal.on_exit = on_exit
 b.terminal.on_stdout = on_stdout
 
-local ok_tog, toggleterm = pcall(require, "toggleterm")
-if ok_tog then
-	toggleterm.setup(b.terminal)
+b.terminal.term_count = 1001
 
-	local Term = require("toggleterm.terminal").Terminal
-	local cmd_count = 1001
-	local cmd_term = Term:new({ count = cmd_count })
-
-	function _G._VIMRC_TOGGLETERM_EXECUTE_FILE()
-		local win = vim.api.nvim_get_current_win()
-		cmd_term:shutdown()
-		cmd_term.cmd = vim.fn.expand("%:p")
-		cmd_term:open()
-		cmd_term.cmd = nil -- do not do anything when toggled before execution
-		vim.api.nvim_set_current_win(win)
-		vim.cmd("stopinsert")
-	end
-
-	vim.api.nvim_set_keymap("n", "<leader>t", "<cmd>lua require('toggleterm').toggle(1000)<CR>", { silent = true })
-	vim.api.nvim_set_keymap("n", "<leader>rr", "<cmd>lua _G._VIMRC_TOGGLETERM_EXECUTE_FILE()<CR>", { silent = true })
-	vim.api.nvim_set_keymap(
-		"n",
-		"<leader>rt",
-		"<cmd>lua require('toggleterm').toggle(" .. cmd_count .. ")<CR>",
-		{ silent = true }
-	)
-else
-	print("Could not load Toggleterm configuration! Try reopening neovim.")
-	print(toggleterm)
+function _G._VIMRC_TOGGLETERM_EXECUTE_FILE()
+	local win = vim.api.nvim_get_current_win()
+	vim.cmd(b.terminal.term_count .. 'TermExec cmd="%:p"')
+	vim.api.nvim_set_current_win(win)
 end
+
+b.which_key.mappings["r"] = {
+	name = "Terminals",
+	["1"] = { "<cmd>lua require('toggleterm').toggle(1)<CR>", "Terminal 1" },
+	["2"] = { "<cmd>lua require('toggleterm').toggle(2)<CR>", "Terminal 2" },
+	["3"] = { "<cmd>lua require('toggleterm').toggle(3)<CR>", "Terminal 3" },
+	r = { "<cmd>lua _G._VIMRC_TOGGLETERM_EXECUTE_FILE()<CR>", "Run current file" },
+	t = {
+		"<cmd>lua require('toggleterm').toggle(" .. b.terminal.term_count .. ")<CR><cmd>stopinsert<CR>",
+		"Show last run",
+	},
+}
+b.which_key.mappings["t"] = { "<cmd>lua require('toggleterm').toggle(1)<CR>", "Terminal 1" }
 -- }}}
 
 -- ================ Lualine ================================
@@ -146,6 +135,9 @@ if ok_null then
 			a.shellcheck,
 		},
 	})
+else
+	print("Cannot load null-ls configuration!")
+	print(null_ls)
 end
 -- }}}
 
@@ -153,9 +145,9 @@ end
 -- {{{
 -- After changing plugin config exit and reopen LunarVim, Run :PackerSync :PackerCompile
 lvim.plugins = {
-	{ "ellisonleao/gruvbox.nvim" },
-	{ "tpope/vim-surround" },
 	{ "Daxtorim/vim-auto-indent-settings" },
+	{ "tpope/vim-surround" },
+	{ "ellisonleao/gruvbox.nvim" },
 	{
 		-- Colorscheme
 		"EdenEast/nightfox.nvim",
@@ -221,6 +213,15 @@ lvim.plugins = {
 				},
 				buftype_exclude = { "terminal" },
 			})
+			-- Refresh after folding
+			for _, cmd in pairs({ "A", "a", "C", "c", "M", "m", "O", "o", "R", "r" }) do
+				vim.api.nvim_set_keymap(
+					"n",
+					"z" .. cmd,
+					"z" .. cmd .. "<cmd>IndentBlanklineRefresh<CR>",
+					{ noremap = true }
+				)
+			end
 		end,
 	},
 	{
