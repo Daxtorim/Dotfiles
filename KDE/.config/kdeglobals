@@ -138,7 +138,7 @@ ForegroundVisited=155,89,182
 [General]
 AccentColor=233,100,58
 BrowserApplication=firefox.desktop
-ColorScheme=BreathDark
+ColorSchemeHash=a9f5c5b74e38dcd8fbf2569906ecc7dbc0b68aee
 Name=Breath2 2021 Dark
 TerminalApplication=alacritty
 TerminalService=Alacritty.desktop
