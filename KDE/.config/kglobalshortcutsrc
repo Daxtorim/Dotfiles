@@ -4,7 +4,7 @@ switch-to-activity-9863da80-f08d-47cd-8a2e-230f4ba45c1b=none,none,Switch to acti
 switch-to-activity-b7cb9ac0-82dd-4814-b955-32324857aebd=none,none,Switch to activity "Default"
 
 [Alacritty.desktop]
-New=Meta+Return,none,New Terminal
+New=none,none,New Terminal
 _k_friendly_name=Alacritty
 _launch=none,none,Alacritty
 
@@ -38,6 +38,10 @@ display=Display\tMeta+P,Display\tMeta+P,Switch Display
 _k_friendly_name=Custom Shortcuts Service
 {c79a8c63-08ae-44c2-abfe-ab69b836b491}=none,none,Launch Konsole
 {d03619b6-9b3c-48cc-9d9c-a2aadb485550}=none,none,Search
+
+[kitty.desktop]
+_k_friendly_name=kitty
+_launch=Meta+Return,none,kitty
 
 [kmix]
 _k_friendly_name=Audio Volume

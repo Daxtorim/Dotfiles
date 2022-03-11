@@ -71,7 +71,11 @@ b.terminal.term_count = 1001
 
 function _G._VIMRC_TOGGLETERM_EXECUTE_FILE()
 	local win = vim.api.nvim_get_current_win()
+	local cursorposition = vim.api.nvim_win_get_cursor(0)
+
 	vim.cmd(b.terminal.term_count .. 'TermExec cmd="%:p"')
+
+	vim.api.nvim_win_set_cursor(win, cursorposition)
 	vim.api.nvim_set_current_win(win)
 end
 
@@ -130,7 +134,7 @@ if ok_null then
 			-- lua
 			f.stylua,
 			-- shell
-			f.shfmt.with({ extra_args = { "-i=0", "-ci", "-bn", "-fn", "-sr" } }),
+			f.shfmt.with({ extra_args = { "-i=0", "-ci", "-fn", "-sr" } }),
 			d.shellcheck,
 			a.shellcheck,
 		},
@@ -211,7 +215,7 @@ lvim.plugins = {
 					"lsp-installer",
 					"Outline",
 				},
-				buftype_exclude = { "terminal" },
+				buftype_exclude = { "terminal", "nofile" },
 			})
 			-- Refresh after folding
 			for _, cmd in pairs({ "A", "a", "C", "c", "M", "m", "O", "o", "R", "r" }) do

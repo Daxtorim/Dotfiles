@@ -47,7 +47,7 @@ immutability=1
 plugin=org.kde.plasma.systemtray
 
 [Containments][40][Applets][45][Configuration]
-PreloadWeight=50
+PreloadWeight=2
 SystrayContainmentId=46
 
 [Containments][40][Applets][56]
@@ -78,7 +78,7 @@ DialogWidth=720
 
 [Containments][40][Applets][63][Configuration][General]
 groupPopups=false
-launchers=applications:Alacritty.desktop,applications:lunarvim.desktop,applications:org.kde.dolphin.desktop,preferred://browser,file:///var/lib/flatpak/exports/share/applications/com.spotify.Client.desktop
+launchers=applications:Alacritty.desktop,applications:kitty.desktop,applications:lunarvim.desktop,applications:org.kde.dolphin.desktop,preferred://browser,file:///var/lib/flatpak/exports/share/applications/com.spotify.Client.desktop
 middleClickAction=None
 
 [Containments][40][Applets][67]
@@ -104,7 +104,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][75][Configuration]
-PreloadWeight=81
+PreloadWeight=58
 
 [Containments][40][Applets][75][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -130,7 +130,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][77][Configuration]
-PreloadWeight=59
+PreloadWeight=30
 
 [Containments][40][Applets][77][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -241,7 +241,7 @@ immutability=1
 plugin=org.kde.plasma.clipboard
 
 [Containments][46][Applets][55][Configuration]
-PreloadWeight=5
+PreloadWeight=0
 
 [Containments][46][Applets][58]
 immutability=1
@@ -255,7 +255,7 @@ immutability=1
 plugin=org.kde.plasma.networkmanagement
 
 [Containments][46][Applets][59][Configuration]
-PreloadWeight=7
+PreloadWeight=0
 
 [Containments][46][Applets][60]
 immutability=1
