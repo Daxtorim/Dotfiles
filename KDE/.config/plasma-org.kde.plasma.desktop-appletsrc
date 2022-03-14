@@ -47,7 +47,7 @@ immutability=1
 plugin=org.kde.plasma.systemtray
 
 [Containments][40][Applets][45][Configuration]
-PreloadWeight=2
+PreloadWeight=0
 SystrayContainmentId=46
 
 [Containments][40][Applets][56]
@@ -86,7 +86,7 @@ immutability=1
 plugin=org.kde.plasma.kickoff
 
 [Containments][40][Applets][67][Configuration]
-PreloadWeight=92
+PreloadWeight=89
 
 [Containments][40][Applets][67][Configuration][ConfigDialog]
 DialogHeight=540
@@ -104,7 +104,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][75][Configuration]
-PreloadWeight=58
+PreloadWeight=36
 
 [Containments][40][Applets][75][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -130,7 +130,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][77][Configuration]
-PreloadWeight=30
+PreloadWeight=8
 
 [Containments][40][Applets][77][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -207,9 +207,6 @@ PreloadWeight=0
 [Containments][46][Applets][51][Configuration][ConfigDialog]
 DialogHeight=558
 DialogWidth=720
-
-[Containments][46][Applets][51][Configuration][General]
-globalMute=true
 
 [Containments][46][Applets][52]
 immutability=1

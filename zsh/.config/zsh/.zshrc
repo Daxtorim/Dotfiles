@@ -2,7 +2,7 @@
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # Basic auto/tab complete:
@@ -24,31 +24,26 @@ setopt inc_append_history        # commands are added to the history immediately
 setopt nobeep                    # No beep
 unsetopt BEEP                    # For real, NO BEEP
 
-HISTFILE="$ZDOTDIR/zsh_history"
+
+CACHE_DIR=${XDG_CACHE_HOME:-"${HOME}/.cache"}/zsh
+PLUGIN_DIR=${CACHE_DIR}/plugins
+
+mkdir -p "${CACHE_DIR}"
+HISTFILE=${CACHE_DIR}/zsh_history.txt
 HISTSIZE=2000000
 SAVEHIST=1500000
 
-# Function to source files if they exist
-function zsh_add_file() {
-	[ -f "$ZDOTDIR/$1" ] && . "$ZDOTDIR/$1"
-}
 
-function zsh_add_plugin() {
-	if [ ! -d "$ZDOTDIR/plugins" ]; then
-		mkdir "$ZDOTDIR/plugins"
-	fi
-	
-	PLUGIN_NAME=$(echo $1 | cut -d "/" -f 2)
-	if [ ! -d "$ZDOTDIR/plugins/$PLUGIN_NAME" ]; then
-		git clone --depth=1 "https://github.com/$1.git" "$ZDOTDIR/plugins/$PLUGIN_NAME"
-	fi
+# Helper functions
+if [ -f "${ZDOTDIR}/functions.zsh" ]; then
+	. "${ZDOTDIR}/functions.zsh"
+else
+	echo "Cannot source helper functions. Cannot load config!"
+	return 1 # exit would kill the shell
+fi
 
-	zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.plugin.zsh" || \
-	zsh_add_file "plugins/$PLUGIN_NAME/$PLUGIN_NAME.zsh"
-}
-
-# General shell agnostic aliases (not within the zsh directory)
-[ -f "${HOME}/Dotfiles/shell-aliases" ] && . "${HOME}/Dotfiles/shell-aliases"
+# General shell agnostic aliases
+_zsh_source_file "${HOME}/Dotfiles/shell-aliases"
 
 # System specific options
 zsh_add_file "zshrc_local.zsh"
@@ -63,9 +58,13 @@ zsh_add_plugin "zsh-users/zsh-syntax-highlighting"
 
 # Prompt
 zsh_add_plugin "romkatv/powerlevel10k"
-zsh_add_file "plugins/powerlevel10k/powerlevel10k.zsh-theme"
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+_zsh_source_file "${PLUGIN_DIR}/powerlevel10k/powerlevel10k.zsh-theme"
+# To customize prompt edit ~/.config/zsh/.p10k.zsh.
 zsh_add_file ".p10k.zsh"
 
 # Keybindings
 bindkey "^R" history-incremental-pattern-search-backward
+
+# vi mode and fix for "broken" (aka default) vi behavior for backspace key
+bindkey -v
+bindkey '^?' backward-delete-char
