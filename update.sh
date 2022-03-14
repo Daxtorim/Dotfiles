@@ -33,7 +33,13 @@ fi
 
 # Update Dotfiles, apply local changes (stash) again
 git pull --rebase --quiet
-[ -n "$(git stash list)" ] && git stash pop --quiet
+
+#Its not an intended to be an if-else
+# shellcheck disable=2015
+[ -n "$(git stash list)" ] && git stash pop --quiet || {
+	echo "Unable to pop stash. Changes are incompatible."
+	exit 1
+}
 
 # Get all files in the repo (except .git directory)
 while IFS= read -r -d $'\0' repo_filename; do
