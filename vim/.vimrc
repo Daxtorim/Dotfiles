@@ -36,10 +36,14 @@ augroup vimrc
 	autocmd!
 	" Do not automatically add a comment marker to new lines and do not wrap long comments
 	autocmd BufWinEnter * setlocal formatoptions-=cro
-	" Insert hard newlines after 72 chars and reformat entire paragraphs automatically
-	autocmd FileType gitcommit setlocal tw=72 formatoptions=w1pant
 	" Do not hide ANY characters in markup files
 	autocmd BufWinEnter * setlocal conceallevel=0
+	" Insert hard newlines after 72 chars and reformat entire paragraphs automatically
+	autocmd FileType gitcommit setlocal tw=72 colorcolumn=73 formatoptions=w1pant
+	" set colorcolumn according to max line width of common formatters
+	autocmd FileType lua setlocal colorcolumn=121
+	autocmd FileType python setlocal colorcolumn=89
+	autocmd FileType rust setlocal colorcolumn=101
 augroup END
 
 "}}}
@@ -103,14 +107,14 @@ nnoremap j gj
 nnoremap k gk
 
 " Remove highlighting and redraw the screen
-nmap <leader>h :nohl<CR>:redraw<CR>
+nmap <leader>h <cmd>nohl<CR><cmd>redraw<CR>
 
 " Search and Replace shortcuts
 nmap <leader>sw yiw/<C-r>"<CR>N
-nmap <leader>se :%s@<C-r>"@@g<Left><Left>
-xmap <leader>se :s@<C-r>"@@g<Left><Left>
+nmap <leader>se <cmd>%s@<C-r>"@@g<Left><Left>
+xmap <leader>se <cmd>s@<C-r>"@@g<Left><Left>
 
-nmap <leader>v :vsplit<CR>
+nmap <leader>v <cmd>vsplit<CR>
 "}}}
 
 " ================ Plugins ===========================

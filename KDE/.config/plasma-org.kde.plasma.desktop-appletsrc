@@ -55,7 +55,7 @@ immutability=1
 plugin=org.kde.plasma.digitalclock
 
 [Containments][40][Applets][56][Configuration]
-PreloadWeight=0
+PreloadWeight=5
 
 [Containments][40][Applets][56][Configuration][Appearance]
 dateDisplayFormat=BesideTime
@@ -86,7 +86,7 @@ immutability=1
 plugin=org.kde.plasma.kickoff
 
 [Containments][40][Applets][67][Configuration]
-PreloadWeight=89
+PreloadWeight=94
 
 [Containments][40][Applets][67][Configuration][ConfigDialog]
 DialogHeight=540
@@ -104,7 +104,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][75][Configuration]
-PreloadWeight=36
+PreloadWeight=100
 
 [Containments][40][Applets][75][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -130,7 +130,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][77][Configuration]
-PreloadWeight=8
+PreloadWeight=13
 
 [Containments][40][Applets][77][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
