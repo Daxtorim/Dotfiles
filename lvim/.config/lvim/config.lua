@@ -1,3 +1,4 @@
+local B = lvim.builtin
 -- ================ Sourcing .vimrc ========================
 
 vim.cmd("source ${HOME}/.config/lvim/vimrc.original")
@@ -6,35 +7,34 @@ vim.cmd("source ${HOME}/.config/lvim/vimrc.original")
 
 -- Add Neovim specific listchars characters
 vim.opt.listchars:append({ lead = "." })
+vim.opt.inccommand = "split"
 
 -- ================ LunarVim Settings ======================
 -- {{{
-local b = lvim.builtin
-
 lvim.format_on_save = false
 lvim.lint_on_save = true
 
-b.dashboard.active = true
+lvim.colorscheme = "nightfox"
 
-b.gitsigns.opts.signcolumn = false
-b.gitsigns.opts.numhl = true
+B.gitsigns.opts.signcolumn = false
+B.gitsigns.opts.numhl = true
 
-b.nvimtree.side = "left"
-b.nvimtree.show_icons.git = 0
-b.nvimtree.setup.hide_dotfiles = 0
+B.nvimtree.side = "left"
+B.nvimtree.show_icons.git = 0
+B.nvimtree.setup.hide_dotfiles = 0
 
-b.notify.active = true
+B.notify.active = true
 
-b.treesitter.ensure_installed = "maintained"
-b.treesitter.highlight.enabled = true
+B.treesitter.ensure_installed = "maintained"
+B.treesitter.highlight.enabled = true
 -- }}}
 
 -- ================ Toggleterm =============================
 -- {{{
-b.terminal.active = true
-b.terminal.direction = "horizontal"
-b.terminal.size = 10
-b.terminal.close_on_exit = true
+B.terminal.active = true
+B.terminal.direction = "horizontal"
+B.terminal.size = 10
+B.terminal.close_on_exit = true
 
 -- {{{ on_exit(), on_stdout(), on_stderr()
 local function on_exit(term, _, exit_code, _)
@@ -64,49 +64,49 @@ local function on_stdout(term, _, data, _)
 end
 -- }}}
 
-b.terminal.on_exit = on_exit
-b.terminal.on_stdout = on_stdout
+B.terminal.on_exit = on_exit
+B.terminal.on_stdout = on_stdout
 
-b.terminal.term_count = 1001
+B.terminal.term_count = 1001
 
 function _G._VIMRC_TOGGLETERM_EXECUTE_FILE()
 	local win = vim.api.nvim_get_current_win()
 	local cursorposition = vim.api.nvim_win_get_cursor(0)
 
-	vim.cmd(b.terminal.term_count .. 'TermExec cmd="%:p"')
+	vim.cmd(B.terminal.term_count .. 'TermExec cmd="%:p"')
 
 	vim.api.nvim_win_set_cursor(win, cursorposition)
 	vim.api.nvim_set_current_win(win)
 end
 
-b.which_key.mappings["r"] = {
+B.which_key.mappings["r"] = {
 	name = "Terminals",
 	["1"] = { "<cmd>lua require('toggleterm').toggle(1)<CR>", "Terminal 1" },
 	["2"] = { "<cmd>lua require('toggleterm').toggle(2)<CR>", "Terminal 2" },
 	["3"] = { "<cmd>lua require('toggleterm').toggle(3)<CR>", "Terminal 3" },
 	r = { "<cmd>lua _G._VIMRC_TOGGLETERM_EXECUTE_FILE()<CR>", "Run current file" },
 	t = {
-		"<cmd>lua require('toggleterm').toggle(" .. b.terminal.term_count .. ")<CR><cmd>stopinsert<CR>",
+		"<cmd>lua require('toggleterm').toggle(" .. B.terminal.term_count .. ")<CR><cmd>stopinsert<CR>",
 		"Show last run",
 	},
 }
-b.which_key.mappings["t"] = { "<cmd>lua require('toggleterm').toggle(1)<CR>", "Terminal 1" }
+B.which_key.mappings["t"] = { "<cmd>lua require('toggleterm').toggle(1)<CR>", "Terminal 1" }
 -- }}}
 
 -- ================ Lualine ================================
 -- {{{
 local components = require("lvim.core.lualine.components")
-b.lualine.options = {
+B.lualine.options = {
 	icons_enabled = true,
-	theme = "auto",
+	theme = "material",
 	component_separators = { left = "", right = "" },
 	section_separators = { left = "", right = "" },
 	disabled_filetypes = {},
 	always_divide_middle = true,
 }
-b.lualine.sections = {
+B.lualine.sections = {
 	lualine_a = { "mode" },
-	lualine_b = { "branch", components.diff, "diagnostics" },
+	lualine_b = { "branch", "diff", "diagnostics" },
 	lualine_c = { components.lsp },
 	lualine_x = { components.spaces },
 	lualine_y = { "encoding", "fileformat", "filetype" },
@@ -156,28 +156,27 @@ lvim.plugins = {
 		-- Colorscheme
 		"EdenEast/nightfox.nvim",
 		config = function()
-			local nightfox = require("nightfox")
-			nightfox.setup({
-				fox = "nightfox", -- Which fox style should be applied
-				transparent = false, -- Disable setting the background color
-				alt_nc = true, -- Non current window bg to alt color see `hl-NormalNC`
-				terminal_colors = true, -- Configure the colors used when opening :terminal
-				styles = {
-					-- Style that is applied to category: see `highlight-args` for options
-					comments = "italic",
-					functions = "NONE",
-					keywords = "bold",
-					strings = "italic",
-					variables = "NONE",
-				},
-				inverse = {
-					-- Enable/Disable inverse highlighting for category
-					match_paren = false,
-					visual = false,
-					search = true,
+			require("nightfox").setup({
+				options = {
+					transparent = false, -- Disable setting the background color
+					dim_inactive = true, -- Non current window bg to alt color see `hl-NormalNC`
+					terminal_colors = true, -- Configure the colors used when opening :terminal
+					styles = {
+						-- Style that is applied to category: see `highlight-args` for options
+						comments = "italic",
+						functions = "NONE",
+						keywords = "bold",
+						strings = "italic",
+						variables = "NONE",
+					},
+					inverse = {
+						-- Enable/Disable inverse highlighting for category
+						match_paren = false,
+						visual = false,
+						search = true,
+					},
 				},
 			})
-			nightfox.load()
 		end,
 	},
 	{
@@ -247,9 +246,14 @@ lvim.plugins = {
 					extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
 					max_file_lines = nil, -- Do not enable for files with more than n lines, int
 					colors = { "#b16286", "#0aaaaa", "#d79921", "#689d6a", "#d65d0e", "#a89984", "#458588" }, -- table of hex strings
-					-- termcolors = {} -- table of colour name strings
 				},
 			})
+		end,
+	},
+	{
+		"luukvbaal/stabilize.nvim",
+		config = function()
+			require("stabilize").setup()
 		end,
 	},
 	{
