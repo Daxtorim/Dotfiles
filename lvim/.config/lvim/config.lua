@@ -103,6 +103,7 @@ B.lualine.options = {
 	section_separators = { left = "", right = "" },
 	disabled_filetypes = {},
 	always_divide_middle = true,
+	-- globalstatus = true,
 }
 B.lualine.sections = {
 	lualine_a = { "mode" },

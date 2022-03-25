@@ -110,11 +110,12 @@ nnoremap k gk
 nmap <leader>h <cmd>nohl<CR><cmd>redraw<CR>
 
 " Search and Replace shortcuts
-nmap <leader>sw yiw/<C-r>"<CR>N
-nmap <leader>se <cmd>%s@<C-r>"@@g<Left><Left>
-xmap <leader>se <cmd>s@<C-r>"@@g<Left><Left>
+nmap <leader>sw *N
+nmap <leader>se *N:%s@@@g<Left><Left>
+xmap <leader>se :s@@@g<Left><Left>
 
 nmap <leader>v <cmd>vsplit<CR>
+nmap <leader>w <cmd>w<CR>
 "}}}
 
 " ================ Plugins ===========================
@@ -161,8 +162,8 @@ endif
 
 " Blinking BAR in insert mode, blinking BLOCK elsewhere (GUI only)
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-              \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-              \,sm:block-blinkwait175-blinkoff150-blinkon175
+	\,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
+	\,sm:block-blinkwait175-blinkoff150-blinkon175
 
 set guifont=FiraCode\ Nerd\ Font
 
