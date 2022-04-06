@@ -31,23 +31,12 @@ DialogWidth=720
 showWindowIcons=true
 wrapPage=true
 
-[Containments][40][Applets][44]
-immutability=1
-plugin=org.kde.plasma.marginsseparator
-
-[Containments][40][Applets][44][Configuration]
-PreloadWeight=0
-
-[Containments][40][Applets][44][Configuration][ConfigDialog]
-DialogHeight=558
-DialogWidth=720
-
 [Containments][40][Applets][45]
 immutability=1
 plugin=org.kde.plasma.systemtray
 
 [Containments][40][Applets][45][Configuration]
-PreloadWeight=0
+PreloadWeight=27
 SystrayContainmentId=46
 
 [Containments][40][Applets][56]
@@ -78,7 +67,7 @@ DialogWidth=720
 
 [Containments][40][Applets][63][Configuration][General]
 groupPopups=false
-launchers=applications:Alacritty.desktop,applications:kitty.desktop,applications:lunarvim.desktop,applications:org.kde.dolphin.desktop,preferred://browser,file:///var/lib/flatpak/exports/share/applications/com.spotify.Client.desktop
+launchers=applications:org.kde.dolphin.desktop,applications:kitty.desktop,file:///var/lib/flatpak/exports/share/applications/com.spotify.Client.desktop,preferred://browser
 middleClickAction=None
 
 [Containments][40][Applets][67]
@@ -86,7 +75,7 @@ immutability=1
 plugin=org.kde.plasma.kickoff
 
 [Containments][40][Applets][67][Configuration]
-PreloadWeight=97
+PreloadWeight=100
 
 [Containments][40][Applets][67][Configuration][ConfigDialog]
 DialogHeight=540
@@ -104,7 +93,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][75][Configuration]
-PreloadWeight=94
+PreloadWeight=100
 
 [Containments][40][Applets][75][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -114,6 +103,18 @@ updateRateLimit=1000
 [Containments][40][Applets][75][Configuration][ConfigDialog]
 DialogHeight=540
 DialogWidth=720
+
+[Containments][40][Applets][75][Configuration][FaceGrid][Appearance]
+chartFace=org.kde.ksysguard.linechart
+showTitle=false
+
+[Containments][40][Applets][75][Configuration][FaceGrid][SensorColors]
+cpu/all/usage=0,110,98
+gpu=40,107,98
+memory/physical/usedPercent=107,104,40
+
+[Containments][40][Applets][75][Configuration][FaceGrid][Sensors]
+highPrioritySensorIds=["cpu/all/usage"]
 
 [Containments][40][Applets][75][Configuration][SensorColors]
 cpu/all/usage=0,110,98
@@ -130,7 +131,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][77][Configuration]
-PreloadWeight=12
+PreloadWeight=31
 
 [Containments][40][Applets][77][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -158,7 +159,7 @@ DialogWidth=1366
 PreloadWeight=0
 
 [Containments][40][General]
-AppletOrder=67;75;77;42;63;44;45;56
+AppletOrder=67;75;77;42;63;45;56
 
 [Containments][46]
 activityId=
@@ -252,7 +253,7 @@ immutability=1
 plugin=org.kde.plasma.networkmanagement
 
 [Containments][46][Applets][59][Configuration]
-PreloadWeight=0
+PreloadWeight=17
 
 [Containments][46][Applets][60]
 immutability=1
@@ -319,7 +320,7 @@ PreloadWeight=0
 
 [Containments][76][General]
 ToolBoxButtonState=topcenter
-ToolBoxButtonX=300
+ToolBoxButtonX=282
 
 [Containments][76][Wallpaper][org.kde.image][General]
 Image=file:///usr/share/wallpapers/Path/contents/images/2560x1600.jpg

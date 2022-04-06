@@ -25,12 +25,15 @@ set encoding=utf-8              "Set default display encoding to utf-8
 set spelllang=en                "Default spell checking for english
 set textwidth=0                 "Do not automatically break long lines
 
+" Stop looking for a mapping/keycode after n milliseconds
+set timeout timeoutlen=1000 ttimeoutlen=30
+
 " Display whitespace visually
 set list listchars=tab:›\ ,space:⋅,trail:~,nbsp:⍽,extends:>,precedes:<
 " set list listchars=tab:<->,space:⋅,trail:~,eol:↴,nbsp:⍽,extends:>,precedes:<
 
-" Stop looking for a mapping/keycode after n milliseconds
-set timeout timeoutlen=1000 ttimeoutlen=30
+" List of characters for separators and other special places
+set fillchars=fold:\ ,foldopen:▼,foldclose:▶,foldsep:│,vert:│,diff:╱
 
 augroup vimrc
 	autocmd!
@@ -154,18 +157,6 @@ if ! has('nvim')
 	colorscheme gruvbox8
 
 endif
-
-"}}}
-
-" ================ Display settings ==================
-"{{{
-
-" Blinking BAR in insert mode, blinking BLOCK elsewhere (GUI only)
-set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-	\,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-	\,sm:block-blinkwait175-blinkoff150-blinkon175
-
-set guifont=FiraCode\ Nerd\ Font
 
 "}}}
 

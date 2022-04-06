@@ -13,17 +13,17 @@ vim.opt.inccommand = "split"
 -- {{{
 lvim.format_on_save = false
 lvim.lint_on_save = true
-
-lvim.colorscheme = "nightfox"
+lvim.colorscheme = "terafox"
 
 B.gitsigns.opts.signcolumn = false
 B.gitsigns.opts.numhl = true
 
-B.nvimtree.side = "left"
-B.nvimtree.show_icons.git = 0
-B.nvimtree.setup.hide_dotfiles = 0
-
 B.notify.active = true
+
+B.nvimtree.side = "left"
+B.nvimtree.show_icons.git = 1
+B.nvimtree.setup.hide_dotfiles = 0
+vim.g.nvim_tree_indent_markers = 1
 
 B.treesitter.ensure_installed = "maintained"
 B.treesitter.highlight.enabled = true
@@ -196,7 +196,7 @@ lvim.plugins = {
 	},
 	{
 		"lukas-reineke/indent-blankline.nvim",
-		event = "BufWinEnter",
+		event = "BufRead",
 		config = function()
 			require("indent_blankline").setup({
 				enabled = true,
@@ -279,11 +279,20 @@ lvim.plugins = {
 					code_actions = "a",
 				},
 			}
-			vim.cmd("autocmd! FileType Outline setlocal nolist")
+			vim.cmd("autocmd! FileType Outline setlocal nolist signcolumn=no")
 			vim.api.nvim_set_keymap("n", "<leader>S", "<CMD>SymbolsOutline<CR>", { noremap = true })
 		end,
 	},
 }
 -- }}}
+
+-- ================ Display settings =======================
+--{{{
+-- Blinking BAR in insert mode, blinking BLOCK elsewhere (GUI only)
+vim.opt.guicursor =
+	"n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait100-blinkoff400-blinkon600-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
+-- vim.opt.guifont = "MesloLGS NF Liga:h10"
+vim.opt.guifont = "Fira Code cv16 cv29 cv31 ss02 ss03 ss05 ss07 ss08 zero:h10"
+--}}}
 
 -- vim:fdm=marker:fdl=0:
