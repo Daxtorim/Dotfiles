@@ -3,17 +3,17 @@
 autoload -U colors && colors
 
 _zsh_time_preexec() {
-	ZSH_COMMAND_TIME_START=$(date "+%s%1N")
+	_ZSH_COMMAND_TIME_START=$(date "+%s%1N")
 }
 
 _zsh_time_precmd() {
-	[ $ZSH_COMMAND_TIME_START ] || return
+	local start_time=${_ZSH_COMMAND_TIME_START:-$(date "+%s%1N")}
+	unset _ZSH_COMMAND_TIME_START
 
-	local execution_time_mil=$(( $(date "+%s%1N") - ${ZSH_COMMAND_TIME_START} ))
+	local execution_time_mil=$(( $(date "+%s%1N") - ${start_time} ))
 	local execution_time_sec=$(( ${execution_time_mil} / 10 ))
-	unset ZSH_COMMAND_TIME_START
 
-	if [ ${execution_time_sec} -lt 10 ] && [ "${EXIT_ERROR:-0}" -eq 0 ]; then
+	if [ ${execution_time_sec} -lt 10 ] && [ "${_ZSH_EXIT_ERROR:-0}" -eq 0 ]; then
 		return
 	fi
 
@@ -31,7 +31,7 @@ _zsh_time_precmd() {
 		timer_display=$(printf "%d.%ds" "$sec" "$mil")
 	fi
 
-	COMMAND_TIME_INFO="%101F ${timer_display}%f"
+	_ZSH_COMMAND_TIME_INFO="%101F ${timer_display}%f"
 }
 
 _zsh_status_precmd() {
@@ -41,13 +41,13 @@ _zsh_status_precmd() {
 	local status_info=""
 	local status_color=""
 
-	EXIT_ERROR=0
+	_ZSH_EXIT_ERROR=0
 
 	local stat
 	for stat in ${exit_codes}; do
 		if [ ${stat} -gt 0 ]; then
 			# Remember error for later
-			EXIT_ERROR=1
+			_ZSH_EXIT_ERROR=1
 		fi
 
 		if [ ${stat} -gt 128 ];then
@@ -65,19 +65,19 @@ _zsh_status_precmd() {
 		status_color="❌%160F"
 	fi
 
-	if [ ${EXIT_ERROR} -ne 0 ]; then
+	if [ ${_ZSH_EXIT_ERROR} -ne 0 ]; then
 		# Remove leading "|" from $status_info
-		COMMAND_STATUS_INFO="${status_color} ${status_info#\|}%f"
+		_ZSH_COMMAND_STATUS_INFO="${status_color} ${status_info#\|}%f"
 	else
-		COMMAND_STATUS_INFO="${status_color}%f"
+		_ZSH_COMMAND_STATUS_INFO="${status_color}%f"
 	fi
 }
 
 _zsh_print_cmd_info() {
-	if [ "${COMMAND_TIME_INFO}" ] || [ "${EXIT_ERROR}" -ne 0 ]; then
-		print -P "─╸\[${COMMAND_STATUS_INFO}\]\-\[${COMMAND_TIME_INFO}\]\-\[ %T\]"
+	if [ "${_ZSH_COMMAND_TIME_INFO}" ] || [ "${_ZSH_EXIT_ERROR}" -ne 0 ]; then
+		print -P "─╸\[${_ZSH_COMMAND_STATUS_INFO}\]\-\[${_ZSH_COMMAND_TIME_INFO}\]\-\[ %T\]"
 	fi
-	unset COMMAND_TIME_INFO
+	unset _ZSH_COMMAND_TIME_INFO
 }
 
 preexec_functions+=(_zsh_time_preexec)

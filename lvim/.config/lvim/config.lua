@@ -7,7 +7,12 @@ vim.cmd("source ${HOME}/.config/lvim/vimrc.original")
 
 -- Add Neovim specific listchars characters
 vim.opt.listchars:append({ lead = "." })
+vim.opt.fillchars:append({ foldopen = "▼", foldclose = "▶", foldsep = "│" })
+
 vim.opt.inccommand = "split"
+
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- ================ LunarVim Settings ======================
 -- {{{
@@ -15,82 +20,18 @@ lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.colorscheme = "terafox"
 
-B.gitsigns.opts.signcolumn = false
-B.gitsigns.opts.numhl = true
+B.gitsigns.opts.signcolumn = true
+B.gitsigns.opts.numhl = false
 
 B.notify.active = true
 
-B.nvimtree.side = "left"
-B.nvimtree.show_icons.git = 1
-B.nvimtree.setup.hide_dotfiles = 0
-vim.g.nvim_tree_indent_markers = 1
+B.nvimtree.setup.filters.dotfiles = false
+B.nvimtree.setup.renderer.indent_markers.enable = true
 
-B.treesitter.ensure_installed = "maintained"
+B.terminal.active = false
+
+B.treesitter.ensure_installed = "all"
 B.treesitter.highlight.enabled = true
--- }}}
-
--- ================ Toggleterm =============================
--- {{{
-B.terminal.active = true
-B.terminal.direction = "horizontal"
-B.terminal.size = 10
-B.terminal.close_on_exit = true
-
--- {{{ on_exit(), on_stdout(), on_stderr()
-local function on_exit(term, _, exit_code, _)
-	if term:is_open() then
-		return
-	end
-	local out = { text = "Success!", level = "info" }
-	if exit_code ~= 0 then
-		out = { text = "Failure!", level = "error" }
-	end
-	vim.notify("Job exited: " .. out.text, out.level, { title = term.name })
-end
-
-local function on_stdout(term, _, data, _)
-	if term:is_open() then
-		return
-	end
-	local str = data[1]
-	-- ─╸[✅]-[ 1.3s]-[ 15:32]
-	if str:match("─╸%[[✅❌].*.*") then
-		local out = { text = "Success!", level = "info" }
-		if str:match("─╸%[❌") then
-			out = { text = "Failure!", level = "error" }
-		end
-		vim.notify("Job finished: " .. out.text, out.level, { title = term.name })
-	end
-end
--- }}}
-
-B.terminal.on_exit = on_exit
-B.terminal.on_stdout = on_stdout
-
-B.terminal.term_count = 1001
-
-function _G._VIMRC_TOGGLETERM_EXECUTE_FILE()
-	local win = vim.api.nvim_get_current_win()
-	local cursorposition = vim.api.nvim_win_get_cursor(0)
-
-	vim.cmd(B.terminal.term_count .. 'TermExec cmd="%:p"')
-
-	vim.api.nvim_win_set_cursor(win, cursorposition)
-	vim.api.nvim_set_current_win(win)
-end
-
-B.which_key.mappings["r"] = {
-	name = "Terminals",
-	["1"] = { "<cmd>lua require('toggleterm').toggle(1)<CR>", "Terminal 1" },
-	["2"] = { "<cmd>lua require('toggleterm').toggle(2)<CR>", "Terminal 2" },
-	["3"] = { "<cmd>lua require('toggleterm').toggle(3)<CR>", "Terminal 3" },
-	r = { "<cmd>lua _G._VIMRC_TOGGLETERM_EXECUTE_FILE()<CR>", "Run current file" },
-	t = {
-		"<cmd>lua require('toggleterm').toggle(" .. B.terminal.term_count .. ")<CR><cmd>stopinsert<CR>",
-		"Show last run",
-	},
-}
-B.which_key.mappings["t"] = { "<cmd>lua require('toggleterm').toggle(1)<CR>", "Terminal 1" }
 -- }}}
 
 -- ================ Lualine ================================
@@ -103,7 +44,7 @@ B.lualine.options = {
 	section_separators = { left = "", right = "" },
 	disabled_filetypes = {},
 	always_divide_middle = true,
-	-- globalstatus = true,
+	globalstatus = true,
 }
 B.lualine.sections = {
 	lualine_a = { "mode" },
@@ -181,17 +122,9 @@ lvim.plugins = {
 		end,
 	},
 	{
-		"Pocco81/AutoSave.nvim",
+		"Pocco81/auto-save.nvim",
 		config = function()
-			require("autosave").setup({
-				enabled = false,
-				execution_message = "AutoSave: saved at " .. vim.fn.strftime("%H:%M:%S"),
-				events = { "InsertLeave", "TextChanged" },
-				write_all_buffers = false,
-				on_off_commands = true,
-				clean_command_line_interval = 0,
-				debounce_delay = 135,
-			})
+			require("auto-save").setup()
 		end,
 	},
 	{
@@ -243,10 +176,9 @@ lvim.plugins = {
 			require("nvim-treesitter.configs").setup({
 				rainbow = {
 					enable = true,
-					-- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-					extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-					max_file_lines = nil, -- Do not enable for files with more than n lines, int
-					colors = { "#b16286", "#0aaaaa", "#d79921", "#689d6a", "#d65d0e", "#a89984", "#458588" }, -- table of hex strings
+					extended_mode = true, -- Also highlight non-bracket delimiters like html tags
+					max_file_lines = nil, -- Do not enable for files with more than n lines
+					colors = { "#b16286", "#0aaaaa", "#d79921", "#689d6a", "#d65d0e", "#a89984", "#458588" },
 				},
 			})
 		end,
@@ -257,42 +189,16 @@ lvim.plugins = {
 			require("stabilize").setup()
 		end,
 	},
-	{
-		"simrat39/symbols-outline.nvim",
-		event = "BufWinEnter",
-		setup = function()
-			vim.g.symbols_outline = {
-				highlight_hovered_item = true,
-				show_guides = true,
-				auto_preview = false,
-				position = "right",
-				relative_width = false,
-				width = 50,
-				show_symbol_details = true,
-				keymaps = {
-					close = { "<ESC>", "q" },
-					goto_location = "<CR>",
-					focus_location = "o",
-					hover_symbol = "K",
-					toggle_preview = "<C-space>",
-					rename_symbol = "r",
-					code_actions = "a",
-				},
-			}
-			vim.cmd("autocmd! FileType Outline setlocal nolist signcolumn=no")
-			vim.api.nvim_set_keymap("n", "<leader>S", "<CMD>SymbolsOutline<CR>", { noremap = true })
-		end,
-	},
 }
 -- }}}
 
 -- ================ Display settings =======================
---{{{
+-- {{{
 -- Blinking BAR in insert mode, blinking BLOCK elsewhere (GUI only)
 vim.opt.guicursor =
 	"n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait100-blinkoff400-blinkon600-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
 -- vim.opt.guifont = "MesloLGS NF Liga:h10"
 vim.opt.guifont = "Fira Code cv16 cv29 cv31 ss02 ss03 ss05 ss07 ss08 zero:h10"
---}}}
+-- }}}
 
 -- vim:fdm=marker:fdl=0:

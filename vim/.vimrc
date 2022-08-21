@@ -5,7 +5,6 @@
 set title titlestring=%<%(VIM:\ %t\ %)%m%r%y
 
 set termguicolors               "Activate true color support
-syntax enable                   "Turn on syntax highlighting when applicable
 set belloff=all                 "Turn off the bell for all events, i.e. NO BEEP
 set number                      "Show line number of current line
 set norelativenumber            "Do not show other line numbers relative to current line
@@ -33,7 +32,14 @@ set list listchars=tab:›\ ,space:⋅,trail:~,nbsp:⍽,extends:>,precedes:<
 " set list listchars=tab:<->,space:⋅,trail:~,eol:↴,nbsp:⍽,extends:>,precedes:<
 
 " List of characters for separators and other special places
-set fillchars=fold:\ ,foldopen:▼,foldclose:▶,foldsep:│,vert:│,diff:╱
+set fillchars=fold:\ ,vert:│,diff:╱
+
+" In Neovim Treesitter will supply syntax highlighting
+if has("nvim")
+	syntax off
+else
+	syntax on
+endif
 
 augroup vimrc
 	autocmd!
@@ -85,6 +91,13 @@ set foldmethod=indent           "Fold based on indentation
 set foldignore=                 "Do not exclude any lines from folds
 set foldlevel=99                "Open all folds by default
 set foldcolumn=0                "Display foldlevel in n wide gutter
+
+" Replace tabs (\t) in first line of fold with spaces, then append ' ... ',
+" then the last line of fold, then append the number of lines within the fold.
+" The first \ signals a line continuation, not an escape sequence
+set foldtext=substitute(getline(v:foldstart),'\\t',repeat('\ ',&tabstop),'g').
+			\'\ ...\ '.trim(getline(v:foldend)).
+			\'\ ('.(v:foldend-v:foldstart+1).'\ lines)'
 "}}}
 
 " ================ Keybindings =======================
