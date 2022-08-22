@@ -36,7 +36,7 @@ immutability=1
 plugin=org.kde.plasma.systemtray
 
 [Containments][40][Applets][45][Configuration]
-PreloadWeight=27
+PreloadWeight=0
 SystrayContainmentId=46
 
 [Containments][40][Applets][56]
@@ -75,7 +75,7 @@ immutability=1
 plugin=org.kde.plasma.kickoff
 
 [Containments][40][Applets][67][Configuration]
-PreloadWeight=100
+PreloadWeight=89
 
 [Containments][40][Applets][67][Configuration][ConfigDialog]
 DialogHeight=540
@@ -93,7 +93,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][75][Configuration]
-PreloadWeight=100
+PreloadWeight=84
 
 [Containments][40][Applets][75][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -123,7 +123,7 @@ memory/physical/usedPercent=107,104,40
 
 [Containments][40][Applets][75][Configuration][Sensors]
 highPrioritySensorIds=["cpu/all/usage"]
-lowPrioritySensorIds=["cpu/all/cpuCount","cpu/all/coreCount"]
+lowPrioritySensorIds=["cpu/all/cpuCount","cpu/all/coreCount","cpu/cpu0/temperature","cpu/cpu0/frequency"]
 totalSensors=["cpu/all/usage"]
 
 [Containments][40][Applets][77]
@@ -131,7 +131,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][77][Configuration]
-PreloadWeight=31
+PreloadWeight=28
 
 [Containments][40][Applets][77][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -253,7 +253,7 @@ immutability=1
 plugin=org.kde.plasma.networkmanagement
 
 [Containments][46][Applets][59][Configuration]
-PreloadWeight=17
+PreloadWeight=0
 
 [Containments][46][Applets][60]
 immutability=1
@@ -331,6 +331,11 @@ launchers=applications:org.kde.dolphin.desktop,applications:firefox.desktop,appl
 
 [Containments40Appletsts][43][Configuration][General]
 launchers=applications:systemsettings.desktop,preferred://filemanager,preferred://browser
+
+[Containments40Appletsts][63][Configuration][General]
+groupPopups=false
+launchers=applications:org.kde.dolphin.desktop,applications:kitty.desktop,file:///var/lib/flatpak/exports/share/applications/com.spotify.Client.desktop,preferred://browser
+middleClickAction=None
 
 [ScreenMapping]
 itemsOnDisabledScreens=

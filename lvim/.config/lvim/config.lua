@@ -195,10 +195,9 @@ lvim.plugins = {
 -- ================ Display settings =======================
 -- {{{
 -- Blinking BAR in insert mode, blinking BLOCK elsewhere (GUI only)
+vim.opt.guifont = "monospace:h11"
 vim.opt.guicursor =
 	"n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait100-blinkoff400-blinkon600-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
--- vim.opt.guifont = "MesloLGS NF Liga:h10"
-vim.opt.guifont = "Fira Code cv16 cv29 cv31 ss02 ss03 ss05 ss07 ss08 zero:h10"
 -- }}}
 
 -- vim:fdm=marker:fdl=0:
