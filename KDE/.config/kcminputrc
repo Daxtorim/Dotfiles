@@ -7,9 +7,13 @@ NumLock=0
 RepeatDelay=300
 RepeatRate=50
 
+[Libinput][1739][10629][Synaptics s3203]
+NaturalScroll=true
+TapToClick=true
+
 [Mouse]
 XLbInptAccelProfileFlat=false
-cursorTheme=Oxygen_Yellow
+cursorTheme=Oxygen 02 Vibrant Orange
 
 [Tmp]
 update_info=delete_cursor_old_default_size.upd:DeleteCursorOldDefaultSize

@@ -15,6 +15,10 @@ ViewPropsTimestamp=2021,9,3,13,45,53.926
 [IconsMode]
 FontWeight=50
 
+[KFileDialog Settings]
+Places Icons Auto-resize=false
+Places Icons Static Size=22
+
 [KPropertiesDialog]
 eDP-1 Height 1366x768=458
 eDP-1 Width 1366x768=410
