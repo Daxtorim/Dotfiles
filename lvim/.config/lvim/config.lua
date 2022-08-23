@@ -1,7 +1,7 @@
-local B = lvim.builtin
 -- ================ Sourcing .vimrc ========================
 
-vim.cmd("source ${HOME}/.config/lvim/vimrc.original")
+local vimrc = debug.getinfo(1).short_src:match(".+/") .. "/vimrc.original"
+vim.cmd("source " .. vimrc)
 
 -- ================ Neovim settings ========================
 
@@ -16,6 +16,7 @@ vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- ================ LunarVim Settings ======================
 -- {{{
+local B = lvim.builtin
 lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.colorscheme = "terafox"
