@@ -1,6 +1,6 @@
 -- ================ Sourcing .vimrc ========================
 
-local vimrc = debug.getinfo(1).short_src:match(".+/") .. "/vimrc.original"
+local vimrc = debug.getinfo(1).source:match("[^@]+/") .. "vimrc.original"
 vim.cmd("source " .. vimrc)
 
 -- ================ Neovim settings ========================
@@ -11,8 +11,14 @@ vim.opt.fillchars:append({ foldopen = "▼", foldclose = "▶", foldsep = "│" 
 
 vim.opt.inccommand = "split"
 
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- workaround to get folding and syntax highlighting with treesitter to work
+vim.api.nvim_create_autocmd({ "BufRead" }, {
+	group = vim.api.nvim_create_augroup("TS_FOLD_WORKAROUND", {}),
+	callback = function()
+		vim.opt.foldmethod = "expr"
+		vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+	end,
+})
 
 -- ================ LunarVim Settings ======================
 -- {{{

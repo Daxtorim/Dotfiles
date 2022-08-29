@@ -24,6 +24,8 @@ set encoding=utf-8              "Set default display encoding to utf-8
 set spelllang=en                "Default spell checking for english
 set textwidth=0                 "Do not automatically break long lines
 
+syntax on
+
 " Stop looking for a mapping/keycode after n milliseconds
 set timeout timeoutlen=1000 ttimeoutlen=30
 
@@ -33,13 +35,6 @@ set list listchars=tab:›\ ,space:⋅,trail:~,nbsp:⍽,extends:>,precedes:<
 
 " List of characters for separators and other special places
 set fillchars=fold:\ ,vert:│,diff:╱
-
-" In Neovim Treesitter will supply syntax highlighting
-if has("nvim")
-	syntax off
-else
-	syntax on
-endif
 
 augroup vimrc
 	autocmd!

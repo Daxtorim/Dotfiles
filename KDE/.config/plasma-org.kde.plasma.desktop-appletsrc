@@ -36,7 +36,7 @@ immutability=1
 plugin=org.kde.plasma.systemtray
 
 [Containments][40][Applets][45][Configuration]
-PreloadWeight=50
+PreloadWeight=60
 SystrayContainmentId=46
 
 [Containments][40][Applets][56]
@@ -80,7 +80,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][75][Configuration]
-PreloadWeight=99
+PreloadWeight=100
 
 [Containments][40][Applets][75][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -118,7 +118,7 @@ immutability=1
 plugin=org.kde.plasma.systemmonitor
 
 [Containments][40][Applets][77][Configuration]
-PreloadWeight=43
+PreloadWeight=48
 
 [Containments][40][Applets][77][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
@@ -141,6 +141,10 @@ totalSensors=["memory/physical/usedPercent"]
 [Containments][40][Applets][80]
 immutability=1
 plugin=org.kde.plasma.icontasks
+
+[Containments][40][Applets][80][Configuration][ConfigDialog]
+DialogHeight=540
+DialogWidth=720
 
 [Containments][40][ConfigDialog]
 DialogHeight=84
@@ -180,7 +184,7 @@ immutability=1
 plugin=org.kde.plasma.notifications
 
 [Containments][46][Applets][49][Configuration]
-PreloadWeight=0
+PreloadWeight=5
 
 [Containments][46][Applets][50]
 immutability=1
@@ -290,8 +294,8 @@ DialogWidth=900
 PreloadWeight=0
 
 [Containments][46][General]
-extraItems=org.kde.plasma.mediacontroller,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.keyboardlayout,org.kde.plasma.notifications,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.keyboardindicator,org.kde.plasma.bluetooth,org.kde.plasma.printmanager,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.kscreen,org.kde.plasma.manage-inputmethod,org.kde.plasma.vault,org.kde.plasma.devicenotifier
-hiddenItems=org.kde.plasma.clipboard,Package Manager,KWin,org.kde.kscreen,Paketmanager,IBus Panel
+extraItems=org.kde.plasma.mediacontroller,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.keyboardlayout,org.kde.plasma.notifications,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.keyboardindicator,org.kde.plasma.bluetooth,org.kde.plasma.printmanager,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.kscreen,org.kde.plasma.manage-inputmethod,org.kde.plasma.vault,org.kde.plasma.devicenotifier,ibus-ui-gtk3
+hiddenItems=org.kde.plasma.clipboard,Package Manager,KWin,org.kde.kscreen,Paketmanager,IBus Panel,ibus-ui-gtk3
 iconSpacing=1
 knownItems=org.kde.plasma.mediacontroller,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.keyboardlayout,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.keyboardindicator,org.kde.plasma.bluetooth,org.kde.plasma.printmanager,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.plasma.manage-inputmethod,org.kde.plasma.vault
 

@@ -53,7 +53,6 @@ enableSpreadLayout=false
 enableStairLayout=false
 enableThreeColumnLayout=false
 ignoreClass=yakuake,spectacle,Conky,zoom,mediawriter
-maximizeSoleTile=true
 monocleMaximize=false
 
 [Script-desktopchangeosd]
