@@ -30,7 +30,7 @@ wmclassmatch=1
 
 [3]
 Description=Lower minimum size restriction
-minsize=20,20
+minsize=10,10
 minsizerule=2
 types=1
 

@@ -6,12 +6,12 @@ GLTextureFilter=0
 OpenGLIsUnsafe=false
 
 [Desktops]
-Id_1=cc44bd12-7861-409a-9325-6bf95dfe0339
-Id_2=70dab0fe-027c-4366-9899-e25af57f149e
-Id_3=d07f14c9-ad94-4b99-b4e6-f55e814a1e53
-Id_4=f583d14c-d6d7-4335-80e9-82c3a2cb7820
-Number=4
-Rows=1
+Id_1=482237ed-ada1-4de0-a040-092d7c0606c2
+Id_2=c1fbf256-9569-4a5f-8365-e2507751342c
+Name_1=Desktop 2
+Name_2=Desktop 3
+Number=2
+Rows=2
 
 [Effect-DimInactive]
 DimFullScreen=false
@@ -29,6 +29,12 @@ LayoutMode=1
 
 [Effect-Slide]
 SlideBackground=false
+
+[Effect-slide]
+SlideBackground=false
+
+[Effect-windowview]
+BorderActivateAll=9
 
 [NightColor]
 Active=true
