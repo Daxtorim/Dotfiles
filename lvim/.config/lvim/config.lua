@@ -36,9 +36,6 @@ B.nvimtree.setup.filters.dotfiles = false
 B.nvimtree.setup.renderer.indent_markers.enable = true
 
 B.terminal.active = false
-
-B.treesitter.ensure_installed = "all"
-B.treesitter.highlight.enabled = true
 -- }}}
 
 -- ================ Lualine ================================

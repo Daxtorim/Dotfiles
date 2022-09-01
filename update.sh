@@ -4,6 +4,9 @@
 [ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -en "$0" "$0" "$@" || :
 [ -d "/home/${USER}/Dotfiles" ] || exit 1
 
+# If any argument is given update regardless of changes in the repo
+update_anyway=$1
+
 # Check if cron job exists and update it if not
 cronjob="#>>>>>> Dotfile-Update
 @hourly /home/${USER}/Dotfiles/update.sh &> /dev/null
@@ -17,6 +20,7 @@ fi
 
 # Wait for networking
 while ! ping -c1 github.com &> /dev/null; do
+	echo "Waiting for network connection. Sleeping 60s..."
 	sleep 60
 done
 
@@ -25,16 +29,18 @@ cd "/home/${USER}/Dotfiles" || exit 2
 git remote update &> /dev/null || exit 3
 git stash push --quiet
 
-if git diff --quiet "@{u}"; then
+if [ -z "${update_anyway}" ]; then
 	# No changes, nothing to do, pop stash, exit early
-	[ -n "$(git stash list)" ] && git stash pop --quiet
-	exit 0
+	if git diff --quiet "@{u}"; then
+		[ -n "$(git stash list)" ] && git stash pop --quiet
+		exit 0
+	fi
 fi
 
-# Update Dotfiles, apply local changes (stash) again
+# Update Dotfiles
 git pull --rebase --quiet
 
-#Its not an intended to be an if-else
+# It's not intended to be an if-else
 # shellcheck disable=2015
 [ -n "$(git stash list)" ] && git stash pop --quiet || {
 	echo "Unable to pop stash. Changes are incompatible."
@@ -63,13 +69,14 @@ while IFS= read -r -d $'\0' repo_filename; do
 				rm -f "${abs_filename}"
 			fi
 			# Add module to the update list when the real file exists
-			if ! grep -q "${module}" <<< "${module_list}"; then
-				module_list=$(printf '%s %s' "${module_list}" "${module}")
+			if ! grep -q "${module}" <<< "${module_list[*]}"; then
+				module_list+=("${module}")
 			fi
 		fi
 	fi
 done < <(find "/home/${USER}/Dotfiles" -path "/home/${USER}/Dotfiles/.git" -prune -o -type f -print0)
 
-# Prune potentially dead symlinks and add new ones (we actually *want* word splitting here)
-# shellcheck disable=2086
-stow --dir="/home/${USER}/Dotfiles" --target="/home/${USER}" --no-folding --restow ${module_list}
+echo "${module_list[*]}"
+
+# Prune potentially dead symlinks and add new ones
+stow --dir="/home/${USER}/Dotfiles" --target="/home/${USER}" --no-folding --restow "${module_list[@]}"
