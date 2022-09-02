@@ -12,6 +12,7 @@ NaturalScroll=true
 TapToClick=true
 
 [Mouse]
+X11LibInputXAccelProfileFlat=true
 XLbInptAccelProfileFlat=false
 cursorTheme=Oxygen 02 Vibrant Orange
 
