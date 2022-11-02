@@ -1,19 +1,15 @@
-[CompactMode]
-FontWeight=50
-PreviewSize=96
+[$Version]
+update_info=dolphin_detailsmodesettings.upd:rename-leading-padding
 
-[DetailsMode]
-FontWeight=50
+[CompactMode]
+PreviewSize=96
 
 [General]
 BrowseThroughArchives=true
 ShowToolTips=true
 SortingChoice=CaseInsensitiveSorting
-Version=201
+Version=202
 ViewPropsTimestamp=2021,9,3,13,45,53.926
-
-[IconsMode]
-FontWeight=50
 
 [KFileDialog Settings]
 Places Icons Auto-resize=false

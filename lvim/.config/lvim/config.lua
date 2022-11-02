@@ -11,6 +11,10 @@ vim.opt.fillchars:append({ foldopen = "▼", foldclose = "▶", foldsep = "│" 
 
 vim.opt.inccommand = "split"
 
+if vim.version().minor >= 9 then
+	vim.opt.splitkeep = "sreen"
+end
+
 -- workaround to get folding and syntax highlighting with treesitter to work
 vim.api.nvim_create_autocmd({ "BufRead" }, {
 	group = vim.api.nvim_create_augroup("TS_FOLD_WORKAROUND", {}),
@@ -26,38 +30,43 @@ local B = lvim.builtin
 lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.colorscheme = "terafox"
+lvim.reload_config_on_save = false
 
 B.gitsigns.opts.signcolumn = true
 B.gitsigns.opts.numhl = false
-
-B.notify.active = true
 
 B.nvimtree.setup.filters.dotfiles = false
 B.nvimtree.setup.renderer.indent_markers.enable = true
 
 B.terminal.active = false
--- }}}
 
--- ================ Lualine ================================
--- {{{
-local components = require("lvim.core.lualine.components")
-B.lualine.options = {
-	icons_enabled = true,
-	theme = "material",
-	component_separators = { left = "", right = "" },
-	section_separators = { left = "", right = "" },
-	disabled_filetypes = {},
-	always_divide_middle = true,
-	globalstatus = true,
+B.indentlines = {
+	enabled = true,
+	space_char_blankline = " ",
+	show_end_of_line = true,
+	show_trailing_blankline_indent = false,
+	use_treesitter = true,
+	max_indent_increase = 2,
+	filetype_exclude = {
+		"help",
+		"terminal",
+		"dashboard",
+		"NvimTree",
+		"packer",
+		"lspinfo",
+		"lsp-installer",
+		"Outline",
+	},
+	buftype_exclude = { "terminal", "nofile" },
 }
-B.lualine.sections = {
-	lualine_a = { "mode" },
-	lualine_b = { "branch", "diff", "diagnostics" },
-	lualine_c = { components.lsp },
-	lualine_x = { components.spaces },
-	lualine_y = { "encoding", "fileformat", "filetype" },
-	lualine_z = { "location", "progress" },
-}
+
+local ok_indent, _ = pcall(require, "indent_blankline")
+if ok_indent then
+	-- Refresh after folding
+	for _, cmd in pairs({ "A", "a", "C", "c", "M", "m", "O", "o", "R", "r" }) do
+		vim.api.nvim_set_keymap("n", "z" .. cmd, "z" .. cmd .. "<cmd>IndentBlanklineRefresh<CR>", { noremap = true })
+	end
+end
 -- }}}
 
 -- ================ LSP Settings ===========================
@@ -132,40 +141,6 @@ lvim.plugins = {
 		end,
 	},
 	{
-		"lukas-reineke/indent-blankline.nvim",
-		event = "BufRead",
-		config = function()
-			require("indent_blankline").setup({
-				enabled = true,
-				space_char_blankline = " ",
-				show_end_of_line = true,
-				show_trailing_blankline_indent = false,
-				use_treesitter = true,
-				max_indent_increase = 2,
-				filetype_exclude = {
-					"help",
-					"terminal",
-					"dashboard",
-					"NvimTree",
-					"packer",
-					"lspinfo",
-					"lsp-installer",
-					"Outline",
-				},
-				buftype_exclude = { "terminal", "nofile" },
-			})
-			-- Refresh after folding
-			for _, cmd in pairs({ "A", "a", "C", "c", "M", "m", "O", "o", "R", "r" }) do
-				vim.api.nvim_set_keymap(
-					"n",
-					"z" .. cmd,
-					"z" .. cmd .. "<cmd>IndentBlanklineRefresh<CR>",
-					{ noremap = true }
-				)
-			end
-		end,
-	},
-	{
 		-- Paint background of #RRGGBB colors in the actual color
 		"norcalli/nvim-colorizer.lua",
 		config = function()
@@ -185,12 +160,6 @@ lvim.plugins = {
 					colors = { "#b16286", "#0aaaaa", "#d79921", "#689d6a", "#d65d0e", "#a89984", "#458588" },
 				},
 			})
-		end,
-	},
-	{
-		"luukvbaal/stabilize.nvim",
-		config = function()
-			require("stabilize").setup()
 		end,
 	},
 }
