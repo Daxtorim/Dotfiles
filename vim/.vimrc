@@ -14,7 +14,7 @@ set wildmenu                    "Add menu for auto completion
 set wildmode=longest:full,full
 set history=1000                "Store cmd history
 set showcmd                     "Show incomplete commands at the bottom right
-set cmdheight=2                 "Set the height of the cmd line at the bottom to 2 lines
+set cmdheight=1                 "Set the height of the cmd line at the bottom to n lines
 set laststatus=2                "Always display the status line, even if only one window is displayed
 set splitbelow splitright       "Open new split panes to right and bottom, which feels more natural
 set backspace=indent,eol,start  "Generally expected backspace behavior in insert mode
@@ -116,6 +116,10 @@ nmap Y y$
 " Motions still act as if the wrapped lines were a single line
 nnoremap j gj
 nnoremap k gk
+
+" Move around buffers (H,L were used to move curser to top or bottom of screen)
+nnoremap L <cmd>bnext<CR>
+nnoremap H <cmd>bNext<CR>
 
 " Remove highlighting and redraw the screen
 nmap <leader>h <cmd>nohl<CR><cmd>redraw<CR>
