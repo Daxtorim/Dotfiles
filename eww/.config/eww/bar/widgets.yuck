@@ -1,0 +1,127 @@
+(include "./helpers.yuck")
+
+;; Variables ;;
+
+(defpoll volume_val :interval "1s" :initial "0" "./scripts/volumectl.sh get-vol")
+(defpoll volume_mute :interval "1s" :initial "no" "./scripts/volumectl.sh get-mute")
+(defpoll time :interval "10s" :initial "Time unknown" "date '+%H:%M %b %d, %Y'")
+(defpoll workspace_data :interval "2s" :initial "[{}]" "./scripts/workspaces_widget.py")
+(defpoll battery_low_class :interval "1s" "./scripts/battery_class.sh")
+
+(deflisten network_data :initial "[{}]" "./scripts/networkctl.sh monitor")
+
+(defvar power false) ; switch for reveal element
+
+;; Widgets ;;
+
+(defwidget cpu_graph []
+  (box :class "widget-box cpu-usage-box"
+       :space-evenly false
+       :spacing 5
+    (label :text "CPU:")
+    (box :width 50
+         :class "graph cpu-usage-graph"
+      (_graph_0_100 :value {EWW_CPU.avg}))))
+
+
+(defwidget ram_graph []
+  (box :class "widget-box ram-usage-box"
+       :space-evenly false
+       :spacing 5
+    (label :text "RAM:")
+    (box :width 50
+         :class "graph ram-usage-graph"
+      (_graph_0_100 :value {EWW_RAM.used_mem_perc}))))
+
+
+(defwidget battery []
+  (box :class "widget-box battery-box ${battery_low_class}"
+    (_battery :status {EWW_BATTERY.BAT0.status}
+              :capacity {EWW_BATTERY.BAT0.capacity})))
+
+
+(defwidget time []
+  (box :class "widget-box time-box"
+       :orientation "h"
+   (label :text "${time}")))
+
+
+(defwidget workspaces []
+  (box :class "widget-box workspaces-box"
+       :orientation "h"
+       :width 50
+       :valign "fill"
+       :halign "center"
+       :space-evenly false
+       :spacing "5"
+    (box :valign "center"
+         :halign "center"
+         :space-evenly false
+      (for ws in workspace_data
+        (box :class "${ws.css_class}"
+             :orientation "h"
+             :halign "center"
+             :valign "center"
+             :space-evenly false
+          (button :onclick "hyprctl dispatch workspace ${ws.name}"
+            (label :text "|${ws.name}|"))
+          (for client in {ws.clients}
+            (button :onclick "hyprctl dispatch focuswindow address:${client.address}"
+                    :tooltip "${client.title} | PID: ${client.pid}"
+              (image :path "${client.icon_path}"
+                     :image-height 20))))))))
+
+
+(defwidget volume []
+  (box :class "widget-box volume-box"
+    (button :onclick "./scripts/volumectl.sh open-ctl"
+            :onmiddleclick "./scripts/volumectl.sh set-mute"
+      (_volume :mute volume_mute :volume volume_val))))
+
+
+(defwidget network []
+  (button :onclick "./scripts/networkctl.sh open-ctl"
+          :valign "fill"
+    (box
+      (box :class "widget-box network-box network-box-connnected"
+           :space-evenly false
+           :tooltip "${network_data.network}"
+           :visible {network_data.status == "connected"}
+        (box :space-evenly false
+          (label :text "${network_data.icon} ")
+          (_network_speed :up {EWW_NET[network_data.iface].NET_UP}
+                          :down {EWW_NET[network_data.iface].NET_DOWN})))
+      (box :class "widget-box network-box network-box-disconnnected"
+           :space-evenly false
+           :visible {network_data.status != "connected"}
+        (box :space-evenly false
+          (label :text "${network_data.icon} ")
+          (label :text "${network_data.status}"))))))
+
+
+(defwidget power []
+  (eventbox :onhover "${EWW_CMD} update power=true"
+            :onhoverlost "${EWW_CMD} update power=false"
+    (box :orientation "h"
+         :space-evenly "false"
+         :spacing 4
+         :vexpand "false"
+         :class "widget-box powermenu-box"
+      (button :class "powermenu-button button-shutdown"
+              :tooltip "Shutdown"
+              :onclick "shutdown now" "")
+      (revealer :transition "slideleft"
+                :reveal power
+                :duration "550ms"
+        (box :orientation "h"
+             :spacing 4
+             :space-evenly "false"
+          (button :class "powermenu-button button-reboot"
+                  :tooltip "Reboot"
+                  :onclick "reboot" "")
+          (button :class "powermenu-button button-logout"
+                  :tooltip "Logout"
+                  :onclick "hyprctl dispatch exit ''" "")
+          (button :class "powermenu-button button-hypr-reload"
+                  :tooltip "Hyprland reload"
+                  :onclick "hyprctl reload" "" ))))))

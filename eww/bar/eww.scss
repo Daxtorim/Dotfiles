@@ -1,0 +1,94 @@
+* {
+  all: unset; //Unsets everything so you can style everything from scratch
+}
+
+// Variable Color's
+$background: #1a1b26;
+$foreground: #a9b1d6;
+
+$black: #24283b;
+$gray: #565f89;
+$red: #f7768e;
+$green: #73daca;
+$yellow: #e0af68;
+$blue: #7aa2f7;
+$magenta: #bb9af7;
+$cyan: #7dcfff;
+$white: $foreground;
+
+// Global Styles
+.bar {
+  background-color: $black;
+  color: $white;
+  padding: 10px;
+  font-family: "monospace";
+}
+
+tooltip {
+  background-color: $black;
+  color: $yellow;
+  border-radius: 10px;
+}
+
+.widget-box {
+  background-color: $background;
+  border-radius: 5px;
+  padding: 0px 5px;
+  margin: 2px;
+}
+
+.graph {
+  border: 1px solid $blue;
+  border-radius: 3px;
+  padding: 1px;
+  margin: 2px 0px;
+}
+
+.battery-charging {
+  color: $black;
+  background-color: $yellow;
+}
+.battery-low-on {
+  color: $black;
+  background-color: $red;
+}
+
+// Workspaces
+.ws {
+  border-radius: 100px;
+  margin: 2px;
+  padding: 2px 10px 2px 5px;
+}
+
+.ws-active {
+  color: $black;
+  background-color: $white;
+}
+
+.ws-inactive {
+  color: $yellow;
+  background-color: $black;
+}
+
+// Powermenu
+.powermenu-box {
+  font-size: larger;
+  font-weight: bold;
+}
+.powermenu-button {
+  padding: 0rem 0.2rem;
+}
+.button-shutdown {
+  color: $red;
+  padding-left: 0.4rem;
+}
+.button-reboot {
+  color: $yellow;
+}
+.button-logout {
+  color: $magenta;
+}
+.button-hypr-reload {
+  color: $green;
+  padding-right: 0.4rem;
+}
