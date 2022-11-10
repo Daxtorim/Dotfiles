@@ -197,7 +197,7 @@ immutability=1
 plugin=org.kde.plasma.notifications
 
 [Containments][46][Applets][49][Configuration]
-PreloadWeight=5
+PreloadWeight=10
 
 [Containments][46][Applets][50]
 immutability=1
@@ -211,14 +211,11 @@ immutability=1
 plugin=org.kde.plasma.volume
 
 [Containments][46][Applets][51][Configuration]
-PreloadWeight=15
+PreloadWeight=25
 
 [Containments][46][Applets][51][Configuration][ConfigDialog]
 DialogHeight=558
 DialogWidth=720
-
-[Containments][46][Applets][51][Configuration][General]
-globalMute=true
 
 [Containments][46][Applets][52]
 immutability=1
@@ -264,7 +261,7 @@ immutability=1
 plugin=org.kde.plasma.networkmanagement
 
 [Containments][46][Applets][59][Configuration]
-PreloadWeight=40
+PreloadWeight=45
 
 [Containments][46][Applets][60]
 immutability=1
@@ -316,7 +313,7 @@ iconSpacing=1
 knownItems=org.kde.plasma.mediacontroller,org.kde.kdeconnect,org.kde.plasma.networkmanagement,org.kde.plasma.keyboardlayout,org.kde.plasma.notifications,org.kde.plasma.devicenotifier,org.kde.plasma.volume,org.kde.plasma.nightcolorcontrol,org.kde.plasma.keyboardindicator,org.kde.plasma.bluetooth,org.kde.plasma.printmanager,org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.plasma.manage-inputmethod,org.kde.plasma.vault
 shownItems=org.kde.plasma.volume,org.kde.plasma.networkmanagement
 
-[Containments][90]
+[Containments][91]
 ItemGeometries-1366x768=
 ItemGeometriesHorizontal=
 activityId=88496407-69e3-4c5f-8993-4cb7fd74c338
@@ -327,11 +324,7 @@ location=0
 plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
 
-[Containments][90][General]
-ToolBoxButtonState=topcenter
-ToolBoxButtonX=167
-
-[Containments][90][Wallpaper][org.kde.image][General]
+[Containments][91][Wallpaper][org.kde.image][General]
 Image=file:///usr/share/wallpapers/Next/contents/images/1366x768.jpg
 
 [Containments1Appletsts][3][Configuration][General]
