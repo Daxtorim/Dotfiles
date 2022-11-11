@@ -25,8 +25,11 @@
 
 
 (defwidget _network_speed [up down]
-  (box :space-evenly false
-    (label :text "⇧${round(up / 1000000, 1) >= 1 ? round(up / 1000000, 0) : round(up / 1000, 1) >= 1 ? round(up / 1000, 0) : round(up, 0)}")
+  (box :class "network-speed-label" :space-evenly false
+    (label :text "|")
+    (label :text "⇧${strlength(up) % 3 == 0 ? '' : strlength(up) % 3 == 1 ? '  ' : ' '}${round(up / 1000000, 1) >= 1 ? round(up / 1000000, 0) : round(up / 1000, 1) >= 1 ? round(up / 1000, 0) : up}")
     (label :text "${round(up / 1000000, 1) >= 1 ? 'M' : round(up / 1000, 1) >= 1 ? 'k' : 'b'}")
-    (label :text "⇩${round(down / 1000000, 1) >= 1 ? round(down / 1000000, 0) : round(down / 1000, 1) >= 1 ? round(down / 1000, 0) : down}")
-    (label :text "${round(down / 1000000, 1) >= 1 ? 'M' : round(down / 1000, 1) >= 1 ? 'k' : 'b'}")))
+    (label :text "|")
+    (label :text "⇩${strlength(down) % 3 == 0 ? '' : strlength(down) % 3 == 1 ? '  ' : ' '}${round(down / 1000000, 1) >= 1 ? round(down / 1000000, 0) : round(down / 1000, 1) >= 1 ? round(down / 1000, 0) : down}")
+    (label :text "${round(down / 1000000, 1) >= 1 ? 'M' : round(down / 1000, 1) >= 1 ? 'k' : 'b'}")
+    (label :text "|")))
