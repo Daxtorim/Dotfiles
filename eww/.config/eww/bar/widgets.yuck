@@ -22,7 +22,7 @@
   (box :class "widget-box cpu-usage-box"
        :space-evenly false
        :spacing 5
-    (label :text "CPU:")
+    (label :text "CPU: ${EWW_TEMPS.CORETEMP_PACKAGE_ID_0}°C ")
     (box :width 50
          :class "graph cpu-usage-graph"
       (_graph_0_100 :value {EWW_CPU.avg}))))

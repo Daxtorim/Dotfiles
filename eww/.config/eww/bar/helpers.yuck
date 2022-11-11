@@ -26,10 +26,12 @@
 
 (defwidget _network_speed [up down]
   (box :class "network-speed-label" :space-evenly false
+    ; for some reason EWW_NET reports double of what is actually going through
+    ; (label :text "RAW:(${round(up / 2, 0)}/${round(down / 2, 0)})")
     (label :text "|")
-    (label :text "⇧${strlength(up) % 3 == 0 ? '' : strlength(up) % 3 == 1 ? '  ' : ' '}${round(up / 1000000, 1) >= 1 ? round(up / 1000000, 0) : round(up / 1000, 1) >= 1 ? round(up / 1000, 0) : up}")
-    (label :text "${round(up / 1000000, 1) >= 1 ? 'M' : round(up / 1000, 1) >= 1 ? 'k' : 'b'}")
+    (label :text "⇧${strlength(round(up/2,0)) % 3 == 0 ? '' : strlength(round(up/2,0)) % 3 == 1 ? '  ' : ' '}${round(up / 2000000, 1) >= 1 ? round(up / 2000000, 0) : round(up / 2000, 1) >= 1 ? round(up / 2000, 0) : round(up / 2, 0)}")
+    (label :text "${round(up / 2000000, 1) >= 1 ? 'M' : round(up / 2000, 1) >= 1 ? 'k' : 'b'}")
     (label :text "|")
-    (label :text "⇩${strlength(down) % 3 == 0 ? '' : strlength(down) % 3 == 1 ? '  ' : ' '}${round(down / 1000000, 1) >= 1 ? round(down / 1000000, 0) : round(down / 1000, 1) >= 1 ? round(down / 1000, 0) : down}")
-    (label :text "${round(down / 1000000, 1) >= 1 ? 'M' : round(down / 1000, 1) >= 1 ? 'k' : 'b'}")
+    (label :text "⇩${strlength(round(down/2,0)) % 3 == 0 ? '' : strlength(round(down/2,0)) % 3 == 1 ? '  ' : ' '}${round(down / 2000000, 1) >= 1 ? round(down / 2000000, 0) : round(down / 2000, 1) >= 1 ? round(down / 2000, 0) : round(down / 2, 0)}")
+    (label :text "${round(down / 2000000, 1) >= 1 ? 'M' : round(down / 2000, 1) >= 1 ? 'k' : 'b'}")
     (label :text "|")))
