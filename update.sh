@@ -76,7 +76,7 @@ while IFS= read -r -d $'\0' repo_filename; do
 	fi
 done < <(find "/home/${USER}/Dotfiles" -path "/home/${USER}/Dotfiles/.git" -prune -o -type f -print0)
 
-echo "${module_list[*]}"
+printf "Found and stowing these modules:\n%s\n" "${module_list[*]}"
 
 # Prune potentially dead symlinks and add new ones
 stow --dir="/home/${USER}/Dotfiles" --target="/home/${USER}" --no-folding --restow "${module_list[@]}"

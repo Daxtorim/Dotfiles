@@ -14,7 +14,7 @@ TapToClick=true
 [Mouse]
 X11LibInputXAccelProfileFlat=true
 XLbInptAccelProfileFlat=false
-cursorTheme=Oxygen 02 Vibrant Orange
+cursorTheme=Bibata-Modern-Amber
 
 [Tmp]
 update_info=delete_cursor_old_default_size.upd:DeleteCursorOldDefaultSize
