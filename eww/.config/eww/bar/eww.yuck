@@ -36,8 +36,7 @@
        :halign "center"
        :space-evenly false
        :spacing 4
-    (cpu_graph)
-    (ram_graph)
+    (time)
   ))
 
 
@@ -47,8 +46,9 @@
        :halign "end"
        :space-evenly false
        :spacing 4
-    (network)
     (volume)
     (battery)
-    (time)
+    (network)
+    (cpu_graph)
+    (ram_graph)
   ))

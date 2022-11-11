@@ -4,8 +4,9 @@
 
 (defpoll volume_val :interval "1s" :initial "0" "./scripts/volumectl.sh get-vol")
 (defpoll volume_mute :interval "1s" :initial "no" "./scripts/volumectl.sh get-mute")
-(defpoll time :interval "10s" :initial "Time unknown" "date '+%H:%M %b %d, %Y'")
+(defpoll time :interval "60s" :initial "Time unknown" "date '+%H:%M %b %d, %Y'")
 (defpoll workspace_data :interval "2s" :initial "[{}]" "./scripts/workspaces_widget.py")
+
 (defpoll battery_low_class :interval "1s" "./scripts/battery_class.sh")
 
 (deflisten network_data :initial "[{}]" "./scripts/networkctl.sh monitor")
@@ -87,16 +88,14 @@
            :space-evenly false
            :tooltip "${network_data.network}"
            :visible {network_data.status == "connected"}
-        (box :space-evenly false
-          (label :text "${network_data.icon} ")
-          (_network_speed :up {EWW_NET[network_data.iface].NET_UP}
-                          :down {EWW_NET[network_data.iface].NET_DOWN})))
+        (label :text "${network_data.icon} ")
+        (_network_speed :up {EWW_NET[network_data.iface].NET_UP}
+                        :down {EWW_NET[network_data.iface].NET_DOWN}))
       (box :class "widget-box network-box network-box-disconnnected"
            :space-evenly false
            :visible {network_data.status != "connected"}
-        (box :space-evenly false
-          (label :text "${network_data.icon} ")
-          (label :text "${network_data.status}"))))))
+        (label :text "${network_data.icon} ")
+        (label :text "${network_data.status}")))))
 
 
 (defwidget power []

@@ -127,7 +127,7 @@ nmap <leader>h <cmd>nohl<CR><cmd>redraw<CR>
 " Search and Replace shortcuts
 nmap <leader>sw *N
 nmap <leader>se *N:%s@@@g<Left><Left>
-xmap <leader>se :s@@@g<Left><Left>
+xmap <leader>se :s@@@g<Left><Left><Left>
 
 nmap <leader>v <cmd>vsplit<CR>
 nmap <leader>w <cmd>w<CR>
