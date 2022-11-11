@@ -2,20 +2,17 @@
 
 # Toggle the "battery-low" css class for the battery widget
 
-bat_capacity=$(eww --config "${HOME}/.config/eww/bar" get "EWW_BATTERY" | jq ".BAT0.capacity")
-bat_status=$(eww --config "${HOME}/.config/eww/bar" get "EWW_BATTERY" | jq ".BAT0.status")
+eww_cmd="eww --config ${HOME}/.config/eww/bar"
+blink_delay=1
 
-# yes, the double quotes are part of the output
-if [ "${bat_status}" = '"Charging"' ]; then
-	echo "battery-charging"
+${eww_cmd} update battery_low_class='battery-box-low-on'
+sleep ${blink_delay}
+${eww_cmd} update battery_low_class='battery-box-low-off'
+sleep ${blink_delay}
 
-elif [ "${bat_capacity}" -le 10 ]; then
+th=$(${eww_cmd} get 'battery_low_threshold')
+cp=$(${eww_cmd} get 'EWW_BATTERY.BAT0.capacity')
 
-	battery_low=$(eww --config "${HOME}/.config/eww/bar" get "battery_low_class")
-
-	if [ "${battery_low}" = "battery-low-on" ]; then
-		echo "battery-low-off"
-	else
-		echo "battery-low-on"
-	fi
+if [ "$cp" -gt "$th" ]; then
+	${eww_cmd} update battery_low_class=''
 fi

@@ -7,7 +7,10 @@
 (defpoll time :interval "60s" :initial "Time unknown" "date '+%H:%M %b %d, %Y'")
 (defpoll workspace_data :interval "2s" :initial "[{}]" "./scripts/workspaces_widget.py")
 
-(defpoll battery_low_class :interval "1s" "./scripts/battery_class.sh")
+(defvar battery_low_class "")
+(defvar battery_low_threshold 10)
+(defpoll _ :interval "0s" :run-while {EWW_BATTERY.BAT0.capacity <= battery_low_threshold}
+           "./scripts/battery_class.sh")
 
 (deflisten network_data :initial "[{}]" "./scripts/networkctl.sh monitor")
 
@@ -36,7 +39,7 @@
 
 
 (defwidget battery []
-  (box :class "widget-box battery-box ${battery_low_class}"
+  (box :class "widget-box battery-box ${battery_low_class} ${EWW_BATTERY.BAT0.status == 'Charging' ? 'battery-box-charging' : ''}"
     (_battery :status {EWW_BATTERY.BAT0.status}
               :capacity {EWW_BATTERY.BAT0.capacity})))
 

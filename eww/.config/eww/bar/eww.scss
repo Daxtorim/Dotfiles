@@ -44,16 +44,20 @@ tooltip {
   margin: 2px 0px;
 }
 
-.battery-charging {
-  color: $black;
-  background-color: $yellow;
-}
-.battery-low-on {
+// ######### Battery ###############
+.battery-box-low-on {
   color: $black;
   background-color: $red;
 }
 
-// Workspaces
+// needs to be last to overwrite .battery-low
+.battery-box-charging {
+  color: $black;
+  background-color: $yellow;
+}
+
+
+// ######### Workspaces ############
 .ws {
   border-radius: 100px;
   margin: 2px;
@@ -70,7 +74,7 @@ tooltip {
   background-color: $black;
 }
 
-// Powermenu
+// ######### Powermenu #############
 .powermenu-box {
   font-size: larger;
   font-weight: bold;
