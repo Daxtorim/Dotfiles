@@ -9,8 +9,7 @@
 
 (defvar battery_low_class "")
 (defvar battery_low_threshold 10)
-(defpoll _ :interval "0s" :run-while {EWW_BATTERY.BAT0.capacity <= battery_low_threshold}
-           "./scripts/battery_class.sh")
+(defpoll _ :interval "0s" :run-while {EWW_BATTERY.BAT0.capacity <= battery_low_threshold} "./scripts/battery_class.sh")
 
 (deflisten network_data :initial "[{}]" "./scripts/networkctl.sh monitor")
 
@@ -21,8 +20,8 @@
 (defwidget cpu_graph []
   (box :class "widget-box cpu-usage-box"
        :space-evenly false
-       :spacing 5
-    (label :text "CPU: ${EWW_TEMPS.CORETEMP_PACKAGE_ID_0}°C ")
+       :spacing 10
+    (label :text "CPU: ${EWW_TEMPS.CORETEMP_PACKAGE_ID_0}°C")
     (box :width 50
          :class "graph cpu-usage-graph"
       (_graph_0_100 :value {EWW_CPU.avg}))))
@@ -47,7 +46,7 @@
 (defwidget time []
   (box :class "widget-box time-box"
        :orientation "h"
-   (label :text "${time}")))
+    (label :text "${time}")))
 
 
 (defwidget workspaces []
@@ -57,23 +56,19 @@
        :valign "fill"
        :halign "center"
        :space-evenly false
-       :spacing "5"
-    (box :valign "center"
-         :halign "center"
-         :space-evenly false
-      (for ws in workspace_data
-        (box :class "${ws.css_class}"
-             :orientation "h"
-             :halign "center"
-             :valign "center"
-             :space-evenly false
-          (button :onclick "hyprctl dispatch workspace ${ws.name}"
-            (label :text "|${ws.name}|"))
-          (for client in {ws.clients}
-            (button :onclick "hyprctl dispatch focuswindow address:${client.address}"
-                    :tooltip "${client.title} | PID: ${client.pid}"
-              (image :path "${client.icon_path}"
-                     :image-height 20))))))))
+    (for ws in workspace_data
+      (box :class "${ws.css_class}"
+           :orientation "h"
+           :halign "center"
+           :valign "center"
+           :space-evenly false
+        (button :onclick "hyprctl dispatch workspace ${ws.name}"
+          (label :text "|${ws.name}|"))
+        (for client in {ws.clients}
+          (button :onclick "hyprctl dispatch focuswindow address:${client.address}"
+                  :tooltip "${client.title} | PID: ${client.pid}"
+            (image :path "${client.icon_path}"
+                   :image-height 20)))))))
 
 
 (defwidget volume []
@@ -86,7 +81,7 @@
 (defwidget network []
   (button :onclick "./scripts/networkctl.sh open-ctl"
           :valign "fill"
-    (box
+    (box ; need a container here since button can only have a single child
       (box :class "widget-box network-box network-box-connnected"
            :space-evenly false
            :tooltip "${network_data.network}"
