@@ -40,11 +40,11 @@ fi
 # Update Dotfiles
 git pull --rebase --quiet
 
-# It's not intended to be an if-else
-# shellcheck disable=2015
-[ -n "$(git stash list)" ] && git stash pop --quiet || {
-	echo "Unable to pop stash. Changes are incompatible."
-	exit 1
+[ -n "$(git stash list)" ] && {
+		git stash pop --quiet || {
+		echo "Unable to pop stash. Changes are incompatible."
+		exit 1
+	}
 }
 
 # Get all files in the repo (except .git directory)
