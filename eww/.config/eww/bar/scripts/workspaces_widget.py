@@ -25,20 +25,22 @@ def find_icon_name(window_class: str) -> str:
     icon_name = ""
 
     launcher = ""
-    launcher_dir_global = "/usr/share/applications"
-    launcher_dir_local = os.path.expanduser("~/.local/share/applications")
-
-    for filename in os.listdir(launcher_dir_global):
-        if re.search(f"{window_class}.desktop$", filename, re.IGNORECASE):
-            launcher = os.path.join(launcher_dir_global, filename)
-            break
-    else:
-        for filename in os.listdir(launcher_dir_local):
-            if re.search(f"{window_class}.desktop$", filename, re.IGNORECASE):
-                launcher = os.path.join(launcher_dir_global, filename)
+    launcher_dirs = [
+        "/usr/share/applications",
+        "/var/lib/flatpak/exports/share/applications",
+        os.path.expanduser("~/.local/share/applications"),
+    ]
+    for dir in launcher_dirs:
+        for filename in os.listdir(dir):
+            if re.search(f"{window_class}.*desktop$", filename, re.IGNORECASE):
+                launcher = os.path.join(dir, filename)
                 break
         else:
-            return get_placeholder_icon()
+            continue
+        break  # only break if inner loop did break as well
+
+    if not launcher:
+        return get_placeholder_icon()
 
     with open(launcher) as fin:
         lines = fin.readlines()
