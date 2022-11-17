@@ -1,5 +1,5 @@
 [Desktop Entry]
 Name=Hyprland (wrapped)
 Comment=An intelligent dynamic tiling Wayland compositor
-Exec=/home/dax/.local/bin/hypr/hyprland_wrapper.sh
+Exec=/home/dax/.local/share/hypr/hyprland_wrapper.sh
 Type=Application
