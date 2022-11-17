@@ -29,11 +29,10 @@
     ; for some reason EWW_NET reports double of what is actually going through
     ; (label :text "RAW:(${round(up / 2, 0)}/${round(down / 2, 0)})")
     ; if 1Mbps <= up|down < 10Mbps; round to 1 decimal place (1.0), otherwise round to 0 decimal places (10)
-    ; leftpad with underscores because eww regex can't match spaces
-    (label :text "|⇧")
-    (label :text {replace("__${round(up / 2000000, 1) >= 10 ? round(up / 2000000, 0) : round(up / 2000000, 1) >= 1 ? round(up / 2000000, 1) : round(up / 2000, 1) >= 1 ? round(up / 2000, 0) : round(up / 2, 0)}", '^.*([0-9._]{3})$', "\\1")})
+    (label :text "|")
+    (label :text {replace("⇧  ${round(up / 2000000, 1) >= 10 ? round(up / 2000000, 0) : round(up / 2000000, 1) >= 1 ? round(up / 2000000, 1) : round(up / 2000, 1) >= 1 ? round(up / 2000, 0) : round(up / 2, 0)}", " *([0-9. ]{3})", "\\1")})
     (label :text {round(up / 2000000, 1) >= 1 ? 'M' : round(up / 2000, 1) >= 1 ? 'k' : 'b'})
-    (label :text "|⇩")
-    (label :text {replace("__${round(down / 2000000, 1) >= 10 ? round(down / 2000000, 0) : round(down / 2000000, 1) >= 1 ? round(down / 2000000, 1) : round(down / 2000, 1) >= 1 ? round(down / 2000, 0) : round(down / 2, 0)}", "^.*([0-9._]{3})$", "\\1")})
+    (label :text "|")
+    (label :text {replace("⇩  ${round(down / 2000000, 1) >= 10 ? round(down / 2000000, 0) : round(down / 2000000, 1) >= 1 ? round(down / 2000000, 1) : round(down / 2000, 1) >= 1 ? round(down / 2000, 0) : round(down / 2, 0)}", " *([0-9. ]{3})", "\\1")})
     (label :text {round(down / 2000000, 1) >= 1 ? 'M' : round(down / 2000, 1) >= 1 ? 'k' : 'b'})
     (label :text "|")))
