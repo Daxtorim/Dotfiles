@@ -26,6 +26,9 @@ set textwidth=0                 "Do not automatically break long lines
 
 syntax on
 
+" Tell vim to draw the entire background; fixes issues with colorscheme
+let &t_ut=''
+
 " Stop looking for a mapping/keycode after n milliseconds
 set timeout timeoutlen=1000 ttimeoutlen=30
 
