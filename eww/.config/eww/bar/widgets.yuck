@@ -79,21 +79,20 @@
 
 
 (defwidget network []
-  (button :onclick "./scripts/networkctl.sh open-ctl"
-          :valign "fill"
-    (box ; need a container here since button can only have a single child
-      (box :class "widget-box network-box network-box-connnected"
-           :space-evenly false
-           :tooltip "${network_data.network}"
-           :visible {network_data.status == "connected"}
-        (label :text "${network_data.icon} ")
-        (_network_speed :up {EWW_NET[network_data.iface].NET_UP}
-                        :down {EWW_NET[network_data.iface].NET_DOWN}))
-      (box :class "widget-box network-box network-box-disconnnected"
-           :space-evenly false
-           :visible {network_data.status != "connected"}
-        (label :text "${network_data.icon} ")
-        (label :text "${network_data.status}")))))
+  (box :class "widget-box network-box"
+    (button :onclick "./scripts/networkctl.sh open-ctl"
+      (box ; need a container here since button can only have a single child
+        (box :class "network-box-connnected"
+             :space-evenly false
+             :tooltip "${network_data.iface} | ${network_data.network}"
+             :visible {network_data.status == "connected"}
+          (label :text "${network_data.icon} ")
+          (_network_speed :up {EWW_NET[network_data.iface].NET_UP}
+                          :down {EWW_NET[network_data.iface].NET_DOWN}))
+        (box :class "network-box-disconnnected"
+             :space-evenly false
+             :visible {network_data.status != "connected"}
+          (label :text "${network_data.icon} ${network_data.status}"))))))
 
 
 (defwidget power []

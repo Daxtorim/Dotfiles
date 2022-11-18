@@ -9,11 +9,15 @@ import subprocess as sp
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk  # noqa
 
 ICON_THEME = Gtk.IconTheme.get_default()
 ICON_SIZE = 32
 PLACEHOLDER_ICON = "fedora-logo-icon"
+
+
+class GetOutOfLoop(Exception):
+    pass
 
 
 def get_placeholder_icon():
@@ -22,26 +26,25 @@ def get_placeholder_icon():
 
 @functools.cache
 def find_icon_name(window_class: str) -> str:
-    icon_name = ""
-
     launcher = ""
     launcher_dirs = [
         "/usr/share/applications",
         "/var/lib/flatpak/exports/share/applications",
         os.path.expanduser("~/.local/share/applications"),
     ]
-    for dir in launcher_dirs:
-        for filename in os.listdir(dir):
-            if re.search(f"{window_class}.*desktop$", filename, re.IGNORECASE):
-                launcher = os.path.join(dir, filename)
-                break
+
+    try:
+        for dir in launcher_dirs:
+            for filename in os.listdir(dir):
+                if re.search(f"{window_class}.*desktop$", filename, re.IGNORECASE):
+                    launcher = os.path.join(dir, filename)
+                    raise GetOutOfLoop
         else:
-            continue
-        break  # only break if inner loop did break as well
+            return get_placeholder_icon()
+    except GetOutOfLoop:
+        pass
 
-    if not launcher:
-        return get_placeholder_icon()
-
+    icon_name = ""
     with open(launcher) as fin:
         lines = fin.readlines()
         for line in lines:
@@ -51,7 +54,10 @@ def find_icon_name(window_class: str) -> str:
         else:
             return get_placeholder_icon()
 
-    return ICON_THEME.lookup_icon(icon_name, ICON_SIZE, 0).get_filename()
+    if icon_path := ICON_THEME.lookup_icon(icon_name, ICON_SIZE, 0).get_filename():
+        return icon_path
+    else:
+        return get_placeholder_icon()
 
 
 def main() -> str:
@@ -71,7 +77,7 @@ def main() -> str:
         workspace_clients[ws["id"]] = []
 
     # sort by window class
-    clients = sorted(clients, key=lambda x: x["class"])
+    clients = sorted(clients, key=lambda x: x["class"].lower())
     for client in clients:
         client["icon_path"] = find_icon_name(client["class"])
         ws_id = client["workspace"]["id"]
@@ -91,15 +97,12 @@ def main() -> str:
             client = {"icon_path": get_placeholder_icon()}
             workspace_clients[id].append(client)
 
-        css_class = f"ws ws-{id} "
+        css_class = f"ws ws-{id} ws-{ws['name']} "
         css_class += "ws-active" if id in active_ws else "ws-inactive"
 
-        workspace = {
-            "css_class": css_class,
-            "name": ws["name"],
-            "clients": workspace_clients[id],
-        }
-        workspace_components.append(workspace)
+        ws["css_class"] = css_class
+        ws["clients"] = workspace_clients[id]
+        workspace_components.append(ws)
 
     # compact separators to make this work with eww
     return json.dumps(workspace_components, separators=(",", ":"))
