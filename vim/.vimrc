@@ -33,7 +33,7 @@ let &t_ut=''
 set timeout timeoutlen=1000 ttimeoutlen=30
 
 " Display whitespace visually
-set list listchars=tab:›\ ,space:⋅,trail:~,nbsp:⍽,extends:>,precedes:<
+set list listchars=tab:›\ ,space:·,trail:~,nbsp:⍽,extends:>,precedes:<
 " set list listchars=tab:<->,space:⋅,trail:~,eol:↴,nbsp:⍽,extends:>,precedes:<
 
 " List of characters for separators and other special places
