@@ -2,15 +2,36 @@
 
 # Only allow one instance of this script (Boilerplate taken from `man flock')
 [ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -en "$0" "$0" "$@" || :
-[ -d "/home/${USER}/Dotfiles" ] || exit 1
+[ -d "${HOME}/Dotfiles" ] || exit 1
 
-# If any argument is given update regardless of changes in the repo
-update_anyway=$1
+###########################################################
+arg_error=0
+while [ $# -gt 0 ]; do
+	case "$1" in
+		-r | --refresh)
+			refresh=true
+			;;
+		-e | --stow-everything)
+			stow_everything=true
+			;;
+		-*)
+			echo "Unknown switch: $1" >&2
+			arg_error=1
+			;;
+		*)
+			echo "Unknown positional argument: $1" >&2
+			arg_error=1
+			;;
+	esac
+done
+[ ${arg_error} -ne 0 ] && exit 1
+###########################################################
+
 
 # Check if cron job exists and update it if not
 cronjob="#>>>>>> Dotfile-Update
-@hourly /home/${USER}/Dotfiles/update.sh &> /dev/null
-@reboot /home/${USER}/Dotfiles/update.sh &> /dev/null
+@hourly ${HOME}/Dotfiles/update.sh &> /dev/null
+@reboot ${HOME}/Dotfiles/update.sh &> /dev/null
 #<<<<<< Dotfile-Update"
 found_jobs="$(crontab -l | grep -zoE '#>>>>> Dotfile-Update.*#<<<<< Dotfile-Update' | tr -d '\0')"
 
@@ -25,11 +46,11 @@ while ! ping -c1 github.com &> /dev/null; do
 done
 
 # Stash uncommited changes to preserve machine dependent modifications
-cd "/home/${USER}/Dotfiles" || exit 2
-git remote update &> /dev/null || exit 3
+cd "${HOME}/Dotfiles" || exit 1
+git remote update &> /dev/null || exit 2
 git stash push --quiet
 
-if [ -z "${update_anyway}" ]; then
+if [ -z "${refresh}" ]; then
 	# No changes, nothing to do, pop stash, exit early
 	if git diff --quiet "@{u}"; then
 		[ -n "$(git stash list)" ] && git stash pop --quiet
@@ -41,9 +62,9 @@ fi
 git pull --rebase --quiet
 
 [ -n "$(git stash list)" ] && {
-		git stash pop --quiet || {
+	git stash pop --quiet || {
 		echo "Unable to pop stash. Changes are incompatible."
-		exit 1
+		exit 2
 	}
 }
 
@@ -61,7 +82,13 @@ while IFS= read -r -d $'\0' repo_filename; do
 	if [ -n "${tmp_filename}" ]; then
 		# Get real filename again
 		rel_filename=$(sed -z 's/@NEWLINE@/\n/' <<< "${tmp_filename}")
-		abs_filename="/home/${USER}/${rel_filename}"
+		abs_filename="${HOME}/${rel_filename}"
+
+		if [ -n "${stow_everything}" ]; then
+			if ! grep -q "${module}" <<< "${module_list[*]}"; then
+				module_list+=("${module}")
+			fi
+		fi
 
 		if [ -e "${abs_filename}" ]; then
 			# Delete actual files so they can be replaced by appropriate symlinks
@@ -74,9 +101,9 @@ while IFS= read -r -d $'\0' repo_filename; do
 			fi
 		fi
 	fi
-done < <(find "/home/${USER}/Dotfiles" -path "/home/${USER}/Dotfiles/.git" -prune -o -type f -print0)
+done < <(find "${HOME}/Dotfiles" -path "${HOME}/Dotfiles/.git" -prune -o -type f -print0)
 
 printf "Found and stowing these modules:\n%s\n" "${module_list[*]}"
 
 # Prune potentially dead symlinks and add new ones
-stow --dir="/home/${USER}/Dotfiles" --target="/home/${USER}" --no-folding --restow "${module_list[@]}"
+stow --dir="${HOME}/Dotfiles" --target="${HOME}" --no-folding --restow "${module_list[@]}"
