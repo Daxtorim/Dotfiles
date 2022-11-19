@@ -27,16 +27,6 @@
       (_graph_0_100 :value {EWW_CPU.avg}))))
 
 
-(defwidget ram_graph []
-  (box :class "widget-box ram-usage-box"
-       :space-evenly false
-       :spacing 5
-    (label :text "RAM:")
-    (box :width 50
-         :class "graph ram-usage-graph"
-      (_graph_0_100 :value {EWW_RAM.used_mem_perc}))))
-
-
 (defwidget battery []
   (box :class "widget-box battery-box ${battery_low_class} ${EWW_BATTERY.BAT0.status == 'Charging' ? 'battery-box-charging' : ''}"
     (_battery :status {EWW_BATTERY.BAT0.status}
@@ -66,7 +56,7 @@
           (label :text "|${ws.name}|"))
         (for client in {ws.clients}
           (button :onclick "hyprctl dispatch focuswindow address:${client.address}"
-                  :tooltip "${client.title} | PID: ${client.pid}"
+                  :tooltip "${client.class} | PID: ${client.pid}"
             (image :path "${client.icon_path}"
                    :image-height 20)))))))
 

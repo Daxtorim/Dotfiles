@@ -50,5 +50,4 @@
     (battery)
     (network)
     (cpu_graph)
-    (ram_graph)
   ))
