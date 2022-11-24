@@ -10,17 +10,21 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		-r | --refresh)
 			refresh=true
+			shift
 			;;
 		-e | --stow-everything)
 			stow_everything=true
+			shift
 			;;
 		-*)
 			echo "Unknown switch: $1" >&2
 			arg_error=1
+			shift
 			;;
 		*)
 			echo "Unknown positional argument: $1" >&2
 			arg_error=1
+			shift
 			;;
 	esac
 done
@@ -61,12 +65,12 @@ fi
 # Update Dotfiles
 git pull --rebase --quiet
 
-[ -n "$(git stash list)" ] && {
-	git stash pop --quiet || {
+if [ -n "$(git stash list)" ]; then
+	if ! git stash pop --quiet; then
 		echo "Unable to pop stash. Changes are incompatible."
 		exit 2
-	}
-}
+	fi
+fi
 
 # Get all files in the repo (except .git directory)
 while IFS= read -r -d $'\0' repo_filename; do
