@@ -8,14 +8,29 @@
 (defpoll workspace_data :interval "2s" :initial "[{}]" "./scripts/workspaces_widget.py")
 
 (defvar battery_low_class "")
-(defvar battery_low_threshold 10)
+(defvar battery_low_threshold 15)
 (defpoll _ :interval "0s" :run-while {EWW_BATTERY.BAT0.capacity <= battery_low_threshold} "./scripts/battery_class.sh")
 
 (deflisten network_data :initial "[{}]" "./scripts/networkctl.sh monitor")
 
 (defvar power false) ; switch for reveal element
+(defvar apps_hover "") ; switch for reveal element
 
 ;; Widgets ;;
+
+(defwidget applications []
+  (eventbox :onhover "${EWW_CMD} update apps_hover='hover apps_hover'"
+            :onhoverlost "${EWW_CMD} update apps_hover=''"
+  (button :class "widget-box apps-box ${apps_hover}"
+          :onclick 'wofi;$?' ; For some reason this only opens wofi when followed up by another command (which won't be executed)
+    (label :text " Apps"))))
+
+
+(defwidget battery []
+  (box :class "widget-box battery-box ${battery_low_class} ${EWW_BATTERY.BAT0.status == 'Charging' ? 'battery-box-charging' : ''}"
+    (_battery :status {EWW_BATTERY.BAT0.status}
+              :capacity {EWW_BATTERY.BAT0.capacity})))
+
 
 (defwidget cpu_graph []
   (box :class "widget-box cpu-usage-box"
@@ -27,16 +42,66 @@
       (_graph_0_100 :value {EWW_CPU.avg}))))
 
 
-(defwidget battery []
-  (box :class "widget-box battery-box ${battery_low_class} ${EWW_BATTERY.BAT0.status == 'Charging' ? 'battery-box-charging' : ''}"
-    (_battery :status {EWW_BATTERY.BAT0.status}
-              :capacity {EWW_BATTERY.BAT0.capacity})))
+(defwidget network []
+  (button :onclick "./scripts/networkctl.sh open-ctl"
+          :class "widget-box network-box"
+    (box ; need a container here since button can only have a single child
+      (box :class "network-box-connnected"
+           :space-evenly false
+           :tooltip "${network_data.iface} | ${network_data.network}"
+           :visible {network_data.status == "connected"}
+        (label :text "${network_data.icon} ")
+        (_network_speed :up {EWW_NET[network_data.iface].NET_UP}
+                        :down {EWW_NET[network_data.iface].NET_DOWN}))
+      (box :class "network-box-disconnnected"
+           :space-evenly false
+           :visible {network_data.status != "connected"}
+        (label :text "${network_data.icon} ${network_data.status}")))))
+
+
+(defwidget power []
+  (eventbox :onhover "${EWW_CMD} update power=true"
+            :onhoverlost "${EWW_CMD} update power=false"
+    (box :orientation "h"
+         :space-evenly "false"
+         :spacing 4
+         :vexpand "false"
+         :class "widget-box powermenu-box"
+      (button :class "powermenu-button button-shutdown"
+              :tooltip "Shutdown"
+              :onclick "shutdown now"
+        "")
+      (revealer :transition "slideleft"
+                :reveal power
+                :duration "550ms"
+        (box :orientation "h"
+             :spacing 4
+             :space-evenly "false"
+          (button :class "powermenu-button button-reboot"
+                  :tooltip "Reboot"
+                  :onclick "reboot"
+            "")
+          (button :class "powermenu-button button-logout"
+                  :tooltip "Logout"
+                  :onclick "hyprctl dispatch exit ''"
+            "")
+          (button :class "powermenu-button button-hypr-reload"
+                  :tooltip "Hyprland reload"
+                  :onclick "hyprctl reload"
+            "" ))))))
 
 
 (defwidget time []
   (box :class "widget-box time-box"
        :orientation "h"
     (label :text "${time}")))
+
+
+(defwidget volume []
+  (button :class "widget-box volume-box"
+          :onclick "./scripts/volumectl.sh open-ctl"
+          :onmiddleclick "./scripts/volumectl.sh set-mute"
+    (_volume :mute volume_mute :volume volume_val)))
 
 
 (defwidget workspaces []
@@ -59,55 +124,3 @@
                   :tooltip "${client.class} | PID: ${client.pid}"
             (image :path "${client.icon_path}"
                    :image-height 20)))))))
-
-
-(defwidget volume []
-  (box :class "widget-box volume-box"
-    (button :onclick "./scripts/volumectl.sh open-ctl"
-            :onmiddleclick "./scripts/volumectl.sh set-mute"
-      (_volume :mute volume_mute :volume volume_val))))
-
-
-(defwidget network []
-  (box :class "widget-box network-box"
-    (button :onclick "./scripts/networkctl.sh open-ctl"
-      (box ; need a container here since button can only have a single child
-        (box :class "network-box-connnected"
-             :space-evenly false
-             :tooltip "${network_data.iface} | ${network_data.network}"
-             :visible {network_data.status == "connected"}
-          (label :text "${network_data.icon} ")
-          (_network_speed :up {EWW_NET[network_data.iface].NET_UP}
-                          :down {EWW_NET[network_data.iface].NET_DOWN}))
-        (box :class "network-box-disconnnected"
-             :space-evenly false
-             :visible {network_data.status != "connected"}
-          (label :text "${network_data.icon} ${network_data.status}"))))))
-
-
-(defwidget power []
-  (eventbox :onhover "${EWW_CMD} update power=true"
-            :onhoverlost "${EWW_CMD} update power=false"
-    (box :orientation "h"
-         :space-evenly "false"
-         :spacing 4
-         :vexpand "false"
-         :class "widget-box powermenu-box"
-      (button :class "powermenu-button button-shutdown"
-              :tooltip "Shutdown"
-              :onclick "shutdown now" "")
-      (revealer :transition "slideleft"
-                :reveal power
-                :duration "550ms"
-        (box :orientation "h"
-             :spacing 4
-             :space-evenly "false"
-          (button :class "powermenu-button button-reboot"
-                  :tooltip "Reboot"
-                  :onclick "reboot" "")
-          (button :class "powermenu-button button-logout"
-                  :tooltip "Logout"
-                  :onclick "hyprctl dispatch exit ''" "")
-          (button :class "powermenu-button button-hypr-reload"
-                  :tooltip "Hyprland reload"
-                  :onclick "hyprctl reload" "" ))))))

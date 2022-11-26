@@ -1,17 +1,9 @@
 (defwidget _battery [capacity status]
-  (label :class "battery-label"
-         :text "${status == 'Charging' ? "" : capacity <= 10 ? "" :  ""}${
-                  capacity < 15 ? "" :
-                  capacity < 30 ? "" :
-                  capacity < 60 ? "" :
-                  capacity < 90 ? "" : ""} ${capacity}%"))
-
-(defwidget _volume [mute volume]
-  (label :class "volume-label"
-         :text "${mute == 'yes' ? "婢" :
-                  volume < 25 ? "奄" :
-                  volume < 60 ? "奔" :
-                  "墳"} ${volume}%"))
+  (box :class "battery-label"
+       :space-evenly false
+    (label :text {status == 'Charging' ? "" : capacity <= battery_low_threshold ? "" :  ""})
+    (label :text {capacity < 15 ? "  " : capacity < 30 ? "  " : capacity < 60 ? "  " : capacity < 90 ? "  " : "  "})
+    (label :text "${capacity}%")))
 
 
 (defwidget _graph_0_100 [value]
@@ -36,3 +28,8 @@
     (label :text {replace("⇩  ${round(down / 2000000, 1) >= 10 ? round(down / 2000000, 0) : round(down / 2000000, 1) >= 1 ? round(down / 2000000, 1) : round(down / 2000, 1) >= 1 ? round(down / 2000, 0) : round(down / 2, 0)}", " *([0-9. ]{3})", "\\1")})
     (label :text {round(down / 2000000, 1) >= 1 ? 'M' : round(down / 2000, 1) >= 1 ? 'K' : 'B'})
     (label :text "|")))
+
+
+(defwidget _volume [mute volume]
+  (label :class "volume-label"
+         :text "${mute == 'yes' ? "婢" : volume < 25 ? "奄" : volume < 60 ? "奔" : "墳"} ${volume}%"))

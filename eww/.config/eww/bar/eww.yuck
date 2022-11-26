@@ -26,6 +26,7 @@
        :space-evenly false
        :spacing 4
     (power)
+    (applications)
     (workspaces)
   ))
 
