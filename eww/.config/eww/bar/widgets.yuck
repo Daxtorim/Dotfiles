@@ -1,17 +1,15 @@
-(include "./helpers.yuck")
-
 ;; Variables ;;
 
-(defpoll volume_val :interval "1s" :initial "0" "./scripts/volumectl.sh get-vol")
-(defpoll volume_mute :interval "1s" :initial "no" "./scripts/volumectl.sh get-mute")
+(defpoll volume_val :interval "1s" :initial "0" "./bar/scripts/volumectl.sh get-vol")
+(defpoll volume_mute :interval "1s" :initial "no" "./bar/scripts/volumectl.sh get-mute")
 (defpoll time :interval "60s" :initial "Time unknown" "date '+%H:%M %b %d, %Y'")
-(defpoll workspace_data :interval "2s" :initial "[{}]" "./scripts/workspaces_widget.py")
+(defpoll workspace_data :interval "2s" :initial "[{}]" "./bar/scripts/workspaces_widget.py")
 
 (defvar battery_low_class "")
 (defvar battery_low_threshold 15)
-(defpoll _ :interval "0s" :run-while {EWW_BATTERY.BAT0.capacity <= battery_low_threshold} "./scripts/battery_class.sh")
+(defpoll _ :interval "0s" :run-while {EWW_BATTERY.BAT0.capacity <= battery_low_threshold} "./bar/scripts/battery_class.sh")
 
-(deflisten network_data :initial "[{}]" "./scripts/networkctl.sh monitor")
+(deflisten network_data :initial "[{}]" "./bar/scripts/networkctl.sh monitor")
 
 (defvar power false) ; switch for reveal element
 (defvar apps_hover "") ; switch for reveal element
@@ -19,8 +17,8 @@
 ;; Widgets ;;
 
 (defwidget applications []
-  (eventbox :onhover "${EWW_CMD} update apps_hover='hover apps_hover'"
-            :onhoverlost "${EWW_CMD} update apps_hover=''"
+  (eventbox :onhover "eww update apps_hover='hover apps_hover'"
+            :onhoverlost "eww update apps_hover=''"
   (button :class "widget-box apps-box ${apps_hover}"
           :onclick 'wofi;$?' ; For some reason this only opens wofi when followed up by another command (which won't be executed)
     (label :text " Apps"))))
@@ -43,7 +41,7 @@
 
 
 (defwidget network []
-  (button :onclick "./scripts/networkctl.sh open-ctl"
+  (button :onclick "./bar/scripts/networkctl.sh open-ctl"
           :class "widget-box network-box"
     (box ; need a container here since button can only have a single child
       (box :class "network-box-connnected"
@@ -59,9 +57,16 @@
         (label :text "${network_data.icon} ${network_data.status}")))))
 
 
+(defwidget notifications-bar []
+  (button :onclick "eww open notifications_window"
+          :onrightclick "eww close notifications_window"
+          :class "widget-box"
+    ""))
+
+
 (defwidget power []
-  (eventbox :onhover "${EWW_CMD} update power=true"
-            :onhoverlost "${EWW_CMD} update power=false"
+  (eventbox :onhover "eww update power=true"
+            :onhoverlost "eww update power=false"
     (box :orientation "h"
          :space-evenly "false"
          :spacing 4
@@ -86,8 +91,8 @@
                   :onclick "hyprctl dispatch exit ''"
             "")
           (button :class "powermenu-button button-hypr-reload"
-                  :tooltip "Hyprland reload"
-                  :onclick "hyprctl reload"
+                  :tooltip "Restart eww"
+                  :onclick "killall -TERM eww; eww open bar"
             "" ))))))
 
 
@@ -99,8 +104,8 @@
 
 (defwidget volume []
   (button :class "widget-box volume-box"
-          :onclick "./scripts/volumectl.sh open-ctl"
-          :onmiddleclick "./scripts/volumectl.sh set-mute"
+          :onclick "./bar/scripts/volumectl.sh open-ctl"
+          :onmiddleclick "./bar/scripts/volumectl.sh set-mute"
     (_volume :mute volume_mute :volume volume_val)))
 
 

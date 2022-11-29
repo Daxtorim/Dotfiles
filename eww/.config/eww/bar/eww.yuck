@@ -1,16 +1,14 @@
-(include "./widgets.yuck")
-
-
 (defwindow bar
   :monitor 0
-  :windowtype "dock"
   :exclusive true
-  :geometry (geometry :x "0%"
-                      :y "0%"
-                      :width "100%"
-                      :height "4%"
-                      :anchor "top center")
+  :geometry
+  (geometry :x "0%"
+            :y "0%"
+            :width "100%"
+            :height "4%"
+            :anchor "top center")
   (bar))
+
 
 (defwidget bar []
   (centerbox :orientation "h"
@@ -28,7 +26,7 @@
     (power)
     (applications)
     (workspaces)
-  ))
+    ))
 
 
 (defwidget _bar_middle []
@@ -38,7 +36,7 @@
        :space-evenly false
        :spacing 4
     (time)
-  ))
+    ))
 
 
 (defwidget _bar_end []
@@ -51,4 +49,5 @@
     (battery)
     (network)
     (cpu_graph)
-  ))
+    (notifications-bar)
+    ))

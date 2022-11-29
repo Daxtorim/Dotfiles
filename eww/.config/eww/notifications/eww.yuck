@@ -1,0 +1,88 @@
+(defwindow notifications_window
+  :monitor 0
+  :geometry
+  (geometry
+    :x "0px"
+    :y "0px"
+    :width "200px"
+    :height "96%"
+    :anchor "bottom right")
+  (notif-panel))
+
+(defpoll notification_history :interval "5s" "dunstctl history | jq '.data[0]'")
+(defvar notifications_paused false)
+
+(defwidget notif-panel []
+  (eventbox
+    :halign "start"
+    :onhoverlost "eww close notifications_window"
+    (rightside)))
+
+
+(defwidget rightside []
+  (box
+    :class "side"
+    :orientation "v"
+    :space-evenly "false"
+    :spacing "10"
+    :halign "center"
+    (box
+      :class "notification-header"
+      :orientation "h"
+      :space-evenly "false"
+      (label
+        :class "notification-label"
+        :halign "start"
+        :text "Notifications")
+      (box
+        :orientation "h"
+        :space-evenly "false"
+        :halign "end"
+        (button
+          :class "notification-action ${notifications_paused == 'true' ? 'notifications-paused' : ''}"
+          :tooltip "Pause/Resume Notifications"
+          :onclick "./notifications/toggle.sh" "")
+        (button
+          :class "notification-action"
+          :tooltip "Dismiss All"
+          :onclick "pkill dunst && hyprctl dispatch exec dunst" "")))
+    (scroll
+      :vscroll true
+      :hscroll false
+      :height 300
+      :width 200
+      (box
+        :orientation "v"
+        :space-evenly false
+        :spacing 20
+        :halign "start"
+        (for noti in notification_history
+          (box
+            :class "notification"
+            :orientation "h"
+            :space-evenly false
+            (image
+              :class "notification-icon"
+              :path "${noti.icon_path.data}"
+              :image-height 50
+              :image-width 100)
+            (box
+              :orientation "v"
+              :space-evenly false
+              :valign "start"
+              :spacing 10
+              (label
+                :xalign 0
+                :wrap true
+                :class "notification-appname"
+                :text "${noti.appname.data}")
+              (label
+                :xalign 0
+                :wrap true
+                :class "notification-summary"
+                :text "${noti.summary.data}")
+              (label
+                :xalign 0
+                :wrap true
+                :class "notification-body"
+                :text "${noti.body.data}"))))))))
