@@ -25,6 +25,8 @@
        :spacing 4
     (power)
     (applications)
+    (scratchpad)
+    (window_deco)
     (workspaces)
     ))
 

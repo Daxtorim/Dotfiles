@@ -3,25 +3,37 @@
 (defpoll volume_val :interval "1s" :initial "0" "./bar/scripts/volumectl.sh get-vol")
 (defpoll volume_mute :interval "1s" :initial "no" "./bar/scripts/volumectl.sh get-mute")
 (defpoll time :interval "60s" :initial "Time unknown" "date '+%H:%M %b %d, %Y'")
-(defpoll workspace_data :interval "2s" :initial "[{}]" "./bar/scripts/workspaces_widget.py")
 
 (defvar battery_low_class "")
 (defvar battery_low_threshold 15)
-(defpoll _ :interval "0s" :run-while {EWW_BATTERY.BAT0.capacity <= battery_low_threshold} "./bar/scripts/battery_class.sh")
+(defpoll a :interval "0s" :run-while {EWW_BATTERY.BAT0.capacity <= battery_low_threshold} "./bar/scripts/battery_class.sh")
 
 (deflisten network_data :initial "[{}]" "./bar/scripts/networkctl.sh monitor")
 
+; updated through ./bar/scripts/hypr_listener.sh
+(defvar workspace_data "[{}]")
+(defvar activewindow_fullscreen "false")
+
 (defvar power false) ; switch for reveal element
-(defvar apps_hover "") ; switch for reveal element
 
 ;; Widgets ;;
 
+(defvar apps_hover "")
 (defwidget applications []
   (eventbox :onhover "eww update apps_hover='hover apps_hover'"
             :onhoverlost "eww update apps_hover=''"
   (button :class "widget-box apps-box ${apps_hover}"
-          :onclick 'wofi;$?' ; For some reason this only opens wofi when followed up by another command (which won't be executed)
+          :onclick 'wofi;$?'
     (label :text " Apps"))))
+
+
+(defvar scratch_hover "")
+(defwidget scratchpad []
+  (eventbox :onhover "eww update scratch_hover='hover scratch_hover'"
+            :onhoverlost "eww update scratch_hover=''"
+  (button :class "widget-box scratch-box ${scratch_hover}"
+          :onclick 'hyprctl dispatch togglespecialworkspace "";$?'
+    (label :text " Scratch"))))
 
 
 (defwidget battery []
@@ -72,7 +84,7 @@
          :spacing 4
          :vexpand "false"
          :class "widget-box powermenu-box"
-      (button :class "powermenu-button button-shutdown"
+      (button :class "button button-shutdown"
               :tooltip "Shutdown"
               :onclick "shutdown now"
         "")
@@ -82,15 +94,15 @@
         (box :orientation "h"
              :spacing 4
              :space-evenly "false"
-          (button :class "powermenu-button button-reboot"
+          (button :class "button button-reboot"
                   :tooltip "Reboot"
                   :onclick "reboot"
             "")
-          (button :class "powermenu-button button-logout"
+          (button :class "button button-logout"
                   :tooltip "Logout"
                   :onclick "hyprctl dispatch exit ''"
             "")
-          (button :class "powermenu-button button-hypr-reload"
+          (button :class "button button-hypr-reload"
                   :tooltip "Restart eww"
                   :onclick "killall -TERM eww; eww open bar"
             "" ))))))
@@ -108,6 +120,21 @@
           :onmiddleclick "./bar/scripts/volumectl.sh set-mute"
     (_volume :mute volume_mute :volume volume_val)))
 
+
+(defwidget window_deco []
+  (box :class "widget-box"
+    (button :class "button close_window_button"
+            :onclick "hyprctl dispatch killactive 1"
+      "")
+    (button :class "button maximize_window_button ${activewindow_fullscreen == 'true' ? 'hover' : ''}"
+            :onclick "hyprctl dispatch fullscreen 1"
+      "")
+    (button :class "button minimize_window_button"
+            :onclick "hyprctl dispatch movetoworkspace special"
+      "")
+    (button :class "button pin_window_button"
+            :onclick "hyprctl dispatch pin"
+      "")))
 
 (defwidget workspaces []
   (box :class "widget-box workspaces-box"
