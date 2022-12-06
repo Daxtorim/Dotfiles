@@ -18,7 +18,7 @@ fi
 
 # Check for avaliable manpager
 if [ -x "${vim_cmd}" ]; then
-	export MANPAGER="${vim_cmd} +MANPAGER -c 'setlocal ts=8 ft=man nomod nolist nu nornu' -c 'nmap q :q!' -"
+	export MANPAGER="${vim_cmd} +MANPAGER -c 'setlocal ts=8 ft=man nomod nolist nonu' -c 'nmap q :q!' -"
 fi
 
 # Install new npm packages globally *for the user* so it won't need `sudo'
