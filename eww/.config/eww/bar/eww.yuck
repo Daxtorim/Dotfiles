@@ -23,11 +23,9 @@
        :halign "start"
        :space-evenly false
        :spacing 4
-    (power)
+    (time)
     (applications)
-    (scratchpad)
     (window_deco)
-    (workspaces)
     ))
 
 
@@ -37,7 +35,7 @@
        :halign "center"
        :space-evenly false
        :spacing 4
-    (time)
+    (workspaces)
     ))
 
 

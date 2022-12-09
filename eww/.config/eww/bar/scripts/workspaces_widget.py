@@ -13,15 +13,18 @@ from gi.repository import Gtk  # noqa
 
 ICON_THEME = Gtk.IconTheme.get_default()
 ICON_SIZE = 32
-PLACEHOLDER_ICON = "fedora-logo-icon"
+
+PLACEHOLDER_ICON = ICON_THEME.lookup_icon(
+    "fedora-logo-icon",
+    ICON_SIZE,
+    0,
+).get_filename()
+
+WS_PIN_ID = 2**64  # This just needs to be a big number outside of hyprlands range
 
 
 class GetOutOfLoop(Exception):
     pass
-
-
-def get_placeholder_icon():
-    return ICON_THEME.lookup_icon(PLACEHOLDER_ICON, ICON_SIZE, 0).get_filename()
 
 
 @functools.cache
@@ -40,7 +43,7 @@ def find_icon_name(window_class: str) -> str:
                     launcher = os.path.join(dir, filename)
                     raise GetOutOfLoop
         else:
-            return get_placeholder_icon()
+            return PLACEHOLDER_ICON
     except GetOutOfLoop:
         pass
 
@@ -52,12 +55,12 @@ def find_icon_name(window_class: str) -> str:
                 icon_name = line.split("=")[1].strip()
                 break
         else:
-            return get_placeholder_icon()
+            return PLACEHOLDER_ICON
 
     if icon_path := ICON_THEME.lookup_icon(icon_name, ICON_SIZE, 0).get_filename():
         return icon_path
     else:
-        return get_placeholder_icon()
+        return PLACEHOLDER_ICON
 
 
 def main() -> str:
@@ -70,32 +73,51 @@ def main() -> str:
             separators=(",", ":"),
         )
 
+    monitors = json.loads(sp.check_output("hyprctl monitors -j", shell=True))
     workspaces = json.loads(sp.check_output("hyprctl workspaces -j", shell=True))
+    active_ws = [monitor["activeWorkspace"]["id"] for monitor in monitors]
+    active_client = json.loads(
+        sp.check_output("hyprctl activewindow -j", shell=True)
+        .decode("utf-8")
+        .strip()
+        .strip(",")  # hyprctl adds an illegal trailing comma to json output
+    )
 
     workspace_clients = {}
+    workspace_clients[WS_PIN_ID] = []
     for ws in workspaces:
         workspace_clients[ws["id"]] = []
 
     # sort by window class
     clients = sorted(clients, key=lambda x: x["class"].lower())
-    for client in clients:
-        client["icon_path"] = find_icon_name(client["class"])
-        ws_id = client["workspace"]["id"]
-        workspace_clients[ws_id].append(client)
+    for cl in clients:
+        cl["icon_path"] = find_icon_name(cl["class"])
 
-    monitors = json.loads(sp.check_output("hyprctl monitors -j", shell=True))
-    active_ws = [monitor["activeWorkspace"]["id"] for monitor in monitors]
+        try:
+            cl_active = True if active_client["address"] == cl["address"] else False
+            cl["active"] = cl_active
+        except KeyError:
+            pass
+
+        ws_id = cl["workspace"]["id"] if not cl["pinned"] else WS_PIN_ID
+        workspace_clients[ws_id].append(cl)
 
     workspace_components = []
 
     workspaces = sorted(workspaces, key=lambda x: x["id"])
+    workspaces.append({"id": WS_PIN_ID, "name": ""})
     for ws in workspaces:
         id = ws["id"]
+        if id < 0:
+            continue
 
         # Add placeholder icon
         if not workspace_clients[id]:
-            client = {"icon_path": get_placeholder_icon()}
-            workspace_clients[id].append(client)
+            if id != WS_PIN_ID:
+                cl = {"icon_path": PLACEHOLDER_ICON, "active": True}
+                workspace_clients[id].append(cl)
+            else:
+                continue
 
         css_class = f"ws ws-{id} ws-{ws['name']} "
         css_class += "ws-active" if id in active_ws else "ws-inactive"

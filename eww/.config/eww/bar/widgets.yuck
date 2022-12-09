@@ -18,43 +18,38 @@
 
 ;; Widgets ;;
 
-(defvar apps_hover "")
 (defwidget applications []
-  (eventbox :onhover "eww update apps_hover='hover apps_hover'"
-            :onhoverlost "eww update apps_hover=''"
-  (button :class "widget-box apps-box ${apps_hover}"
-          :onclick 'wofi;$?'
-    (label :text " Apps"))))
-
-
-(defvar scratch_hover "")
-(defwidget scratchpad []
-  (eventbox :onhover "eww update scratch_hover='hover scratch_hover'"
-            :onhoverlost "eww update scratch_hover=''"
-  (button :class "widget-box scratch-box ${scratch_hover}"
-          :onclick 'hyprctl dispatch togglespecialworkspace "";$?'
-    (label :text " Scratch"))))
+  (button  :class "widget-box apps-box"
+           :onclick "wofi &"
+           :timeout "3s"
+           :valign "center"
+    (label :text " Apps")))
 
 
 (defwidget battery []
   (box :class "widget-box battery-box ${battery_low_class} ${EWW_BATTERY.BAT0.status == 'Charging' ? 'battery-box-charging' : ''}"
+       :valign "center"
     (_battery :status {EWW_BATTERY.BAT0.status}
               :capacity {EWW_BATTERY.BAT0.capacity})))
 
 
 (defwidget cpu_graph []
-  (box :class "widget-box cpu-usage-box"
-       :space-evenly false
-       :spacing 10
-    (label :text "CPU: ${EWW_TEMPS.CORETEMP_PACKAGE_ID_0}°C")
-    (box :width 50
-         :class "graph cpu-usage-graph"
+  (box :space-evenly false
+    (label :class "widget-box cpu-usage-label"
+           :space-evenly false
+           :spacing 10
+           :valign "center"
+           :text "CPU: ${EWW_TEMPS.CORETEMP_PACKAGE_ID_0}°C")
+    (box :class "graph cpu-usage-graph"
+         :valign "fill"
+         :width 60
       (_graph_0_100 :value {EWW_CPU.avg}))))
 
 
 (defwidget network []
-  (button :onclick "./bar/scripts/networkctl.sh open-ctl"
-          :class "widget-box network-box"
+  (button :class "widget-box network-box"
+          :valign "center"
+          :onclick "./bar/scripts/networkctl.sh open-ctl"
     (box ; need a container here since button can only have a single child
       (box :class "network-box-connnected"
            :space-evenly false
@@ -70,52 +65,23 @@
 
 
 (defwidget notifications-bar []
-  (button :onclick "eww open notifications_window"
+  (button :class "widget-box"
+          :valign "center"
+          :onclick "eww open notifications_window"
           :onrightclick "eww close notifications_window"
-          :class "widget-box"
     ""))
-
-
-(defwidget power []
-  (eventbox :onhover "eww update power=true"
-            :onhoverlost "eww update power=false"
-    (box :orientation "h"
-         :space-evenly "false"
-         :spacing 4
-         :vexpand "false"
-         :class "widget-box powermenu-box"
-      (button :class "button button-shutdown"
-              :tooltip "Shutdown"
-              :onclick "shutdown now"
-        "")
-      (revealer :transition "slideleft"
-                :reveal power
-                :duration "550ms"
-        (box :orientation "h"
-             :spacing 4
-             :space-evenly "false"
-          (button :class "button button-reboot"
-                  :tooltip "Reboot"
-                  :onclick "reboot"
-            "")
-          (button :class "button button-logout"
-                  :tooltip "Logout"
-                  :onclick "hyprctl dispatch exit ''"
-            "")
-          (button :class "button button-hypr-reload"
-                  :tooltip "Restart eww"
-                  :onclick "killall -TERM eww; eww open bar"
-            "" ))))))
 
 
 (defwidget time []
   (box :class "widget-box time-box"
+       :valign "center"
        :orientation "h"
     (label :text "${time}")))
 
 
 (defwidget volume []
   (button :class "widget-box volume-box"
+          :valign "center"
           :onclick "./bar/scripts/volumectl.sh open-ctl"
           :onmiddleclick "./bar/scripts/volumectl.sh set-mute"
     (_volume :mute volume_mute :volume volume_val)))
@@ -123,36 +89,36 @@
 
 (defwidget window_deco []
   (box :class "widget-box"
+       :valign "center"
     (button :class "button close_window_button"
             :onclick "hyprctl dispatch killactive 1"
+            :style "color: #f7768e;"
       "")
-    (button :class "button maximize_window_button ${activewindow_fullscreen == 'true' ? 'hover' : ''}"
+    (button :class "button maximize_window_button ${activewindow_fullscreen == 'true' ? 'selected' : ''}"
             :onclick "hyprctl dispatch fullscreen 1"
+            :style "color:#e0af68;"
       "")
-    (button :class "button minimize_window_button"
-            :onclick "hyprctl dispatch movetoworkspace special"
-      "")
     (button :class "button pin_window_button"
-            :onclick "hyprctl dispatch pin"
-      "")))
+            :onclick "hyprctl dispatch pin 1"
+            :style "color: #565f89;"
+      "")))
 
 (defwidget workspaces []
   (box :class "widget-box workspaces-box"
        :orientation "h"
        :width 50
-       :valign "fill"
+       :valign "center"
        :halign "center"
        :space-evenly false
     (for ws in workspace_data
       (box :class "${ws.css_class}"
            :orientation "h"
-           :halign "center"
-           :valign "center"
            :space-evenly false
         (button :onclick "hyprctl dispatch workspace ${ws.name}"
           (label :text "|${ws.name}|"))
         (for client in {ws.clients}
           (button :onclick "hyprctl dispatch focuswindow address:${client.address}"
                   :tooltip "${client.class} | PID: ${client.pid}"
+                  :class {client.active ? "selected" : ""}
             (image :path "${client.icon_path}"
                    :image-height 20)))))))
