@@ -4,17 +4,17 @@ autoload -U colors && colors
 
 _zsh_time_preexec() {
 	_ZSH_COMMAND_TIME_START=$(date "+%s%1N")
+	_ZSH_COMMAND_INFO_SHOW=1
 }
 
 _zsh_time_precmd() {
-	local start_time=${_ZSH_COMMAND_TIME_START:-$(date "+%s%1N")}
-	unset _ZSH_COMMAND_TIME_START
+	[ -z "${_ZSH_COMMAND_TIME_START}" ] && return
 
-	local execution_time_mil=$(( $(date "+%s%1N") - ${start_time} ))
+	local execution_time_mil=$(( $(date "+%s%1N") - ${_ZSH_COMMAND_TIME_START} ))
 	local execution_time_sec=$(( ${execution_time_mil} / 10 ))
 
 	if [ ${execution_time_sec} -lt 10 ] && [ "${_ZSH_EXIT_ERROR:-0}" -eq 0 ]; then
-		return
+		_ZSH_COMMAND_INFO_SHOW=0
 	fi
 
 	local mil=$(( ${execution_time_mil} % 10 ))
@@ -35,7 +35,8 @@ _zsh_time_precmd() {
 }
 
 _zsh_status_precmd() {
-	# save exit codes in variable because "local" is a command and overwrites $? and $pipestatus
+	# save exit codes in variable because "local" is a command
+	# and overwrites $? and $pipestatus in this scope
 	local exit_codes=("${pipestatus[@]}")
 
 	local status_info=""
@@ -74,10 +75,10 @@ _zsh_status_precmd() {
 }
 
 _zsh_print_cmd_info() {
-	if [ "${_ZSH_COMMAND_TIME_INFO}" ] || [ "${_ZSH_EXIT_ERROR}" -ne 0 ]; then
+	if [ "${_ZSH_COMMAND_INFO_SHOW}" -ne 0 ]; then
 		print -P "─╸\[${_ZSH_COMMAND_STATUS_INFO}\]\-\[${_ZSH_COMMAND_TIME_INFO}\]\-\[ %T\]"
 	fi
-	unset _ZSH_COMMAND_TIME_INFO
+	unset _ZSH_COMMAND_INFO_SHOW
 }
 
 preexec_functions+=(_zsh_time_preexec)
