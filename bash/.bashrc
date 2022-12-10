@@ -9,6 +9,7 @@ esac
 
 # ================= General Settings ======================
 
+[ -f "${HOME}/Dotfiles/shell-env" ] && . "${HOME}/Dotfiles/shell-env"
 [ -f "${HOME}/Dotfiles/shell-aliases" ] && . "${HOME}/Dotfiles/shell-aliases"
 
 # enable bash completion in interactive shells

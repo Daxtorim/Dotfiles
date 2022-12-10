@@ -14,6 +14,7 @@ while [ $# -gt 0 ]; do
 			;;
 		-e | --stow-everything)
 			stow_everything=true
+			refresh=true
 			shift
 			;;
 		-*)
@@ -31,17 +32,6 @@ done
 [ ${arg_error} -ne 0 ] && exit 1
 ###########################################################
 
-
-# Check if cron job exists and update it if not
-cronjob="#>>>>>> Dotfile-Update
-@hourly ${HOME}/Dotfiles/update.sh &> /dev/null
-@reboot ${HOME}/Dotfiles/update.sh &> /dev/null
-#<<<<<< Dotfile-Update"
-found_jobs="$(crontab -l | grep -zoE '#>>>>> Dotfile-Update.*#<<<<< Dotfile-Update' | tr -d '\0')"
-
-if [[ "${found_jobs}" != "${cronjob}" ]]; then
-	echo -e "$(crontab -l | sed -e '/#>>>>>> Dotfile-Update/,/#<<<<<< Dotfile-Update/d')\n${cronjob}" | crontab -
-fi
 
 # Wait for networking
 while ! ping -c1 github.com &> /dev/null; do
