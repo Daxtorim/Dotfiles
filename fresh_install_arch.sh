@@ -12,12 +12,13 @@ cd || exit 10
 pkg="sudo pacman --noconfirm -S"
 user_home=$HOME
 
-packages=(yay kitty zsh vim neovim exa wofi dunst fontconfig polkit bluez bluez-utils blueman git git-delta npm nodejs python python-pip)
-$pkg -yu
-$pkg "${packages[@]}"
+packages=(yay flatpak kitty zsh vim neovim exa wofi dunst fontconfig lxsession bluez bluez-utils blueman git git-delta npm nodejs python python-pip)
+$pkg -yu              # update
+$pkg "${packages[@]}" # install
 
 git clone "https://github.com/Daxtorim/Dotfiles.git" "${user_home}/Dotfiles"
 . "${user_home}/Dotfiles/shell-env"
+chsh -s "$(command -v zsh)"
 
 echo
 echo
@@ -27,7 +28,7 @@ echo "##########################################################"
 rust_installer=$(mktemp)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs --output "${rust_installer}" || exit 11
 chmod +x "${rust_installer}"
-${rust_installer} -y --no-modify-path --default-toolchain nightly --profile default
+"${rust_installer}" -y --no-modify-path --default-toolchain nightly --profile default
 rm -f "${rust_installer}"
 
 echo
@@ -37,9 +38,9 @@ echo "#                 Installing Lunarvim                    #"
 echo "##########################################################"
 lvim_installer=$(mktemp)
 curl -sSf "https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh" --output "${lvim_installer}" || exit 11
-chmod +x "$lvim_installer"
+chmod +x "${lvim_installer}"
 LV_BRANCH='release-1.2/neovim-0.8' "${lvim_installer}" -y
-rm -f "$lvim_installer"
+rm -f "${lvim_installer}"
 
 echo
 echo
@@ -48,12 +49,12 @@ echo "#                 Installing Hyprland                    #"
 echo "##########################################################"
 yay --noconfirm -S gdb ninja meson gcc cmake libxcb xcb-proto xcb-util xcb-util-keysyms libxfixes libx11 libxcomposite xorg-xinput libxrender pixman wayland-protocols cairo pango seatd libxkbcommon xcb-util-wm xorg-xwayland
 hyprland_dir="${user_home}/Documents/Repositories/Hyprland"
-mkdir -p "$hyprland_dir"
-git clone --recursive https://github.com/hyprwm/Hyprland "$hyprland_dir"
-cd "$hyprland_dir" || exit 10
+mkdir -p "${hyprland_dir}"
+git clone --recursive https://github.com/hyprwm/Hyprland "${hyprland_dir}"
+cd "${hyprland_dir}" || exit 10
 sudo make install || exit 11
 cd ~ || exit 10
-sudo cp "${user_home}/Dotfiles/hypr/.local/share/hypr/hyprland_wrapped.desktop" "/usr/share/applications"
+sudo cp "${user_home}/Dotfiles/hypr/.local/share/hypr/hyprland_wrapped.desktop" "/usr/share/wayland-sessions/"
 
 echo
 echo
@@ -62,7 +63,7 @@ echo "#         Installing Elkowar's whacky widgets            #"
 echo "##########################################################"
 $pkg gtk-layer-shell
 eww_dir="${user_home}/Documents/Repositories/eww"
-mkdir -p "$eww_dir"
+mkdir -p "${eww_dir}"
 git clone https://github.com/elkowar/eww.git "${eww_dir}"
 cd "${eww_dir}" || exit 10
 cargo build --release --no-default-features --features=wayland || exit 11
@@ -89,5 +90,5 @@ net.ipv6.conf.default.temp_prefered_lft=43200
 net.ipv6.conf.default.temp_valid_lft=172800
 EOF
 
-"${user_home}/Dotfiles/update.sh --refresh"
+"${user_home}/Dotfiles/update.sh" --stow-everything
 sudo reboot

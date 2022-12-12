@@ -13,12 +13,7 @@ from gi.repository import Gtk  # noqa
 
 ICON_THEME = Gtk.IconTheme.get_default()
 ICON_SIZE = 32
-
-PLACEHOLDER_ICON = ICON_THEME.lookup_icon(
-    "fedora-logo-icon",
-    ICON_SIZE,
-    0,
-).get_filename()
+PLACEHOLDER_ICON = os.path.expanduser("~/.local/share/icons/placeholder.png")
 
 WS_PIN_ID = 2**64  # This just needs to be a big number outside of hyprlands range
 
@@ -76,12 +71,7 @@ def main() -> str:
     monitors = json.loads(sp.check_output("hyprctl monitors -j", shell=True))
     workspaces = json.loads(sp.check_output("hyprctl workspaces -j", shell=True))
     active_ws = [monitor["activeWorkspace"]["id"] for monitor in monitors]
-    active_client = json.loads(
-        sp.check_output("hyprctl activewindow -j", shell=True)
-        .decode("utf-8")
-        .strip()
-        .strip(",")  # hyprctl adds an illegal trailing comma to json output
-    )
+    active_client = json.loads(sp.check_output("hyprctl activewindow -j", shell=True))
 
     workspace_clients = {}
     workspace_clients[WS_PIN_ID] = []

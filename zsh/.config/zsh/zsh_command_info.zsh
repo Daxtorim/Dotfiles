@@ -61,9 +61,9 @@ _zsh_status_precmd() {
 
 	# Base success on the pipe's last command
 	if [ ${exit_codes[${#exit_codes}]} -eq 0 ]; then
-		status_color="✅%70F"
+		status_color="%70F✅"
 	else
-		status_color="❌%160F"
+		status_color="%160F❌"
 	fi
 
 	if [ ${_ZSH_EXIT_ERROR} -ne 0 ]; then

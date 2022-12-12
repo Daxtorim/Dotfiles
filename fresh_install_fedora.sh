@@ -40,7 +40,7 @@ echo "##########################################################"
 rust_installer=$(mktemp)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs --output "${rust_installer}" || exit 11
 chmod +x "${rust_installer}"
-${rust_installer} -y --no-modify-path --default-toolchain nightly --profile default
+"${rust_installer}" -y --no-modify-path --default-toolchain nightly --profile default
 rm -f "${rust_installer}"
 
 echo
@@ -50,9 +50,9 @@ echo "#                 Installing Lunarvim                    #"
 echo "##########################################################"
 lvim_installer=$(mktemp)
 curl -sSf "https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh" --output "${lvim_installer}" || exit 11
-chmod +x "$lvim_installer"
+chmod +x "${lvim_installer}"
 LV_BRANCH='release-1.2/neovim-0.8' "${lvim_installer}" -y
-rm -f "$lvim_installer"
+rm -f "${lvim_installer}"
 
 echo
 echo
@@ -61,12 +61,12 @@ echo "#                 Installing Hyprland                    #"
 echo "##########################################################"
 $dnf install meson cmake "pkgconfig(cairo)" "pkgconfig(egl)" "pkgconfig(gbm)" "pkgconfig(gl)" "pkgconfig(glesv2)" "pkgconfig(libdrm)" "pkgconfig(libinput)" "pkgconfig(libseat)" "pkgconfig(libudev)" "pkgconfig(pango)" "pkgconfig(pangocairo)" "pkgconfig(pixman-1)" "pkgconfig(vulkan)" "pkgconfig(wayland-client)" "pkgconfig(wayland-protocols)" "pkgconfig(wayland-scanner)" "pkgconfig(wayland-server)" "pkgconfig(xcb)" "pkgconfig(xcb-icccm)" "pkgconfig(xcb-renderutil)" "pkgconfig(xkbcommon)" "pkgconfig(xwayland)" glslang-devel
 hyprland_dir="${user_home}/Documents/Repositories/Hyprland"
-mkdir -p "$hyprland_dir"
-git clone --recursive https://github.com/hyprwm/Hyprland "$hyprland_dir"
-cd "$hyprland_dir" || exit 10
+mkdir -p "${hyprland_dir}"
+git clone --recursive https://github.com/hyprwm/Hyprland "${hyprland_dir}"
+cd "${hyprland_dir}" || exit 10
 sudo make install || exit 11
 cd ~ || exit 10
-sudo cp "${user_home}/Dotfiles/hypr/.local/share/hypr/hyprland_wrapped.desktop" "/usr/share/applications"
+sudo cp "${user_home}/Dotfiles/hypr/.local/share/hypr/hyprland_wrapped.desktop" "/usr/share/wayland-sessions/"
 
 echo
 echo

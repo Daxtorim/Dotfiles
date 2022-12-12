@@ -41,7 +41,7 @@ done
 
 # Stash uncommited changes to preserve machine dependent modifications
 cd "${HOME}/Dotfiles" || exit 1
-git remote update &> /dev/null || exit 2
+git remote update > /dev/null || exit 2
 git stash push --quiet
 
 if [ -z "${refresh}" ]; then
