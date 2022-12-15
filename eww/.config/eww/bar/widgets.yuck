@@ -2,6 +2,7 @@
 
 (defpoll volume_val :interval "1s" :initial "0" "./bar/scripts/volumectl.sh get-vol")
 (defpoll volume_mute :interval "1s" :initial "no" "./bar/scripts/volumectl.sh get-mute")
+(defpoll volume_info :interval "1s" :initial "{}" "./bar/scripts/volumectl.sh get-info")
 (defpoll time :interval "60s" :initial "Time unknown" "date '+%H:%M %b %d, %Y'")
 
 (defvar battery_low_class "")
@@ -80,11 +81,14 @@
 
 
 (defwidget volume []
-  (button :class "widget-box volume-box"
-          :valign "center"
-          :onclick "./bar/scripts/volumectl.sh open-ctl"
-          :onmiddleclick "./bar/scripts/volumectl.sh set-mute"
-    (_volume :mute volume_mute :volume volume_val)))
+  (box :class "widget-box volume-box"
+       :valign "center"
+    (button :onclick "./bar/scripts/volumectl.sh open-ctl"
+            :onmiddleclick "./bar/scripts/volumectl.sh set-sink-mute"
+      (label :text "${volume_info.mute_out == 'yes' ? "婢" : volume_info.vol_out < 25 ? "奄" : volume_info.vol_out < 60 ? "奔" : "墳"} ${volume_info.vol_out}% "))
+    (button :onclick "./bar/scripts/volumectl.sh open-ctl"
+            :onmiddleclick "./bar/scripts/volumectl.sh set-source-mute"
+      (label :text "${volume_info.mute_mic == 'yes' ? '' : ''} ${volume_info.vol_mic}%"))))
 
 
 (defwidget window_deco []
@@ -94,9 +98,9 @@
             :onclick "hyprctl dispatch killactive 1"
             :style "color: #f7768e;"
       "")
-    (button :class "button maximize_window_button ${activewindow_fullscreen == 'true' ? 'selected' : ''}"
+    (button :class "button maximize_window_button "
             :onclick "hyprctl dispatch fullscreen 1"
-            :style "color:#e0af68;"
+            :style "${activewindow_fullscreen == 'true' ? 'color:#000;background-color:#e0af68;border-radius:3px' : 'color:#e0af68;'}"
       "")
     (button :class "button pin_window_button"
             :onclick "hyprctl dispatch pin 1"

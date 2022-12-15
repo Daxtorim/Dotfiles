@@ -28,8 +28,3 @@
     (label :text {replace("   ${round(down / 2000000, 1) >= 10 ? round(down / 2000000, 0) : round(down / 2000000, 1) >= 1 ? round(down / 2000000, 1) : round(down / 2000, 1) >= 1 ? round(down / 2000, 0) : round(down / 2, 0)}", " *([0-9. ]{4})", "\\1")})
     (label :text {round(down / 2000000, 1) >= 1 ? 'M' : round(down / 2000, 1) >= 1 ? 'K' : 'B'})
     (label :text "|")))
-
-
-(defwidget _volume [mute volume]
-  (label :class "volume-label"
-         :text "${mute == 'yes' ? "婢" : volume < 25 ? "奄" : volume < 60 ? "奔" : "墳"} ${volume}%"))

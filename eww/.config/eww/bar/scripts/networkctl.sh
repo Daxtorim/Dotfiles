@@ -1,6 +1,9 @@
 #!/bin/bash
 
-[ "$1" = "open-ctl" ] && plasmawindowed org.kde.plasma.networkmanagement && exit
+if [ "$1" = "open-ctl" ]; then
+	kitty nmtui &
+	exit
+fi
 
 if [ "$1" = "monitor" ]; then
 	"${HOME}/.config/eww/bar/scripts/network_widget.py"
