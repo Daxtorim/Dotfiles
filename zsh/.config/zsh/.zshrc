@@ -15,6 +15,11 @@ zmodload zsh/complist
 compinit
 _comp_options+=(globdots)                                       # Include hidden files.
 
+# Open command line in editor
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
+
 ## Options section
 setopt extendedglob              # Extended globbing. Allows using regular expressions with *
 setopt appendhistory             # Immediately append history instead of overwriting
