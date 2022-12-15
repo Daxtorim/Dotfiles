@@ -121,7 +121,7 @@
         (button :onclick "hyprctl dispatch workspace ${ws.name}"
           (label :text "|${ws.name}|"))
         (for client in {ws.clients}
-          (button :onclick "hyprctl dispatch focuswindow address:${client.address}"
+          (button :onclick "focuswindow_for_real.sh ${client.address}"
                   :tooltip "${client.class} | PID: ${client.pid}"
                   :class {client.active ? "selected" : ""}
             (image :path "${client.icon_path}"
