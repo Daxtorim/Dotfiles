@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 # shellcheck disable=1091
 
-main()
+echoerr()
 {
-	install_packages
+	printf "%s\n" "$*" >&2
+}
 
-	git clone --depth=1 "https://github.com/Daxtorim/Dotfiles.git" "${_INSTALL_HOME}/Dotfiles"
-	sudo chsh -s "$(command -v zsh)" "${_INSTALL_USER}"
-
-	. "${_INSTALL_HOME}/Dotfiles/shell-env"
-
+install_rust()
+{
 	echo
 	echo
 	echo "##########################################################"
@@ -20,7 +18,10 @@ main()
 	chmod +x "${rust_installer}"
 	"${rust_installer}" -y --no-modify-path --default-toolchain nightly --profile default
 	rm -f "${rust_installer}"
+}
 
+install_lunarvim()
+{
 	echo
 	echo
 	echo "##########################################################"
@@ -31,7 +32,33 @@ main()
 	chmod +x "${lvim_installer}"
 	LV_BRANCH='release-1.2/neovim-0.8' "${lvim_installer}" -y
 	rm -f "${lvim_installer}"
+}
 
+install_eww()
+{
+	echo
+	echo
+	echo "##########################################################"
+	echo "#         Installing Elkowar's whacky widgets            #"
+	echo "##########################################################"
+	case "${_INSTALL_DISTRO}" in
+		arch | endeavouros)
+			sudo pacman --needed --noconfirm -S gtk-layer-shell
+			;;
+		fedora)
+			sudo dnf install gtk-layer-shell
+			;;
+	esac
+	eww_dir="${_INSTALL_HOME}/Documents/Repositories/eww"
+	mkdir -p "${eww_dir}"
+	git clone https://github.com/Daxtorim/eww.git "${eww_dir}"
+	cd "${eww_dir}" || exit 10
+	cargo build --release --no-default-features --features=wayland || exit 11
+	cp target/release/eww "${_INSTALL_HOME}/.cargo/bin"
+}
+
+install_hyprland()
+{
 	echo
 	echo
 	echo "##########################################################"
@@ -50,29 +77,36 @@ main()
 
 		fedora)
 			sudo dnf copr enable kasion/Hyprland-git
-			sudo dnf install hyprland "libdrm-2.4.114"
+			sudo dnf install hyprland
+			;;
+		*)
+			echoerr '!!! Skipping Hyprland (and companions) !!!'
+			echoerr 'Not a suitable distro for Hyprland!'
+			return 1
 			;;
 	esac
 
-	echo
-	echo
-	echo "##########################################################"
-	echo "#         Installing Elkowar's whacky widgets            #"
-	echo "##########################################################"
-	case "${_INSTALL_DISTRO}" in
-		arch | endeavouros)
-			sudo pacman --needed --noconfirm -S gtk-layer-shell
-			;;
-		fedora)
-			sudo dnf install gtk-layer-shell
-			;;
-	esac
-	eww_dir="${_INSTALL_HOME}/Documents/Repositories/eww"
-	mkdir -p "${eww_dir}"
-	git clone https://github.com/elkowar/eww.git "${eww_dir}"
-	cd "${eww_dir}" || exit 10
-	cargo build --release --no-default-features --features=wayland || exit 11
-	cp target/release/eww "${_INSTALL_HOME}/.cargo/bin"
+	install_eww
+}
+
+main()
+{
+	install_packages
+
+	if ! git clone --depth=1 "https://github.com/Daxtorim/Dotfiles.git" "${_INSTALL_HOME}/Dotfiles"; then
+		# shellcheck disable=2015 # Not intended to be a if-then-else
+		[ -x "${_INSTALL_HOME}/Dotfiles/update.sh" ] && "${_INSTALL_HOME}/Dotfiles/update.sh" || {
+			echoerr ""
+			echoerr "Cannot download Dotfiles and they don't exist already either!"
+			exit 1
+		}
+	fi
+	. "${_INSTALL_HOME}/Dotfiles/shell-env"
+	sudo chsh -s "$(command -v zsh)" "${_INSTALL_USER}"
+
+	install_rust
+	install_lunarvim
+	install_hyprland
 
 	# tell system to use temporary IPv6 addresses
 	messages=(
@@ -111,7 +145,7 @@ install_packages()
 	case "${_INSTALL_DISTRO}" in
 		fedora)
 			rpmfusion=("https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm" "rpmfusion-nonfree-release-tainted")
-			packages=(kitty zsh vim neovim exa wofi dunst fontconfig lxpolkit blueman git git-delta npm node python pip)
+			packages=(kitty zsh vim neovim exa wofi dunst jq fontconfig lxpolkit blueman git git-delta npm node python pip)
 			drivers=(intel-media-driver libva-intel-drivers broadcom-wl bluez bluez-utils)
 
 			dnf="sudo dnf -y"
@@ -130,18 +164,19 @@ install_packages()
 			$dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
 			$dnf groupupdate "C Development Tools and Libraries"
 			;;
-
 		arch | endeavouros)
-			packages=(yay flatpak stow kitty zsh vim neovim exa wofi dunst fontconfig lxsession bluez bluez-utils blueman git git-delta npm nodejs python python-pip)
+			packages=(yay flatpak stow kitty zsh vim neovim exa wofi dunst fontconfig jq lxsession bluez bluez-utils blueman git git-delta npm nodejs python python-pip)
+			fonts=(noto-fonts)
+			font_deps=(noto-fonts-cjk noto-fonts-emoji noto-fonts-extra)
 
 			pkg="sudo pacman --needed --noconfirm -S"
 
-			$pkg -yu              # update
-			$pkg "${packages[@]}" # install
+			$pkg -yyu # update
+			$pkg "${packages[@]}"
+			$pkg "${fonts[@]}"
+			$pkg --asdeps "${font_deps[@]}"
 			;;
-
 	esac
-
 }
 
 keep_sudo_cached()
@@ -154,33 +189,26 @@ keep_sudo_cached()
 
 setup()
 {
-
 	if [ "${EUID}" -eq 0 ]; then
-		echo "Do not run script as root to preserve USER variable!"
-	else
-		_INSTALL_USER=$USER
-		_INSTALL_HOME=$HOME
-
-		distro_id=$(grep "^ID=" /etc/os-release)
-		_INSTALL_DISTRO=${distro_id#*=}
-
-		# Will need elevated privileges later
-		sudo -v || exit 1
-		keep_sudo_cached &
-		PID=$!
-
-		kill_pid()
-		{
-			kill "$PID"
-			exit
-		}
-
-		trap kill_pid INT
-
-		main
-
-		kill_pid
+		echoerr "Do not run script as root to preserve USER variable!"
+		exit 1
 	fi
+
+	_INSTALL_USER=$USER
+	_INSTALL_HOME=$HOME
+
+	distro_id=$(grep "^ID=" /etc/os-release)
+	_INSTALL_DISTRO=${distro_id#*=}
+
+	echo "Need elevated privileges to install packages."
+	sudo -v || exit 1
+	keep_sudo_cached &
+	PID=$!
+
+	# shellcheck disable=2064 # $PID *should* be expanded right here
+	trap "kill $PID" EXIT
+
+	main
 }
 
 setup

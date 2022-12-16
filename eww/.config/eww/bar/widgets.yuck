@@ -98,7 +98,7 @@
             :onclick "hyprctl dispatch killactive 1"
             :style "color: #f7768e;"
       "")
-    (button :class "button maximize_window_button "
+    (button :class "button maximize_window_button"
             :onclick "hyprctl dispatch fullscreen 1"
             :style "${activewindow_fullscreen == 'true' ? 'color:#000;background-color:#e0af68;border-radius:3px' : 'color:#e0af68;'}"
       "")

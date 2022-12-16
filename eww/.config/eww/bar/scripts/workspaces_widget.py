@@ -78,8 +78,8 @@ def main() -> str:
     for ws in workspaces:
         workspace_clients[ws["id"]] = []
 
-    # sort by window class
-    clients = sorted(clients, key=lambda x: x["class"].lower())
+    # sort by window class first, sort ties then by address
+    clients = sorted(clients, key=lambda x: (x["class"].lower(), x["address"]))
     for cl in clients:
         cl["icon_path"] = find_icon_name(cl["class"])
 

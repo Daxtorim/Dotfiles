@@ -110,6 +110,12 @@ lvim.plugins = {
 	{ "ellisonleao/gruvbox.nvim" },
 	{ "elkowar/yuck.vim" },
 	{
+		"j-hui/fidget.nvim",
+		config = function()
+			require("fidget").setup({})
+		end,
+	},
+	{
 		-- smooth scrolling
 		"karb94/neoscroll.nvim",
 		config = function()
