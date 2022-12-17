@@ -5,7 +5,9 @@
 [ -d "${HOME}/Dotfiles" ] || exit 1
 
 ###########################################################
-arg_error=0
+arg_error=false
+refresh=false
+stow_everything=false
 while [ $# -gt 0 ]; do
 	case "$1" in
 		-r | --refresh)
@@ -19,17 +21,17 @@ while [ $# -gt 0 ]; do
 			;;
 		-*)
 			echo "Unknown switch: $1" >&2
-			arg_error=1
+			arg_error=true
 			shift
 			;;
 		*)
 			echo "Unknown positional argument: $1" >&2
-			arg_error=1
+			arg_error=true
 			shift
 			;;
 	esac
 done
-[ ${arg_error} -ne 0 ] && exit 1
+[ ${arg_error} = "true" ] && exit 1
 ###########################################################
 
 
@@ -44,7 +46,7 @@ cd "${HOME}/Dotfiles" || exit 1
 git remote update > /dev/null || exit 2
 git stash push --quiet
 
-if [ -z "${refresh}" ]; then
+if [ "${refresh}" = "false" ]; then
 	# No changes, nothing to do, pop stash, exit early
 	if git diff --quiet "@{u}"; then
 		[ -n "$(git stash list)" ] && git stash pop --quiet
@@ -78,26 +80,30 @@ while IFS= read -r -d $'\0' repo_filename; do
 		rel_filename=$(sed -z 's/@NEWLINE@/\n/' <<< "${tmp_filename}")
 		abs_filename="${HOME}/${rel_filename}"
 
-		if [ -n "${stow_everything}" ]; then
-			if ! grep -q "${module}" <<< "${module_list[*]}"; then
-				module_list+=("${module}")
-			fi
-		fi
-
-		if [ -e "${abs_filename}" ]; then
+		if [ -e "${abs_filename}" ] || [ "${stow_everything}" = "true" ]; then
 			# Delete actual files so they can be replaced by appropriate symlinks
-			if [ ! -L "${abs_filename}" ]; then
-				rm -f "${abs_filename}"
-			fi
+			rm -f "${abs_filename}"
 			# Add module to the update list when the real file exists
 			if ! grep -q "${module}" <<< "${module_list[*]}"; then
 				module_list+=("${module}")
 			fi
 		fi
 	fi
-done < <(find "${HOME}/Dotfiles" -path "${HOME}/Dotfiles/.git" -prune -o -type f -print0)
+done < <(find -L "${HOME}/Dotfiles" -path "${HOME}/Dotfiles/.git" -prune -o -type f -print0)
+
+if [ -z "${module_list[*]}" ];then
+	>&2 echo "Cannot find any existing files of modules to stow"
+	exit 1
+fi
 
 printf "Found and stowing these modules:\n%s\n" "${module_list[*]}"
 
 # Prune potentially dead symlinks and add new ones
-stow --dir="${HOME}/Dotfiles" --target="${HOME}" --no-folding --restow "${module_list[@]}"
+stow_output=$(2>&1 stow --dir="${HOME}/Dotfiles" --target="${HOME}" --no-folding --restow "${module_list[@]}")
+stow_ec=$?
+if [ "$stow_ec" -ne 0 ]; then
+	>&2 echo "Error ocurred while stowing modules:"
+	>&2 echo
+	>&2 echo "${stow_output}"
+	exit "${stow_ec}"
+fi
