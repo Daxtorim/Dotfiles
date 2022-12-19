@@ -1,0 +1,82 @@
+{
+  "_vim_": "/* vim: set ft=json : */",
+  "layer": "top",
+  "exclusive": false,
+  "position": "bottom",
+  "height": 30,
+  "spacing": 4,
+  "modules-left": [
+    "clock",
+    "tray"
+  ],
+  "modules-center": [],
+  "modules-right": [
+    "pulseaudio",
+    "network",
+    "battery",
+    "battery#bat2"
+  ],
+  "battery": {
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": " {icon} {capacity}%",
+    "format-plugged": " {icon} {capacity}%",
+    "format-alt": "{icon} {time}",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "battery#bat2": {
+    "bat": "BAT2"
+  },
+  "clock": {
+    "format": "{:%Y-%m-%d %H:%M:%S}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+  "network": {
+    "interval": 2,
+    "format-wifi": "﬉ ({signalStrength}%) |  {bandwidthUpBytes} |  {bandwidthDownBytes}",
+    "format-ethernet": " |  {bandwidthUpBytes} |  {bandwidthDownBytes}",
+    "format-linked": "{ifname} (No IP) ",
+    "format-disconnected": "⚠ Disconnected",
+    "format-alt": "{ifname}: {ipaddr}/{cidr}",
+    "tooltip-format": "{ifname} via {gwaddr} ",
+    "tooltip-format-diconnected": ""
+  },
+  "pulseaudio": {
+    "scroll-step": 0.5,
+    "format": "{icon} {volume}% | {format_source}",
+    "format-bluetooth": "{volume}% {icon} {format_source}",
+    "format-bluetooth-muted": "婢 {icon} {format_source}",
+    "format-muted": "婢 {format_source}",
+    "format-source": " {volume}%",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [
+        "",
+        "",
+        ""
+      ]
+    },
+    "on-click": "pavucontrol",
+    "on-click-middle": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+  },
+  "tray": {
+    "show-passive-items": true,
+    "spacing": 3
+  }
+}

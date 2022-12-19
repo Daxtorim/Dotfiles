@@ -145,7 +145,7 @@ install_packages()
 	case "${_INSTALL_DISTRO}" in
 		fedora)
 			rpmfusion=("https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm" "rpmfusion-nonfree-release-tainted")
-			packages=(kitty zsh vim neovim exa wofi dunst jq fontconfig lxpolkit blueman git git-delta npm node python pip)
+			packages=(kitty zsh vim neovim exa wofi waybar dunst jq fontconfig lxpolkit blueman git git-delta npm node python pip)
 			drivers=(intel-media-driver libva-intel-drivers broadcom-wl bluez bluez-utils)
 
 			dnf="sudo dnf -y"
@@ -165,7 +165,7 @@ install_packages()
 			$dnf groupupdate "C Development Tools and Libraries"
 			;;
 		arch | endeavouros)
-			packages=(yay flatpak stow kitty zsh vim neovim exa wofi dunst fontconfig jq lxsession bluez bluez-utils blueman git git-delta npm nodejs python python-pip)
+			packages=(yay flatpak stow kitty zsh vim neovim exa wofi waybar dunst fontconfig jq lxsession bluez bluez-utils blueman git git-delta npm nodejs python python-pip)
 			fonts=(noto-fonts)
 			font_deps=(noto-fonts-cjk noto-fonts-emoji noto-fonts-extra)
 

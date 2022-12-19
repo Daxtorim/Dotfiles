@@ -1,5 +1,5 @@
 // Global Styles
-.bar {
+.taskbar {
   color: $white;
   background-color: rgba(0, 0, 0, 0);
   font-family: "monospace";
@@ -26,32 +26,8 @@ tooltip {
   margin: 0.2em 0em;
 }
 
-:hover {
-  background-color: $white;
-  color: $black;
-  border-radius: 0.5em;
-}
-
-.selected {
-  background-color: $white;
-  color: $black;
-  border-radius: 0.5em;
-}
-
 .cpu-usage-graph {
   padding: 0 0.5em;
-}
-
-// ######### Battery ###############
-.battery-box-low-on {
-  color: $black;
-  background-color: $red;
-}
-
-// needs to be last to overwrite .battery-low
-.battery-box-charging {
-  color: $black;
-  background-color: $yellow;
 }
 
 // ######### Workspaces ############
@@ -83,13 +59,4 @@ tooltip {
   border-left: 0.1em solid black;
   box-shadow: 0.1em 0.1em 0.2em #555;
   background-color: darken($color: $black, $amount: 5);
-}
-
-// ######### Powermenu #############
-.powermenu-box {
-  font-size: larger;
-  font-weight: bold;
-}
-.button {
-  padding: 0rem 0.3rem;
 }

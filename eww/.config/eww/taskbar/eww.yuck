@@ -1,0 +1,43 @@
+(defwindow taskbar
+  :monitor 0
+  :geometry
+  (geometry :x "0%"
+            :y "0%"
+            :width "50%"
+            :height "1%"
+            :anchor "bottom center")
+  (_taskbar))
+
+; updated through ./bar/scripts/hypr_listener.sh
+(defvar workspace_data "[{}]")
+(defvar activewindow_fullscreen "false")
+(defvar _taskbar_visible false)
+
+
+(defwidget _taskbar []
+  (eventbox :onhover "${EWW_CMD} update _taskbar_visible=true"
+            :onhoverlost "${EWW_CMD} update _taskbar_visible=false"
+    (revealer :transition "slideup"
+              :duration "400ms"
+              :reveal {_taskbar_visible}
+      (__taskbar))))
+
+(defwidget __taskbar []
+  (box :class "widget-box workspaces-box"
+       :orientation "h"
+       :width 50
+       :valign "center"
+       :halign "center"
+       :space-evenly false
+    (for ws in workspace_data
+      (box :class "${ws.css_class}"
+           :orientation "h"
+           :space-evenly false
+        (button :onclick "hyprctl dispatch workspace ${ws.name}"
+          (label :text "|${ws.name}|"))
+        (for client in {ws.clients}
+          (button :onclick "focuswindow_for_real.sh ${client.address}"
+                  :tooltip "${client.class} | PID: ${client.pid}"
+                  :class {client.active ? "selected" : ""}
+            (image :path "${client.icon_path}"
+                   :image-height 60)))))))
