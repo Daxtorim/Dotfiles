@@ -1,5 +1,6 @@
 (defwindow taskbar
   :monitor 0
+  :stacking "overlay"
   :geometry
   (geometry :x "0%"
             :y "0%"

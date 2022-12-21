@@ -77,6 +77,7 @@ if ok_null then
 	local f = null_ls.builtins.formatting
 	local d = null_ls.builtins.diagnostics
 	local a = null_ls.builtins.code_actions
+	---@diagnostic disable-next-line: redundant-parameter
 	null_ls.setup({
 		sources = {
 			-- python

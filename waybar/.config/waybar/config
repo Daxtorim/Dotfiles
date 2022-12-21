@@ -6,13 +6,14 @@
   "height": 30,
   "spacing": 4,
   "modules-left": [
-    "clock",
+    "clock#date",
+    "clock#time",
     "tray"
   ],
   "modules-center": [],
   "modules-right": [
-    "pulseaudio",
     "network",
+    "pulseaudio",
     "battery",
     "battery#bat2"
   ],
@@ -37,9 +38,12 @@
   "battery#bat2": {
     "bat": "BAT2"
   },
-  "clock": {
-    "format": "{:%Y-%m-%d %H:%M:%S}",
+  "clock#date": {
+    "format": "{: %Y-%m-%d}",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+  "clock#time": {
+    "format": "{: %H:%M:%S}"
   },
   "network": {
     "interval": 2,

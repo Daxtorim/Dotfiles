@@ -51,7 +51,7 @@ install_eww()
 	esac
 	eww_dir="${_INSTALL_HOME}/Documents/Repositories/eww"
 	mkdir -p "${eww_dir}"
-	git clone https://github.com/Daxtorim/eww.git "${eww_dir}"
+	git clone https://github.com/elkowar/eww.git "${eww_dir}"
 	cd "${eww_dir}" || exit 10
 	cargo build --release --no-default-features --features=wayland || exit 11
 	cp target/release/eww "${_INSTALL_HOME}/.cargo/bin"
