@@ -22,12 +22,16 @@ tooltip {
 .graph {
   border: 0.1em solid $blue;
   border-radius: 0.3em;
+  color: black;
+  background: $black;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 80, 0, 1) 10%,
+    rgba(100, 125, 20, 1) 50%,
+    rgba(140, 0, 0, 1) 90%
+  );
   padding: 0.1em;
   margin: 0.2em 0em;
-}
-
-.cpu-usage-graph {
-  padding: 0 0.5em;
 }
 
 // ######### Workspaces ############
