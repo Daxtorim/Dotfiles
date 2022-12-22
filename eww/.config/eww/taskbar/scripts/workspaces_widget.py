@@ -13,7 +13,7 @@ from gi.repository import Gtk  # noqa
 
 ICON_THEME = Gtk.IconTheme.get_default()
 ICON_SIZE = 128
-PLACEHOLDER_ICON = os.path.expanduser("~/.local/share/icons/placeholder.png")
+PLACEHOLDER_ICON = os.path.expanduser("~/.local/share/icons/placeholder.svg")
 
 WS_PIN_ID = 2**64  # This just needs to be a big number outside of hyprlands range
 

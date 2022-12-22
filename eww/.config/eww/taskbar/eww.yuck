@@ -4,8 +4,8 @@
   :geometry
   (geometry :x "0%"
             :y "0%"
-            :width "50%"
-            :height "1%"
+            :width "20%"
+            :height "30"
             :anchor "bottom center")
   (_taskbar))
 
@@ -16,14 +16,6 @@
 
 
 (defwidget _taskbar []
-  (eventbox :onhover "${EWW_CMD} update _taskbar_visible=true"
-            :onhoverlost "${EWW_CMD} update _taskbar_visible=false"
-    (revealer :transition "slideup"
-              :duration "400ms"
-              :reveal {_taskbar_visible}
-      (__taskbar))))
-
-(defwidget __taskbar []
   (box :class "widget-box workspaces-box"
        :orientation "h"
        :width 50
@@ -41,4 +33,4 @@
                   :tooltip "${client.class} | PID: ${client.pid}"
                   :class {client.active ? "selected" : ""}
             (image :path "${client.icon_path}"
-                   :image-height 60)))))))
+                   :image-height 30)))))))
