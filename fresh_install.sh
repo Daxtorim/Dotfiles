@@ -59,13 +59,13 @@ install_eww()
 
 install_hyprland()
 {
-	echo
-	echo
-	echo "##########################################################"
-	echo "#                 Installing Hyprland                    #"
-	echo "##########################################################"
 	case "${_INSTALL_DISTRO}" in
 		arch | endeavouros)
+			echo
+			echo
+			echo "##########################################################"
+			echo "#                 Installing Hyprland                    #"
+			echo "##########################################################"
 			sudo pacman --needed --noconfirm -S gdb ninja meson gcc cmake libxcb xcb-proto xcb-util xcb-util-errors xcb-util-keysyms libxfixes libx11 libxcomposite xorg-xinput libxrender pixman wayland-protocols cairo pango seatd libxkbcommon xcb-util-wm xorg-xwayland
 			hyprland_dir="${_INSTALL_HOME}/Documents/Repositories/Hyprland"
 			mkdir -p "${hyprland_dir}"
@@ -74,13 +74,8 @@ install_hyprland()
 			sudo make install || exit 11
 			sudo cp "${_INSTALL_HOME}/Dotfiles/hypr/.local/share/hypr/hyprland_wrapped.desktop" "/usr/share/wayland-sessions/"
 			;;
-
-		fedora)
-			sudo dnf copr enable kasion/Hyprland-git
-			sudo dnf install hyprland
-			;;
 		*)
-			echoerr '!!! Skipping Hyprland (and companions) !!!'
+			echoerr 'Skipping Hyprland installation (and companions)'
 			echoerr 'Not a suitable distro for Hyprland!'
 			return 1
 			;;
@@ -111,22 +106,22 @@ main()
 	# tell system to use temporary IPv6 addresses
 	messages=(
 		"# generate and use temporary addresses (RFC3041)"
-		"# valid_lft=48h | prefered_lft=12h"
+		"# valid_lft=72h | prefered_lft=6h"
 		"# preferred is intentionally misspelled"
 		""
 		"net.ipv6.conf.all.accept_ra=1"
 		"net.ipv6.conf.all.addr_gen_mode=3"
 		"net.ipv6.conf.all.use_tempaddr=2"
-		"net.ipv6.conf.all.temp_prefered_lft=43200"
-		"net.ipv6.conf.all.temp_valid_lft=172800"
+		"net.ipv6.conf.all.temp_prefered_lft=21600"
+		"net.ipv6.conf.all.temp_valid_lft=259200"
 		""
 		"net.ipv6.conf.default.accept_ra=1"
 		"net.ipv6.conf.default.addr_gen_mode=3"
 		"net.ipv6.conf.default.use_tempaddr=2"
-		"net.ipv6.conf.default.temp_prefered_lft=43200"
-		"net.ipv6.conf.default.temp_valid_lft=172800"
+		"net.ipv6.conf.default.temp_prefered_lft=21600"
+		"net.ipv6.conf.default.temp_valid_lft=259200"
 	)
-	printf "%s\n" "${messages[@]}" | sudo tee "/etc/sysctl.d/40-ipv6.conf" > /dev/null
+	printf "%s\n" "${messages[@]}" | sudo tee "/etc/sysctl.d/90-ipv6.conf" > /dev/null
 
 	"${_INSTALL_HOME}/Dotfiles/update.sh" --stow-everything
 
@@ -145,7 +140,7 @@ install_packages()
 	case "${_INSTALL_DISTRO}" in
 		fedora)
 			rpmfusion=("https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm" "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm" "rpmfusion-nonfree-release-tainted")
-			packages=(kitty zsh vim neovim exa wofi waybar dunst jq fontconfig lxpolkit blueman git git-delta npm node python pip)
+			packages=(kitty zsh vim neovim exa fontconfig blueman git git-delta npm node python pip)
 			drivers=(intel-media-driver libva-intel-drivers broadcom-wl bluez bluez-utils)
 
 			dnf="sudo dnf -y"
