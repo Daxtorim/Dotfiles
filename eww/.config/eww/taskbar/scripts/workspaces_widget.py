@@ -58,67 +58,76 @@ def find_icon_name(window_class: str) -> str:
         return PLACEHOLDER_ICON
 
 
-def main() -> str:
-    clients = json.loads(sp.check_output("hyprctl clients -j", shell=True))
-
-    if not clients:
-        splash = sp.check_output("hyprctl splash", shell=True).decode("utf-8")
-        return json.dumps(
-            [{"css_class": "ws ws-splash", "name": splash.strip()}],
-            separators=(",", ":"),
-        )
-
-    monitors = json.loads(sp.check_output("hyprctl monitors -j", shell=True))
-    workspaces = json.loads(sp.check_output("hyprctl workspaces -j", shell=True))
-    active_ws = [monitor["activeWorkspace"]["id"] for monitor in monitors]
-    active_client = json.loads(sp.check_output("hyprctl activewindow -j", shell=True))
-
+def sort_clients_into_workspaces(clients: list, workspaces: list) -> dict:
     workspace_clients = {}
     workspace_clients[WS_PIN_ID] = []
     for ws in workspaces:
         workspace_clients[ws["id"]] = []
 
-    # sort by window class first, sort ties then by address
-    clients = sorted(clients, key=lambda x: (x["class"].lower(), x["address"]))
+    active_client_address = json.loads(
+        sp.check_output("hyprctl activewindow -j", shell=True)
+    ).get("address")
+
+    # sort by window class first (drop the "org.*" part), sort ties then by address
+    clients = sorted(
+        clients, key=lambda x: (x["class"].split(".")[-1].lower(), x["address"])
+    )
     for cl in clients:
         cl["icon_path"] = find_icon_name(cl["class"])
-
-        try:
-            cl_active = True if active_client["address"] == cl["address"] else False
-            cl["active"] = cl_active
-        except KeyError:
-            pass
+        cl["tooltip"] = f"{cl['class']} | PID: {cl['pid']}\n{cl['title']}"
+        cl["active"] = active_client_address == cl["address"]
 
         ws_id = cl["workspace"]["id"] if not cl["pinned"] else WS_PIN_ID
+
         workspace_clients[ws_id].append(cl)
 
-    workspace_components = []
+    return workspace_clients
+
+
+def add_css_class_and_clients(workspaces: list, workspace_clients: dict) -> list:
+    shown_workspaces = []
+
+    monitors = json.loads(sp.check_output("hyprctl monitors -j", shell=True))
+    active_ws = [monitor["activeWorkspace"]["id"] for monitor in monitors]
 
     workspaces = sorted(workspaces, key=lambda x: x["id"])
     workspaces.append({"id": WS_PIN_ID, "name": ""})
     for ws in workspaces:
         id = ws["id"]
-        if id < 0:
+        if id < 0:  # skip special workspaces (scratchpads)
             continue
 
-        # Add placeholder icon
+        # Add placeholder icon if no client exists on this workspace
         if not workspace_clients[id]:
             if id != WS_PIN_ID:
                 cl = {"icon_path": PLACEHOLDER_ICON, "active": True}
                 workspace_clients[id].append(cl)
             else:
                 continue
-
-        css_class = f"ws ws-{id} ws-{ws['name']} "
-        css_class += "ws-active" if id in active_ws else "ws-inactive"
-
-        ws["css_class"] = css_class
         ws["clients"] = workspace_clients[id]
-        workspace_components.append(ws)
 
-    # compact separators to make this work with eww
-    return json.dumps(workspace_components, separators=(",", ":"))
+        css_class_list = ["ws", f"ws-{id}", f"ws-{ws['name']}"]
+        css_class_list += ["ws-active"] if id in active_ws else ["ws-inactive"]
+        ws["css_class"] = " ".join(css_class_list)
+
+        shown_workspaces.append(ws)
+
+    return shown_workspaces
+
+
+def main() -> list:
+    clients = json.loads(sp.check_output("hyprctl clients -j", shell=True))
+
+    if not clients:
+        splash = sp.check_output("hyprctl splash", shell=True).decode("utf-8")
+        return [{"css_class": "ws ws-splash", "name": splash.strip()}]
+
+    workspaces = json.loads(sp.check_output("hyprctl workspaces -j", shell=True))
+
+    workspace_clients = sort_clients_into_workspaces(clients, workspaces)
+    return add_css_class_and_clients(workspaces, workspace_clients)
 
 
 if __name__ == "__main__":
-    print(main())
+    # compact separators to make this work with eww
+    print(json.dumps(main(), separators=(",", ":")))

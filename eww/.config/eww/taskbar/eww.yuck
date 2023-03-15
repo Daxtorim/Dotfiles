@@ -10,50 +10,41 @@
 (defvar _taskbar_visible false)
 
 (defwidget bar []
-  (box
-    :orientation "h"
-    :valign "center"
-    :halign "center"
-    :space-evenly false
+  (box :orientation "h"
+       :valign "fill"
+       :halign "center"
+       :space-evenly false
     (taskbar)
     (cpu_graph)))
 
 (defwidget taskbar []
-  (box
-    :class "widget-box workspaces-box"
-    :orientation "h"
-    :width 50
-    :valign "center"
-    :halign "center"
-    :space-evenly false
+  (box :class "workspaces-box"
+       :orientation "h"
+       :width 50
+       :valign "fill"
+       :halign "center"
+       :space-evenly false
     (for ws in workspace_data
-      (box
-        :class "${ws.css_class}"
-        :orientation "h"
-        :space-evenly false
-        (button
-          :onclick "hyprctl dispatch workspace ${ws.name}"
-          (label
-            :text "|${ws.name}|"))
+      (box :class "${ws.css_class}"
+           :orientation "h"
+           :space-evenly false
+        (button :onclick "hyprctl dispatch workspace ${ws.name}"
+          (label :text "|${ws.name}|"))
         (for client in {ws.clients}
-          (button
-            :onclick "focuswindow_for_real.sh ${client.address}"
-            :tooltip "${client.class} | PID: ${client.pid}"
-            :class {client.active ? "selected" : ""}
-            (image
-              :path "${client.icon_path}"
-              :image-height 30)))))))
+          (button :onclick "focuswindow_for_real.sh ${client.address}"
+                  :tooltip "${client.tooltip}"
+                  :class {client.active ? "selected" : ""}
+            (image :path "${client.icon_path}"
+                   :image-height 30)))))))
 
 (defwidget cpu_graph []
-  (box
-    :class "graph cpu-usage-graph"
-    :valign "fill"
-    :width 60
-    (graph
-      :value {EWW_CPU.avg}
-      :thickness 2.0
-      :time-range "30s"
-      :min 0
-      :max 100
-      :dynamic true
-      :line-style "round")))
+  (box :class "graph cpu-usage-graph"
+       :valign "fill"
+       :width 60
+    (graph :value {EWW_CPU.avg}
+           :thickness 2.0
+           :time-range "30s"
+           :min 0
+           :max 100
+           :dynamic true
+           :line-style "round")))
