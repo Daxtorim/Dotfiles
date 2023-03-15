@@ -1,9 +1,0 @@
-[Common]
-OutlineCloseButton=true
-
-[Windeco]
-ButtonSize=ButtonSmall
-DrawBackgroundGradient=true
-DrawBorderOnMaximizedWindows=true
-DrawSizeGrip=true
-DrawTitleBarSeparator=true
