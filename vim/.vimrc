@@ -24,6 +24,10 @@ set encoding=utf-8              "Set default display encoding to utf-8
 set spelllang=en                "Default spell checking for english
 set textwidth=0                 "Do not automatically break long lines
 
+if v:version >= 900
+	set splitkeep=screen
+endif
+
 syntax on
 
 " Tell vim to draw the entire background; fixes issues with colorscheme

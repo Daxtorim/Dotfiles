@@ -11,9 +11,6 @@ vim.opt.fillchars:append({ foldopen = "▼", foldclose = "▶", foldsep = "│" 
 
 vim.opt.inccommand = "split"
 
-if vim.version().minor >= 9 then
-	vim.opt.splitkeep = "sreen"
-end
 
 -- workaround to get folding and syntax highlighting with treesitter to work
 vim.api.nvim_create_autocmd({ "BufRead" }, {
@@ -26,14 +23,17 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
 
 -- ================ LunarVim Settings ======================
 -- {{{
-local B = lvim.builtin
+vim.g.everforest_background = 'hard'
+lvim.colorscheme = "everforest"
+
 lvim.format_on_save = false
 lvim.lint_on_save = true
-lvim.colorscheme = "terafox"
 lvim.reload_config_on_save = false
 
-B.gitsigns.opts.signcolumn = true
-B.gitsigns.opts.numhl = false
+local B = lvim.builtin
+
+B.gitsigns.opts.signcolumn = false
+B.gitsigns.opts.numhl = true
 
 B.nvimtree.setup.filters.dotfiles = false
 B.nvimtree.setup.renderer.indent_markers.enable = true
@@ -108,6 +108,7 @@ end
 -- {{{
 -- After changing plugin config exit and reopen LunarVim, Run :PackerSync :PackerCompile
 lvim.plugins = {
+	{ "sainnhe/everforest" },
 	{ "Daxtorim/vim-auto-indent-settings" },
 	{ "tpope/vim-surround" },
 	{ "ellisonleao/gruvbox.nvim" },
@@ -137,33 +138,6 @@ lvim.plugins = {
 		end,
 	},
 	{
-		-- Colorscheme
-		"EdenEast/nightfox.nvim",
-		config = function()
-			require("nightfox").setup({
-				options = {
-					transparent = false, -- Disable setting the background color
-					dim_inactive = true, -- Non current window bg to alt color see `hl-NormalNC`
-					terminal_colors = true, -- Configure the colors used when opening :terminal
-					styles = {
-						-- Style that is applied to category: see `highlight-args` for options
-						comments = "italic",
-						functions = "NONE",
-						keywords = "bold",
-						strings = "italic",
-						variables = "NONE",
-					},
-					inverse = {
-						-- Enable/Disable inverse highlighting for category
-						match_paren = false,
-						visual = false,
-						search = true,
-					},
-				},
-			})
-		end,
-	},
-	{
 		"Pocco81/auto-save.nvim",
 		config = function()
 			require("auto-save").setup()
@@ -178,28 +152,22 @@ lvim.plugins = {
 	},
 	{
 		-- Paint pairs of brackets in different colors
-		"p00f/nvim-ts-rainbow",
+		"HiPhish/nvim-ts-rainbow2",
 		event = "BufRead",
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				rainbow = {
 					enable = true,
-					extended_mode = true, -- Also highlight non-bracket delimiters like html tags
-					max_file_lines = nil, -- Do not enable for files with more than n lines
-					colors = { "#b16286", "#0aaaaa", "#d79921", "#689d6a", "#d65d0e", "#a89984", "#458588" },
+					query = {
+						"rainbow-parens",
+						html = "rainbow-tags",
+						latex = "rainbow-blocks",
+					},
 				},
 			})
 		end,
 	},
 }
--- }}}
-
--- ================ Display settings =======================
--- {{{
--- Blinking BAR in insert mode, blinking BLOCK elsewhere (GUI only)
-vim.opt.guifont = "monospace:h11"
-vim.opt.guicursor =
-	"n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait100-blinkoff400-blinkon600-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
 -- }}}
 
 -- vim:fdm=marker:fdl=0:
