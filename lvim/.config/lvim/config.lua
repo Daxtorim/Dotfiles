@@ -11,7 +11,6 @@ vim.opt.fillchars:append({ foldopen = "▼", foldclose = "▶", foldsep = "│" 
 
 vim.opt.inccommand = "split"
 
-
 -- workaround to get folding and syntax highlighting with treesitter to work
 vim.api.nvim_create_autocmd({ "BufRead" }, {
 	group = vim.api.nvim_create_augroup("TS_FOLD_WORKAROUND", {}),
@@ -23,7 +22,7 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
 
 -- ================ LunarVim Settings ======================
 -- {{{
-vim.g.everforest_background = 'hard'
+vim.g.everforest_background = "hard"
 lvim.colorscheme = "everforest"
 
 lvim.format_on_save = false
@@ -61,11 +60,45 @@ B.indentlines.options = {
 	buftype_exclude = { "terminal", "nofile" },
 }
 
+-- Refresh indent markers after folding
 local ok_indent, _ = pcall(require, "indent_blankline")
+local ok_which_key, wk = pcall(require, "which-key")
 if ok_indent then
-	-- Refresh after folding
-	for _, cmd in pairs({ "A", "a", "C", "c", "M", "m", "O", "o", "R", "r" }) do
-		vim.api.nvim_set_keymap("n", "z" .. cmd, "z" .. cmd .. "<cmd>IndentBlanklineRefresh<CR>", { noremap = true })
+	if ok_which_key then
+		wk.register({
+			-- stylua: ignore
+			z = {
+				A = { "zA<cmd>IndentBlanklineRefresh<CR>", "Toggle all folds under cursor", noremap = true },
+				a = { "za<cmd>IndentBlanklineRefresh<CR>", "Toggle fold under cursor",      noremap = true },
+				C = { "zC<cmd>IndentBlanklineRefresh<CR>", "Close all folds under cursor",  noremap = true },
+				c = { "zc<cmd>IndentBlanklineRefresh<CR>", "Close fold under cursor",       noremap = true },
+				e = { "ze<cmd>IndentBlanklineRefresh<CR>", "Right this line",               noremap = true },
+				H = { "zH<cmd>IndentBlanklineRefresh<CR>", "Half screen to the left",       noremap = true },
+				h = { "zh<cmd>IndentBlanklineRefresh<CR>", "Scroll left",                   noremap = true },
+				L = { "zL<cmd>IndentBlanklineRefresh<CR>", "Half screen to the right",      noremap = true },
+				l = { "zl<cmd>IndentBlanklineRefresh<CR>", "Scroll right",                  noremap = true },
+				M = { "zM<cmd>IndentBlanklineRefresh<CR>", "Close all folds",               noremap = true },
+				m = { "zm<cmd>IndentBlanklineRefresh<CR>", "Fold more",                     noremap = true },
+				O = { "zO<cmd>IndentBlanklineRefresh<CR>", "Open all folds under cursor",   noremap = true },
+				o = { "zo<cmd>IndentBlanklineRefresh<CR>", "Open fold under cursor",        noremap = true },
+				R = { "zR<cmd>IndentBlanklineRefresh<CR>", "Open all folds",                noremap = true },
+				r = { "zr<cmd>IndentBlanklineRefresh<CR>", "Fold less",                     noremap = true },
+				s = { "zs<cmd>IndentBlanklineRefresh<CR>", "Left this line",                noremap = true },
+				v = { "zv<cmd>IndentBlanklineRefresh<CR>", "Show cursor line",              noremap = true },
+				X = { "zX<cmd>IndentBlanklineRefresh<CR>", "Re-apply foldlevel",            noremap = true },
+				x = { "zx<cmd>IndentBlanklineRefresh<CR>", "Update folds",                  noremap = true },
+			},
+		})
+	else
+		local x = { "A", "a", "C", "c", "e", "H", "h", "L", "l", "M", "m", "O", "o", "R", "r", "s", "v", "X", "x" }
+		for _, cmd in ipairs(x) do
+			vim.api.nvim_set_keymap(
+				"n",
+				"z" .. cmd,
+				"z" .. cmd .. "<cmd>IndentBlanklineRefresh<CR>",
+				{ noremap = true }
+			)
+		end
 	end
 end
 -- }}}
@@ -108,9 +141,9 @@ end
 -- {{{
 -- After changing plugin config exit and reopen LunarVim, Run :PackerSync :PackerCompile
 lvim.plugins = {
-	{ "sainnhe/everforest" },
 	{ "Daxtorim/vim-auto-indent-settings" },
 	{ "tpope/vim-surround" },
+	{ "sainnhe/everforest" },
 	{ "ellisonleao/gruvbox.nvim" },
 	{ "elkowar/yuck.vim" },
 	{
