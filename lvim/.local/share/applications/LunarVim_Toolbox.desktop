@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=LunarVim (Toolbox)
+GenericName=Text Editor
+Comment=An IDE layer for Neovim with sane defaults. Completely free and community driven.
+Exec=toolbox run --container Std ${HOME}/.local/bin/lvim %F
+Icon=lvim
+MimeType=text/x-tex;text/x-pascal;text/x-moc;text/x-makefile;text/x-java;text/x-csrc;text/x-chdr;text/x-c++src;text/x-c++hdr;text/tcl;text/plain;application/x-shellscript;
+StartupNotify=false
+Terminal=true
