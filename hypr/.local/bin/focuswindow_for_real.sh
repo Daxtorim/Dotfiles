@@ -1,1 +1,0 @@
-../share/hypr/focuswindow_for_real.sh
