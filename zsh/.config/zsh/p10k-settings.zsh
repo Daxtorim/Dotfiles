@@ -484,11 +484,12 @@
 
   # Context format all: user@hostname (user:yellow; @:green; hostname:blue)
   # Context format when running with privileges: USER in red
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%B%009F%n%002F@%004F%m'
-  # Context format when in SSH without privileges:
-  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_TEMPLATE='%B%003F%n%002F@%004F%m'
-  # Default context format (no privileges, no SSH):
-  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='%B%003F%n%002F@%004F%m'
+  if [ -f "/run/.containerenv" ]; then
+      toolbox_name=\($(grep 'name=' "/run/.containerenv" | sed -e 's/^name="\(.*\)"$/\1/')\)
+  else
+      toolbox_name=""
+  fi
+  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE="%B%003F%n%002F@%004F%m${toolbox_name}"
 
   # Don't show context unless running with privileges or in SSH.
   # Tip: Remove the next line to always show context.
@@ -552,7 +553,7 @@
   #   - verbose: Enable instant prompt and print a warning when detecting console output during
   #              zsh initialization. Choose this if you've never tried instant prompt, haven't
   #              seen the warning, or if you are unsure what this all means.
-  typeset -g POWERLEVEL9K_INSTANT_PROMPT=verbose
+  typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
   # Hot reload allows you to change POWERLEVEL9K options after Powerlevel10k has been initialized.
   # For example, you can type POWERLEVEL9K_BACKGROUND=red and see your prompt turn red. Hot reload

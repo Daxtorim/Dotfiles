@@ -5,71 +5,115 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Basic auto/tab complete:
-autoload -U compinit
-zstyle ':completion:*' menu select
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"         # Colored completion (different colors for dirs/files/etc)
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.cache/zsh/cache
-zmodload zsh/complist
-compinit
-_comp_options+=(globdots)                                       # Include hidden files.
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+mkdir -p "${cache_dir}"
+
+# ================ General Options ================ {{{
+unsetopt BEEP                          # Do not make a sound when encountering errors
+setopt AUTO_CD                         # Automatically cd into directories without specifying `cd`
+setopt GLOB_DOTS                       # Do not require a leading dot to be matched explicitly
+setopt EXTENDED_GLOB                   # Give ~, #, ^ special meaning for patterns in filename generation
+setopt INTERACTIVE_COMMENTS            # Allow comments in interactive multi-line command chains
+setopt BANG_HIST                       # Use »!« to start history expansion
 
 # Open command line in editor
+bindkey -e
 autoload -z edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 
-## Options section
-setopt extendedglob              # Extended globbing. Allows using regular expressions with *
-setopt appendhistory             # Immediately append history instead of overwriting
-setopt histignorealldups         # If a new command is a duplicate, remove the older one
-setopt autocd                    # if only directory path is entered, cd there.
-setopt inc_append_history        # commands are added to the history immediately, otherwise only when shell exits.
-setopt nobeep                    # No beep
-unsetopt BEEP                    # For real, NO BEEP
+autoload -Uz colors; colors
+#}}}
 
+# ================ Completions ==================== {{{
 
-CACHE_DIR=${XDG_CACHE_HOME:-"${HOME}/.cache"}/zsh
-PLUGIN_DIR=${CACHE_DIR}/plugins
+autoload -Uz compinit; compinit
+zmodload zsh/complist
 
-mkdir -p "${CACHE_DIR}"
-HISTFILE=${CACHE_DIR}/zsh_history.txt
-HISTSIZE=2000000
-SAVEHIST=1500000
+# zstyle ':completion:<function>:<completer>:<command>:<argument>:<tag>' <option> <value>
 
+zstyle ':completion:*' use-cache true
+zstyle ':completion:*' cache-path "${cache_dir}/zcompcache"
 
-# Helper functions
-if [ -f "${ZDOTDIR}/functions.zsh" ]; then
-	. "${ZDOTDIR}/functions.zsh"
-else
-	echo "Cannot source helper functions. Cannot load config!"
-	return 1 # exit would kill the shell
+zstyle ':completion:*' completer \
+	_extensions _complete _approximate _ignored
+
+# 1. case-sensitive prefix match;
+# 2. case-insensitiv prefix match;
+# 3. case-sensitive substring match;
+# 4. case-insensitiv substring match
+zstyle ':completion:*' matcher-list \
+	'' \
+	'm:{a-zA-Z}={A-Za-z}' \
+	'l:|=* r:|=*' \
+	'm:{a-zA-Z}={A-Za-z} l:|=* r:|=*'
+
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-prompt '%F{black}Last line: %L Position: %P%f'
+zstyle ':completion:*' select-prompt '%F{black}Selected: %M Position: %P%f'
+
+zstyle ':completion:*:approximate:*' max-errors 2
+
+zstyle ':completion:*:*:-command-:*' group-order \
+	aliases builtins functions commands
+
+zstyle ':completion:*:*:*:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:*:*:*:descriptions' format '%F{green}  -- %d --%f'
+zstyle ':completion:*:*:*:*:messages' format '%F{blue}  -- %d --%f'
+zstyle ':completion:*:*:*:*:warnings' format '%F{red}  -- no matches found --%f'
+zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}  !? Corrections for »%o« (errors: %e)%f'
+
+bindkey '\t' expand-or-complete-prefix               # <Tab> to complete words, ignoring suffix if it exists
+bindkey -M menuselect '^[[Z' reverse-menu-complete   # <S-Tab> to go through completion menu in reverse
+
+unsetopt LIST_AMBIGUOUS                # Show completion menu even if something can be inserted
+setopt NOMATCH                         # Print error when filename generation does not produce matches
+setopt COMPLETE_IN_WORD                # Allow completion to begin at the cursor rather than the end of the word
+#}}}
+
+# ================ Directory stack ================ {{{
+setopt AUTO_PUSHD                      # Push the current directory visited on the stack
+setopt PUSHD_IGNORE_DUPS               # Do not store duplicates in the stack
+setopt PUSHD_SILENT                    # Do not print the directory stack after pushd or popd
+# show first 10 items on the directory stack and make aliases for them
+alias d='dirs -v | sed '\''11,$d'\'
+for index ({1..9}) alias "$index"="cd +${index}"; unset index
+#}}}
+
+# ================ History options ================ {{{
+setopt INC_APPEND_HISTORY              # Write to the history file immediately, not when the shell exits
+setopt HIST_IGNORE_ALL_DUPS            # Delete old recorded entry if new entry is a duplicate
+setopt HIST_IGNORE_SPACE               # Don't record any entry starting with a space
+HISTFILE="${cache_dir}/zhistory"
+HISTSIZE=50000
+SAVEHIST=50000
+#}}}
+
+# ================ Plugins ======================== {{{
+if [ ! -f "${HOME}/.local/share/zap/zap.zsh" ]; then
+	echo "Installing Zap plugin manager:"
+	if ! git clone https://github.com/zap-zsh/zap.git "${HOME}/.local/share/zap"; then
+		>2 echo "❌ Failed to install Zap!"
+		return 2
+	fi
 fi
+. "${HOME}/.local/share/zap/zap.zsh"
 
-# General shell agnostic aliases
-_zsh_source_file "${HOME}/Dotfiles/shell-aliases"
+plug "${HOME}/Dotfiles/shell-aliases"
+plug "${ZDOTDIR}/zsh_command_info.zsh"
 
-# System specific options
-zsh_add_file "zshrc_local.zsh"
-
-# General files
-zsh_add_file "extract_archives.zsh"
-zsh_add_file "zsh_command_info.zsh"
-
-# Plugins
-zsh_add_plugin "zsh-users/zsh-autosuggestions"
-zsh_add_plugin "zsh-users/zsh-syntax-highlighting"
+plug "zsh-users/zsh-autosuggestions"
+plug "zsh-users/zsh-syntax-highlighting"
+plug "hlissner/zsh-autopair"
 
 # Prompt
-zsh_add_plugin "romkatv/powerlevel10k"
-_zsh_source_file "${PLUGIN_DIR}/powerlevel10k/powerlevel10k.zsh-theme"
-# To customize prompt edit ~/.config/zsh/.p10k.zsh.
-zsh_add_file ".p10k.zsh"
+plug "romkatv/powerlevel10k"
+plug "${ZDOTDIR}/p10k-settings.zsh"
 
-# Keybindings
-bindkey "^R" history-incremental-pattern-search-backward
+# Fuzzy finder (fzf) for history/file/directory entries
+plug "/usr/share/fzf/shell/completion.zsh"
+plug "/usr/share/fzf/shell/key-bindings.zsh"
+#}}}
 
-# vi mode and fix for "broken" (aka default) vi behavior for backspace key
-bindkey -v
-bindkey '^?' backward-delete-char
+# vim:fdm=marker:fdl=0:
