@@ -9,17 +9,38 @@ esac
 
 # ================= General Settings ======================
 
-[ -f "${HOME}/Dotfiles/shell-env" ] && . "${HOME}/Dotfiles/shell-env"
-[ -f "${HOME}/Dotfiles/shell-aliases" ] && . "${HOME}/Dotfiles/shell-aliases"
+set_default_shell()
+{
+	# only change to zsh if this is the first start up of the terminal
+	[ -n "${REPLACED_BASH_WITH_ZSH}" ] && return 0
+	REPLACED_BASH_WITH_ZSH=1
+	export REPLACED_BASH_WITH_ZSH
 
-# enable bash completion in interactive shells
-if ! shopt -oq posix; then
-	if [ -f /usr/share/bash-completion/bash_completion ]; then
-		. /usr/share/bash-completion/bash_completion
-	elif [ -f /etc/bash_completion ]; then
-		. /etc/bash_completion
+	local preferred_shell
+	preferred_shell="$(command -v zsh)"
+	if [ -n "${preferred_shell}" ]; then
+		SHELL=${preferred_shell}
+		export SHELL
+		exec "${preferred_shell}"
 	fi
-fi
+}
+set_default_shell
+
+enable_autocompletion()
+{
+	if ! shopt -oq posix; then
+		if [ -f /usr/share/bash-completion/bash_completion ]; then
+			. /usr/share/bash-completion/bash_completion
+		elif [ -f /etc/bash_completion ]; then
+			. /etc/bash_completion
+		fi
+	fi
+}
+enable_autocompletion
+
+[ -f "${HOME}/Dotfiles/shell-aliases" ] && . "${HOME}/Dotfiles/shell-aliases"
+[ -f /usr/share/fzf/shell/key-bindings.bash ] && . /usr/share/fzf/shell/key-bindings.bash
+[ -f /usr/share/fzf/shell/completion.bash ] && . /usr/share/fzf/shell/completion.bash
 
 # Don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth:erasedups
@@ -57,5 +78,11 @@ else
 	alias git_prompt_update=''
 fi
 
-export PS1="\n\[$white\]╭[\$?]-[\[$yellow\]\u\[$green\]@\[$blue\]\h\[$white\]]-[\[$magenta\]\w\[$white\]]\$(git_prompt_update)\n╰─╸\[$green\]\\$ \[$reset\]"
-export PS2="\[$white\]╺─╸\[$green\]\\$ \[$reset\]"
+if [ -f "/run/.containerenv" ]; then
+	toolbox_name=\($(grep 'name=' "/run/.containerenv" | sed -e 's/^name="\(.*\)"$/\1/')\)
+else
+	toolbox_name=""
+fi
+
+PS1="\n\[$white\]╭[\$?]-[\[$yellow\]\u\[$green\]@\[$blue\]\h$toolbox_name\[$white\]]-[\[$magenta\]\w\[$white\]]\$(git_prompt_update)\n╰─╸\[$green\]\\$ \[$reset\]"
+PS2="\[$white\]╺─╸\[$green\]\\$ \[$reset\]"
