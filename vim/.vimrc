@@ -8,6 +8,7 @@ filetype indent plugin on
 set title titlestring=%<%(Vim:\ %t\ %)%m%r%y
 
 set termguicolors               " Activate true color support
+set background=dark             " Tell colorschemes which colour mode to use (light/dark)
 set belloff=all                 " Turn off the bell for all events, i.e. NO BEEP
 set number                      " Show line number of current line
 set norelativenumber            " Don't show other line numbers relative to current line
@@ -27,9 +28,8 @@ set clipboard=unnamed           " Put yanked/deleted text into the * register (�
 set mouse=nvi                   " Enable use of the mouse to select text inside a buffer
 
 if v:version >= 900
-	set splitkeep=screen
+	set splitkeep=screen        " Keep buffer text on screen static when splitting windows, moving the cursor if necessary
 endif
-
 
 " Tell vim to draw the entire background; fixes issues with colorscheme
 let &t_ut=''
@@ -47,20 +47,6 @@ set list listchars=tab:›\ ,space:·,trail:~,nbsp:⍽,extends:>,precedes:<
 
 " List of characters for separators and other special places
 set fillchars=fold:\ ,vert:│,diff:╱
-
-augroup vimrc
-	autocmd!
-	" Do not automatically add a comment marker to new lines and do not wrap long comments
-	autocmd BufWinEnter * setlocal formatoptions-=cro
-	" Do not hide ANY characters in markup files
-	autocmd BufWinEnter * setlocal conceallevel=0
-	" Insert hard newlines after 72 chars and reformat entire paragraphs automatically
-	autocmd FileType gitcommit setlocal tw=72 colorcolumn=73 formatoptions=w1pant
-	" set colorcolumn according to max line width of common formatters
-	autocmd FileType lua setlocal colorcolumn=121
-	autocmd FileType python setlocal colorcolumn=89
-	autocmd FileType rust setlocal colorcolumn=101
-augroup END
 "}}}
 
 " ================ Scrolling ====================== {{{
@@ -75,14 +61,6 @@ set ignorecase                  " Ignore case when searching for all lowercase p
 set smartcase                   " Do NOT ignore case when search pattern contains uppercase letters
 set hlsearch                    " Highlight matches
 set incsearch                   " Search while still typing
-"}}}
-
-" ================ Wildmenu ======================= {{{
-set wildmenu                    " Add menu for auto completion
-set wildoptions=pum             " Use popup menu to display completions
-set wildmode=longest:full,full  " Start wildmenu and complete longest common prefix, then cycle through complete matches
-set wildchar=<Tab>              " Use this key to go through completion options
-set wildcharm=<C-z>             " Use this key to open wildmenu via a mapping
 "}}}
 
 " ================ Indentation ==================== {{{
@@ -112,12 +90,37 @@ set foldtext=
 	\.'\ ('.(v:foldend-v:foldstart+1).'\ lines)'
 "}}}
 
+" ================ Wildmenu ======================= {{{
+set wildmenu                    " Add menu for auto completion
+set wildoptions=pum             " Use popup menu to display completions
+set wildmode=longest:full,full  " Start wildmenu and complete longest common prefix, then cycle through complete matches
+set wildchar=<Tab>              " Use this key to go through completion options
+set wildcharm=<C-z>             " Use this key to open wildmenu via a mapping
+"}}}
+
+" ================ Autocommands =================== {{{
+augroup vimrc
+	autocmd!
+	" Do not automatically add a comment marker to new lines and do not wrap long comments
+	autocmd BufWinEnter * setlocal formatoptions-=cro
+	" Do not hide ANY characters in markup files
+	autocmd BufWinEnter * setlocal conceallevel=0
+	" Insert hard newlines after 72 chars and reformat entire paragraphs automatically
+	autocmd FileType gitcommit setlocal tw=72 colorcolumn=73 formatoptions=w1pant
+	" set colorcolumn according to max line width of common formatters
+	autocmd FileType lua setlocal colorcolumn=121
+	autocmd FileType python setlocal colorcolumn=89
+	autocmd FileType rust setlocal colorcolumn=101
+augroup END
+"}}}
+
 " ================ Keybindings ==================== {{{
-" Avoid meta (alt) key, not reliable
+" Avoid meta (alt) key, not reliable in all terminals
 " Capitalization does NOT matter with CTRL
 
 " Space as <leader> key
 let mapleader = " "
+let maplocalleader = "_"
 
 " DO NOT GO INTO EX MODE EVER !!!
 nmap Q <Nop>
@@ -149,9 +152,15 @@ nmap <leader>w <cmd>w<CR>
 "}}}
 
 " ================ Plugins ======================== {{{
+if ! exists('g:do_not_install_vim_plugins')
 
-" Neovim expects vim-plug in a different location, but with LunarVim it becomes unnecessary anyway
-if ! has('nvim')
+	if has('nvim')
+		" if this file is sourced from neovim modify runtimepath to
+		" automatically include vim plugins
+		set runtimepath^=~/.vim
+		set runtimepath+=~/.vim/after
+		let &packpath = &runtimepath
+	endif
 
 	" Install vim-plug if not found
 	if empty(glob('~/.vim/autoload/plug.vim'))
@@ -169,9 +178,9 @@ if ! has('nvim')
 		Plug 'lifepillar/vim-gruvbox8'
 		Plug 'tpope/vim-commentary'
 		Plug 'tpope/vim-surround'
+		Plug 'tpope/vim-sleuth'
 		Plug 'LunarWatcher/auto-pairs', { 'tag': '*' }
 		Plug 'machakann/vim-highlightedyank'
-		Plug 'Daxtorim/vim-auto-indent-settings'
 	call plug#end()
 
 	"Plugin settings
@@ -179,16 +188,12 @@ if ! has('nvim')
 	let g:AutoPairsCompatibleMaps = 0
 	let g:AutoPairsShortcutFastWrap = '<C-e>'
 
-	set background=dark
 	colorscheme gruvbox8_hard
-	"Reduce color intensity of listchars
-	highlight SpecialKey guifg=#3a3a3a
+	"Reduce color intensity of some highlights
+	highlight SpecialKey guifg=#3a3a3a       " listchars
 	highlight CursorLine guibg=#191919
 	highlight CursorColumn guibg=#191919
-
-
 endif
-
 "}}}
 
 " vim:fdm=marker:fdl=0:

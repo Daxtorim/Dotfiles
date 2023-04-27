@@ -11,9 +11,14 @@ export TMPDIR="${TMPDIR:-/tmp}"
 export EDITOR=vi
 export VISUAL=vi
 if [ -x "$(command -v vim)" ]; then
-	export MANPAGER="vim +MANPAGER -c 'setlocal ts=8 ft=man nomod nolist nonu' -c 'nmap q :q!' -"
+	export MANPAGER="vim +MANPAGER --not-a-term -c 'setlocal ts=8 ft=man nomod nolist nonu' -c 'nmap q :q!' -"
 	export EDITOR=vim
 	export VISUAL=vim
+fi
+if [ -x "$(command -v nvim)" ]; then
+	export MANPAGER="nvim +Man! -c 'nmap q :q!'"
+	export EDITOR=nvim
+	export VISUAL=nvim
 fi
 if [ -x "$(command -v nvim)" ] && [ -x "$(command -v lvim)" ]; then
 	export EDITOR=lvim

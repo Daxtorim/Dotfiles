@@ -1,25 +1,5 @@
--- ================ Sourcing .vimrc ========================
-local vimrc = debug.getinfo(1).source:match("[^@]+/") .. "vimrc.original"
-vim.cmd("source " .. vimrc)
-
--- ================ Neovim settings ============== {{{
----@diagnostic disable-next-line: param-type-mismatch
-vim.opt.fillchars:append({ foldopen = "▼", foldclose = "▶", foldsep = "│" })
-vim.opt.listchars:append({ lead = "." })
-
-vim.opt.laststatus = 3
-vim.opt.inccommand = "split"
-vim.opt.signcolumn = "auto:1-3"
-
-vim.api.nvim_create_autocmd("TextYankPost", {
-	group = vim.api.nvim_create_augroup("highlight_yank", {}),
-	desc = "Hightlight selection on yank",
-	pattern = "*",
-	callback = function()
-		vim.highlight.on_yank({ higroup = "IncSearch", timeout = 300 })
-	end,
-})
---}}}
+vim.cmd("source ~/.config/nvim/init.lua")
+vim.g.do_not_install_vim_plugins = true
 
 -- =============== LunarVim Settings ============= {{{
 lvim.colorscheme = "gruvbox"
@@ -27,9 +7,10 @@ lvim.colorscheme = "gruvbox"
 lvim.format_on_save = false
 lvim.lint_on_save = true
 lvim.reload_config_on_save = false
+--}}}
 
+-- =============== Core Plugin Settings ========== {{{
 local B = lvim.builtin
-
 B.gitsigns.opts.signcolumn = false
 B.gitsigns.opts.numhl = true
 
