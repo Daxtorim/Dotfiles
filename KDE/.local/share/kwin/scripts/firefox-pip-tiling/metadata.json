@@ -1,0 +1,20 @@
+{
+  "KPlugin": {
+    "Name": "firefox-pip-tiling",
+    "Description": "Automatically tile firefox picture-in-picture windows to the bottom right of the screen and add a shortcut to temporarily hide them.",
+    "Icon": "preferences-system-windows-actions",
+    "Authors": [
+      {
+        "Email": "dax@example.com",
+        "Name": "dax"
+      }
+    ],
+    "Id": "firefox-pip-tiling",
+    "Version": "0.1",
+    "License": "GPLv3",
+    "Website": ""
+  },
+  "X-Plasma-API": "javascript",
+  "X-Plasma-MainScript": "code/main.js",
+  "KPackageStructure": "KWin/Script"
+}

@@ -1,4 +1,6 @@
 #!/bin/sh
+# print kwin/QT debug output to journal
+# export QT_LOGGING_RULES="kwin_*.debug=true"
 
 export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
