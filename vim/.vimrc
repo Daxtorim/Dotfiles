@@ -2,7 +2,7 @@
 
 " enable syntax highlighting and ftplugin settings
 syntax enable
-filetype indent plugin on
+filetype plugin on
 
 " Set the window title to 'Vim: filename [+][RO][Filetype]'
 set title titlestring=%<%(Vim:\ %t\ %)%m%r%y
