@@ -485,7 +485,7 @@
   # Context format all: user@hostname (user:yellow; @:green; hostname:blue)
   # Context format when running with privileges: USER in red
   if [ -f "/run/.containerenv" ]; then
-      toolbox_name=\($(grep 'name=' "/run/.containerenv" | sed -e 's/^name="\(.*\)"$/\1/')\)
+    toolbox_name="($(grep 'name=' "/run/.containerenv" | sed -e 's/^name="\(.*\)"$/\1/'))"
   else
       toolbox_name=""
   fi

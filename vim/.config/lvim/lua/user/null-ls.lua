@@ -22,7 +22,7 @@ if ok_null then
 			-- lua
 			f.stylua,
 			-- shell
-			f.shfmt.with({ extra_args = { "-i=0", "-ci", "-fn", "-sr" } }),
+			f.shfmt.with({ extra_args = { "-i=0", "-ci", "-sr", "-bn" } }),
 			-- d.shellcheck, -- diagnostics provided by bash-language-server (using shellcheck behind the scenes)
 			a.shellcheck,
 		},
