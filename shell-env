@@ -27,6 +27,32 @@ if [ -x "$(command -v nvim)" ] && [ -x "$(command -v lvim)" ]; then
 	export VISUAL=lvim
 fi
 
+# =============== kitty shell integration ======== {{{
+kitty_shell_integration() {
+	if [ ! -x "$(command -v kitty)" ] \
+		|| [ ! -x "$(command -v git)" ] \
+		|| [ ! "xterm-kitty" = "${TERM}" ]; then
+		return 1
+	fi
+
+	export KITTY_SHELL_DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/kitty/shell-integration"
+
+	if [ -d "${KITTY_SHELL_DATA_DIR}/bash" ] && [ -d "${KITTY_SHELL_DATA_DIR}/zsh" ]; then
+		return
+	fi
+
+	echo "Installing kitty's shell integration files"
+
+	kitty_dir=$(mktemp -d)
+	mkdir -p "${KITTY_SHELL_DATA_DIR}"
+	git clone --depth=1 'https://github.com/kovidgoyal/kitty' "${kitty_dir}"
+	mv "${kitty_dir}/shell-integration/"* "${KITTY_SHELL_DATA_DIR}"
+	rm -rf "${kitty_dir}"
+}
+kitty_shell_integration
+#}}}
+
+# =============== NPM setup (javascript) ========= {{{
 # Install new npm packages globally *for the user* so it won't need `sudo'
 npm_directory="${XDG_DATA_HOME}/npm-global"
 mkdir -p "${npm_directory}"

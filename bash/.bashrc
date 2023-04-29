@@ -54,8 +54,24 @@ shopt -s histappend
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# ================== PROMPT ===============================
+# ================ Sourcing files ================= {{{
+_source() { [ -f "$1" ] && . "$1"; }
+_source "${HOME}/Dotfiles/shell-aliases"
+_source /usr/share/fzf/shell/key-bindings.bash
+_source /usr/share/fzf/shell/completion.bash
 
+_source /usr/share/bash-completion/bash_completion \
+	|| _source /etc/bash_completion
+#}}}
+
+# ================ kitty integration ============== {{{
+if [ -n "${KITTY_SHELL_DATA_DIR}" ]; then
+	export KITTY_SHELL_INTEGRATION="enabled"
+	. "${KITTY_SHELL_DATA_DIR}/bash/kitty.bash"
+fi
+#}}}
+
+# ================== PROMPT ======================= {{{
 # color names for readability
 reset='\033[00m'
 black='\033[30m'
