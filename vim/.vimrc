@@ -107,10 +107,12 @@ augroup vimrc
 	autocmd BufWinEnter * setlocal conceallevel=0
 	" Insert hard newlines after 72 chars and reformat entire paragraphs automatically
 	autocmd FileType gitcommit setlocal tw=72 colorcolumn=73 formatoptions=w1pant
+
 	" set colorcolumn according to max line width of common formatters
-	autocmd FileType lua setlocal colorcolumn=121
-	autocmd FileType python setlocal colorcolumn=89
-	autocmd FileType rust setlocal colorcolumn=101
+	autocmd FileType javascript setlocal colorcolumn=81   " prettier
+	autocmd FileType lua setlocal colorcolumn=121         " stylua
+	autocmd FileType python setlocal colorcolumn=89       " black
+	autocmd FileType rust setlocal colorcolumn=101        " rustfmt
 augroup END
 "}}}
 

@@ -1,8 +1,22 @@
 const tileSizeFraction = 0.32; // fraction of screen width
 const hideDuration = 2000; // milliseconds
 const hideShortcut = "Meta+<";
+const pipWindowTitles = ["Picture-in-Picture", "Bild-im-Bild"];
 
-function calcTileGeometry(client) {
+// =============================================================================
+
+let active_pip_windows = [];
+
+// =============================================================================
+
+function removePipWindow(client) {
+  const index = active_pip_windows.indexOf(client);
+  if (index > -1) {
+    active_pip_windows.splice(index, 1);
+  }
+}
+
+function calculateTileGeometry(client) {
   const cHeight = client.frameGeometry.height;
   const cWidth = client.frameGeometry.width;
   const cAspectRatio = cWidth / cHeight;
@@ -15,34 +29,57 @@ function calcTileGeometry(client) {
   return { x: posX, y: posY, height: cHeightNew, width: cWidthNew };
 }
 
-function tempMinimize(client) {
+// =============================================================================
+// ============== Flatpak firefox pip windows cannot be minimized ==============
+// =============================================================================
+function movePipWindowsOffScreen() {
+  active_pip_windows.forEach((window) => {
+    window.originalGeometry = {};
+    for (let k in window.frameGeometry) {
+      window.originalGeometry[k] = window.frameGeometry[k];
+    }
+
+    window.frameGeometry.x = -9999999;
+    window.frameGeometry.y = -9999999;
+  });
+}
+
+function restorePipWindowsPosition() {
+  active_pip_windows.forEach((window) => {
+    window.frameGeometry = window.originalGeometry;
+  });
+}
+
+function tempMinimize() {
   let timer = new QTimer();
   timer.singleShot = true;
   timer.interval = hideDuration;
-  timer.timeout.connect(() => {
-    client.minimized = false;
-  });
+  timer.timeout.connect(restorePipWindowsPosition);
 
-  client.minimized = true;
+  movePipWindowsOffScreen();
   timer.start();
 }
+// =============================================================================
+// =============================================================================
+// =============================================================================
 
 function autotilePipWindow(client) {
-  if ("Picture-in-Picture" !== client.caption) {
+  if (!pipWindowTitles.some((title) => client.caption.includes(title))) {
     return;
   }
-  client.frameGeometry = calcTileGeometry(client);
+
+  active_pip_windows.push(client);
+  client.frameGeometry = calculateTileGeometry(client);
   client.keepAbove = true;
   client.onAllDesktops = true;
-
-  registerShortcut(
-    "HidePipWindowTemp",
-    "Firefox pip: Hide window temporarily (set by script)",
-    hideShortcut,
-    () => {
-      tempMinimize(client);
-    }
-  );
 }
 
+registerShortcut(
+  "HidePipWindowTemp",
+  "Firefox pip: Hide window temporarily",
+  hideShortcut,
+  tempMinimize
+);
+
 workspace.clientAdded.connect(autotilePipWindow);
+workspace.clientRemoved.connect(removePipWindow);
