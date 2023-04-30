@@ -119,7 +119,7 @@ plug "/usr/share/fzf/shell/key-bindings.zsh"
 # ================ kitty integration ============== {{{
 if [ -n "${KITTY_SHELL_DATA_DIR}" ]; then
 	export KITTY_SHELL_INTEGRATION="enabled"
-	autoload -Uz -- "${KITTY_SHELL_DATA_DIR}"/zsh/kitty-integration
+	autoload -Uz -- "${KITTY_SHELL_DATA_DIR}/zsh/kitty-integration"
 	kitty-integration
 	unfunction kitty-integration
 fi

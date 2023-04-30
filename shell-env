@@ -33,25 +33,23 @@ export VISUAL="${EDITOR}"
 
 # =============== kitty shell integration ======== {{{
 kitty_shell_integration() {
-	if [ ! -x "$(command -v kitty)" ] \
-		|| [ ! -x "$(command -v git)" ] \
-		|| [ ! "xterm-kitty" = "${TERM}" ]; then
-		return 1
-	fi
-
-	export KITTY_SHELL_DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/kitty/shell-integration"
-
-	if [ -d "${KITTY_SHELL_DATA_DIR}/bash" ] && [ -d "${KITTY_SHELL_DATA_DIR}/zsh" ]; then
+	KITTY_SHELL_DATA_DIR="${XDG_DATA_HOME}/kitty/shell-integration"
+	if [ -f "${KITTY_SHELL_DATA_DIR}/bash/kitty.bash" ] && [ -f "${KITTY_SHELL_DATA_DIR}/zsh/kitty-integration" ]; then
+		export KITTY_SHELL_DATA_DIR
 		return
 	fi
 
+	[ ! -x "$(command -v git)" ] && return 1
+
 	echo "Installing kitty's shell integration files"
 
-	kitty_dir=$(mktemp -d)
+	rm -rf "${KITTY_SHELL_DATA_DIR}"
 	mkdir -p "${KITTY_SHELL_DATA_DIR}"
+	kitty_dir=$(mktemp -d)
 	git clone --depth=1 'https://github.com/kovidgoyal/kitty' "${kitty_dir}"
 	mv "${kitty_dir}/shell-integration/"* "${KITTY_SHELL_DATA_DIR}"
 	rm -rf "${kitty_dir}"
+	export KITTY_SHELL_DATA_DIR
 }
 kitty_shell_integration
 #}}}
