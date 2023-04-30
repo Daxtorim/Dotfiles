@@ -1,9 +1,5 @@
 " ================ General Options ================ {{{
 
-" enable syntax highlighting and ftplugin settings
-syntax enable
-filetype plugin on
-
 " Set the window title to 'Vim: filename [+][RO][Filetype]'
 set title titlestring=%<%(Vim:\ %t\ %)%m%r%y
 
@@ -13,6 +9,7 @@ set belloff=all                 " Turn off the bell for all events, i.e. NO BEEP
 set number                      " Show line number of current line
 set norelativenumber            " Don't show other line numbers relative to current line
 set signcolumn=auto             " Only display a signcolumn when there are signes set
+set colorcolumn=121             " Add a highlighted column to indicate excessivly long lines
 set cursorline                  " Highlight line where the cursor is
 set history=1000                " Store cmd history
 set showcmd                     " Show incomplete commands at the bottom right
@@ -28,8 +25,12 @@ set clipboard=unnamed           " Put yanked/deleted text into the * register (Â
 set mouse=nvi                   " Enable use of the mouse to select text inside a buffer
 
 if v:version >= 900
-	set splitkeep=screen        " Keep buffer text on screen static when splitting windows, moving the cursor if necessary
+    set splitkeep=screen        " Keep buffer text on screen static when splitting windows, moving the cursor if necessary
 endif
+
+" enable syntax highlighting and ftplugin settings
+syntax enable
+filetype plugin on
 
 " Tell vim to draw the entire background; fixes issues with colorscheme
 let &t_ut=''
@@ -106,7 +107,7 @@ augroup vimrc
 	" Do not hide ANY characters in markup files
 	autocmd BufWinEnter * setlocal conceallevel=0
 	" Insert hard newlines after 72 chars and reformat entire paragraphs automatically
-	autocmd FileType gitcommit setlocal tw=72 colorcolumn=73 formatoptions=w1pant
+	autocmd FileType gitcommit setlocal spell tw=72 colorcolumn=73 formatoptions=w1pant
 
 	" set colorcolumn according to max line width of common formatters
 	autocmd FileType javascript setlocal colorcolumn=81   " prettier
