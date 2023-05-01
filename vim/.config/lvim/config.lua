@@ -1,5 +1,5 @@
-vim.cmd("source ~/.config/nvim/init.lua")
 vim.g.do_not_install_vim_plugins = true
+vim.cmd("source ~/.config/nvim/init.lua")
 
 -- =============== LunarVim Settings ============= {{{
 lvim.colorscheme = "gruvbox"
