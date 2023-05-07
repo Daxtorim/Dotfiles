@@ -1,13 +1,20 @@
 const tileSizeFraction = 0.32; // fraction of screen width
 const hideDuration = 2000; // milliseconds
-const hideShortcut = "Meta+<";
 const pipWindowTitles = ["Picture-in-Picture", "Bild-im-Bild"];
 
 // =============================================================================
 
-let active_pip_windows = [];
+const active_pip_windows = [];
 
 // =============================================================================
+
+function cloneProperties(obj) {
+  const clone = {};
+  for (let key in obj) {
+    clone[key] = obj[key];
+  }
+  return clone;
+}
 
 function removePipWindow(client) {
   const index = active_pip_windows.indexOf(client);
@@ -34,10 +41,7 @@ function calculateTileGeometry(client) {
 // =============================================================================
 function movePipWindowsOffScreen() {
   active_pip_windows.forEach((window) => {
-    window.originalGeometry = {};
-    for (let k in window.frameGeometry) {
-      window.originalGeometry[k] = window.frameGeometry[k];
-    }
+    window.originalGeometry = cloneProperties(window.frameGeometry);
 
     window.frameGeometry.x = -9999999;
     window.frameGeometry.y = -9999999;
@@ -46,12 +50,18 @@ function movePipWindowsOffScreen() {
 
 function restorePipWindowsPosition() {
   active_pip_windows.forEach((window) => {
-    window.frameGeometry = window.originalGeometry;
+    window.frameGeometry = cloneProperties(window.originalGeometry);
+  });
+}
+
+function manuallyTilePipWindow() {
+  active_pip_windows.forEach((window) => {
+    window.frameGeometry = cloneProperties(window.targetGeometry);
   });
 }
 
 function tempMinimize() {
-  let timer = new QTimer();
+  const timer = new QTimer();
   timer.singleShot = true;
   timer.interval = hideDuration;
   timer.timeout.connect(restorePipWindowsPosition);
@@ -67,18 +77,27 @@ function autotilePipWindow(client) {
   if (!pipWindowTitles.some((title) => client.caption.includes(title))) {
     return;
   }
-
   active_pip_windows.push(client);
-  client.frameGeometry = calculateTileGeometry(client);
+
+  client.originalGeometry = cloneProperties(client.frameGeometry);
+  client.targetGeometry = calculateTileGeometry(client);
+
+  client.frameGeometry = cloneProperties(client.targetGeometry);
   client.keepAbove = true;
   client.onAllDesktops = true;
 }
 
 registerShortcut(
-  "HidePipWindowTemp",
-  "Firefox pip: Hide window temporarily",
-  hideShortcut,
+  "FF-Pip-Tiling Hide Window",
+  "Firefox Pip: Hide window temporarily",
+  "Meta+<",
   tempMinimize
+);
+registerShortcut(
+  "FF-Pip-Tiling Tile Window",
+  "Firefox Pip: Move window into bottom right corner",
+  "Meta+Alt+3",
+  manuallyTilePipWindow
 );
 
 workspace.clientAdded.connect(autotilePipWindow);
