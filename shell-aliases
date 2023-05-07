@@ -14,15 +14,16 @@ alias grs="git restore --staged"
 alias gra="git restore --staged ."
 alias gs="git status"
 
-alias grep='grep --color=auto'
+alias grep="grep --color=auto"
+alias ip="ip --color=auto"
 
-alias ls='ls --color=auto'
-alias ll='ls --color=auto -lh'
-alias la='ls --color=auto -lha'
+alias ls="ls --color=auto --group-directories-first"
+alias ll="ls --color=auto --group-directories-first --time-style=long-iso -lh"
+alias la="ls --color=auto --group-directories-first --time-style=long-iso -lhA"
 if [ -x "$(command -v exa)" ]; then
-	alias ls='exa --colour=auto --grid'
-	alias ll='exa --colour=auto --long --group --header --time-style=long-iso'
-	alias la='exa --colour=auto --long --group --header --time-style=long-iso --all --all'
+	alias ls="exa --colour=auto --group-directories-first --icons --grid"
+	alias ll="exa --colour=auto --group-directories-first --icons --long --group --header --time-style=long-iso"
+	alias la="exa --colour=auto --group-directories-first --icons --long --group --header --time-style=long-iso --all"
 fi
 
 if [ ! -f "/run/.containerenv" ] && toolbox list --containers | awk '{print $2}' | grep -q "^Std$"; then
@@ -31,8 +32,7 @@ if [ ! -f "/run/.containerenv" ] && toolbox list --containers | awk '{print $2}'
 fi
 
 # Use correct extraction program based on file extension
-extract()
-{
+extract() {
 	if [ -f "$1" ]; then
 		case $1 in
 			*.tar.gz) tar xzf "$1" ;;
