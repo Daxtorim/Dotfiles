@@ -1,7 +1,7 @@
 vim.cmd("source ~/.vimrc")
 -- vim.g.do_not_install_vim_plugins = true
 
--- ================ General settings ============= {{{
+--#: General settings                       {{{
 ---@diagnostic disable-next-line: param-type-mismatch
 vim.opt.fillchars:append({ foldopen = "▼", foldclose = "▶", foldsep = "│" })
 vim.opt.listchars:append({ lead = "." })

@@ -8,7 +8,7 @@ fi
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 mkdir -p "${cache_dir}"
 
-# ================ General Options ================ {{{
+#: General Options                          {{{
 unsetopt BEEP                          # Do not make a sound when encountering errors
 setopt AUTO_CD                         # Automatically cd into directories without specifying `cd`
 setopt GLOB_DOTS                       # Do not require a leading dot to be matched explicitly
@@ -25,7 +25,7 @@ bindkey "^X^E" edit-command-line
 autoload -Uz colors; colors
 #}}}
 
-# ================ Completions ==================== {{{
+#: Completions                              {{{
 
 autoload -Uz compinit; compinit
 zmodload zsh/complist
@@ -72,7 +72,7 @@ setopt NOMATCH                         # Print error when filename generation do
 setopt COMPLETE_IN_WORD                # Allow completion to begin at the cursor rather than the end of the word
 #}}}
 
-# ================ Directory stack ================ {{{
+#: Directory stack                          {{{
 setopt AUTO_PUSHD                      # Push the current directory visited on the stack
 setopt PUSHD_IGNORE_DUPS               # Do not store duplicates in the stack
 setopt PUSHD_SILENT                    # Do not print the directory stack after pushd or popd
@@ -81,7 +81,7 @@ alias d='dirs -v | sed '\''11,$d'\'
 for index ({1..9}) alias "$index"="cd +${index}"; unset index
 #}}}
 
-# ================ History options ================ {{{
+#: History options                          {{{
 setopt INC_APPEND_HISTORY              # Write to the history file immediately, not when the shell exits
 setopt HIST_IGNORE_ALL_DUPS            # Delete old recorded entry if new entry is a duplicate
 setopt HIST_IGNORE_SPACE               # Don't record any entry starting with a space
@@ -90,7 +90,7 @@ HISTSIZE=50000
 SAVEHIST=50000
 #}}}
 
-# ================ Plugins ======================== {{{
+#: Plugins                                  {{{
 if [ ! -f "${HOME}/.local/share/zap/zap.zsh" ]; then
 	echo "Installing Zap plugin manager:"
 	if ! git clone https://github.com/zap-zsh/zap.git "${HOME}/.local/share/zap"; then
@@ -116,7 +116,7 @@ plug "/usr/share/fzf/shell/completion.zsh"
 plug "/usr/share/fzf/shell/key-bindings.zsh"
 #}}}
 
-# ================ kitty integration ============== {{{
+#: kitty integration                        {{{
 if [ -n "${KITTY_SHELL_DATA_DIR}" ]; then
 	export KITTY_SHELL_INTEGRATION="enabled"
 	autoload -Uz -- "${KITTY_SHELL_DATA_DIR}/zsh/kitty-integration"

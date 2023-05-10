@@ -1,4 +1,4 @@
-" ================ General Options ================ {{{
+"#: General Options                         {{{
 
 " Set the window title to 'Vim: filename [+][RO][Filetype]'
 set title titlestring=%<%(Vim:\ %t\ %)%m%r%y
@@ -8,9 +8,10 @@ set background=dark             " Tell colorschemes which colour mode to use (li
 set belloff=all                 " Turn off the bell for all events, i.e. NO BEEP
 set number                      " Show line number of current line
 set norelativenumber            " Don't show other line numbers relative to current line
-set signcolumn=auto             " Only display a signcolumn when there are signes set
-set colorcolumn=121             " Add a highlighted column to indicate excessivly long lines
+set signcolumn=auto             " Only display a signcolumn when there are signs set
+set colorcolumn=121             " Add a highlighted column to indicate excessively long lines
 set cursorline                  " Highlight line where the cursor is
+set conceallevel=2              " Hide markup characters
 set history=1000                " Store cmd history
 set showcmd                     " Show incomplete commands at the bottom right
 set cmdheight=1                 " Set the height of the cmd line at the bottom to n lines
@@ -50,21 +51,21 @@ set list listchars=tab:›\ ,space:·,trail:~,nbsp:⍽,extends:>,precedes:<
 set fillchars=fold:\ ,vert:│,diff:╱
 "}}}
 
-" ================ Scrolling ====================== {{{
+"#: Scrolling                               {{{
 set scrolloff=3 sidescrolloff=0 " Start scrolling when n lines away from borders
 set sidescroll=0                " Put cursor back to the middle of the screen when scrolling off horizontally
 set nowrap                      " Do not wrap long lines
 set linebreak                   " Break lines at convenient points when 'wrap' is enabled
 "}}}
 
-" ================ Search ========================= {{{
+"#: Search                                  {{{
 set ignorecase                  " Ignore case when searching for all lowercase pattern
 set smartcase                   " Do NOT ignore case when search pattern contains uppercase letters
 set hlsearch                    " Highlight matches
 set incsearch                   " Search while still typing
 "}}}
 
-" ================ Indentation ==================== {{{
+"#: Indentation                             {{{
 set autoindent                  " Keep new lines on the same level as previous line
 set smartindent                 " Auto indent new lines after e.g '{'
 set smarttab                    " Indent according to shiftwidth at start of line and convert between tabs and spaces appropriately
@@ -74,7 +75,7 @@ set shiftwidth=0                " Number of spaces by which text is shifted (0=t
 set noexpandtab                 " Use actual tab characters, do not replace them with spaces
 "}}}
 
-" ================ Folds ========================== {{{
+"#: Folds                                   {{{
 set foldenable                  " Fold by default
 set foldmethod=indent           " Fold based on indentation
 set foldignore=                 " Do not exclude any lines from folds
@@ -91,7 +92,7 @@ set foldtext=
 	\.'\ ('.(v:foldend-v:foldstart+1).'\ lines)'
 "}}}
 
-" ================ Wildmenu ======================= {{{
+"#: Wildmenu                                {{{
 set wildmenu                    " Add menu for auto completion
 set wildoptions=pum             " Use popup menu to display completions
 set wildmode=longest:full,full  " Start wildmenu and complete longest common prefix, then cycle through complete matches
@@ -99,13 +100,11 @@ set wildchar=<Tab>              " Use this key to go through completion options
 set wildcharm=<C-z>             " Use this key to open wildmenu via a mapping
 "}}}
 
-" ================ Autocommands =================== {{{
+"#: Autocommands                            {{{
 augroup vimrc
 	autocmd!
 	" Do not automatically add a comment marker to new lines and do not wrap long comments
 	autocmd BufWinEnter * setlocal formatoptions-=cro
-	" Do not hide ANY characters in markup files
-	autocmd BufWinEnter * setlocal conceallevel=0
 	" Insert hard newlines after 72 chars and reformat entire paragraphs automatically
 	autocmd FileType gitcommit setlocal spell tw=72 colorcolumn=73 formatoptions=w1pant
 
@@ -117,7 +116,7 @@ augroup vimrc
 augroup END
 "}}}
 
-" ================ Keybindings ==================== {{{
+"#: Keybindings                             {{{
 " Avoid meta (alt) key, not reliable in all terminals
 " Capitalization does NOT matter with CTRL
 
@@ -154,12 +153,11 @@ nmap <leader>v <cmd>vsplit<CR>
 nmap <leader>w <cmd>w<CR>
 "}}}
 
-" ================ Plugins ======================== {{{
+"#: Plugins                                 {{{
 if ! exists('g:do_not_install_vim_plugins')
 
 	if has('nvim')
-		" if this file is sourced from neovim modify runtimepath to
-		" automatically include vim plugins
+		" if this file is sourced from neovim modify runtimepath to automatically include vim plugins
 		set runtimepath^=~/.vim
 		set runtimepath+=~/.vim/after
 		let &packpath = &runtimepath

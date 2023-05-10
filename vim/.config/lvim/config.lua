@@ -1,7 +1,7 @@
 vim.g.do_not_install_vim_plugins = true
 vim.cmd("source ~/.config/nvim/init.lua")
 
--- =============== LunarVim Settings ============= {{{
+--#: LunarVim Settings                      {{{
 lvim.colorscheme = "gruvbox"
 
 lvim.format_on_save = false
@@ -9,7 +9,7 @@ lvim.lint_on_save = true
 lvim.reload_config_on_save = false
 --}}}
 
--- =============== Core Plugin Settings ========== {{{
+--#: Core Plugin Settings                   {{{
 local B = lvim.builtin
 B.gitsigns.opts.signcolumn = false
 B.gitsigns.opts.numhl = true
@@ -35,7 +35,7 @@ require("user.null-ls")
 require("user.telescope")
 --}}}
 
--- =============== Plugins ======================= {{{
+--#: Plugins                                {{{
 lvim.plugins = {
 	{ "Daxtorim/vim-auto-indent-settings" },
 	{ "tpope/vim-surround" },
