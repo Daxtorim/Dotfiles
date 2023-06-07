@@ -138,8 +138,18 @@ nmap Y y$
 noremap <expr> j (v:count ? 'j' : 'gj')
 noremap <expr> k (v:count ? 'k' : 'gk')
 
+" Set undo points in insert mode for certain actions
+inoremap <left> <c-g>U<left>
+inoremap <right> <c-g>U<right>
+inoremap <up> <c-g>u<up>
+inoremap <down> <c-g>u<down>
+inoremap <cr> <c-g>u<cr>
+" inoremap <bs> <c-g>u<bs>
+inoremap <c-w> <c-g>u<c-w>
+inoremap <c-u> <c-g>u<c-u>
+
 " Open list of buffers in wildmenu
-nnoremap <leader><space> :buffer <C-z>
+nnoremap <leader><leader> :buffer <C-z>
 
 " Remove highlighting and redraw the screen
 nmap <leader>h <cmd>nohls<CR><cmd>redraw<CR>

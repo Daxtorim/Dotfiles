@@ -1,5 +1,5 @@
-vim.cmd("source ~/.vimrc")
 -- vim.g.do_not_install_vim_plugins = true
+vim.cmd("source ~/.vimrc")
 
 --#: General settings                       {{{
 ---@diagnostic disable-next-line: param-type-mismatch
