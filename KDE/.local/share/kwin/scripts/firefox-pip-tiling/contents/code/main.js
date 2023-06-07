@@ -1,10 +1,10 @@
-const tileSizeFraction = 0.32; // fraction of screen width
-const hideDuration = 2000; // milliseconds
-const pipWindowTitles = ["Picture-in-Picture", "Bild-im-Bild"];
+const TILE_SIZE_FRACTION = 0.32; // fraction of screen width
+const HIDE_DURATION = 2000; // milliseconds
+const PIP_WINDOW_TITLES = ["Picture-in-Picture", "Bild-im-Bild"];
 
 // =============================================================================
 
-const active_pip_windows = [];
+const ACTIVE_PIP_WINDOWS = [];
 
 // =============================================================================
 
@@ -17,9 +17,9 @@ function cloneProperties(obj) {
 }
 
 function removePipWindow(client) {
-  const index = active_pip_windows.indexOf(client);
+  const index = ACTIVE_PIP_WINDOWS.indexOf(client);
   if (index > -1) {
-    active_pip_windows.splice(index, 1);
+    ACTIVE_PIP_WINDOWS.splice(index, 1);
   }
 }
 
@@ -27,8 +27,8 @@ function calculateTileGeometry(client) {
   const cHeight = client.frameGeometry.height;
   const cWidth = client.frameGeometry.width;
   const cAspectRatio = cWidth / cHeight;
-  const screenGeometry = workspace.clientArea(KWin.FullscreenArea, client);
-  const cWidthNew = Math.round(tileSizeFraction * screenGeometry.width);
+  const screenGeometry = workspace.clientArea(KWin.FullScreenArea, client);
+  const cWidthNew = Math.round(TILE_SIZE_FRACTION * screenGeometry.width);
   const cHeightNew = Math.round(cWidthNew / cAspectRatio);
   const posX = screenGeometry.width - cWidthNew;
   const posY = screenGeometry.height - cHeightNew;
@@ -36,55 +36,38 @@ function calculateTileGeometry(client) {
   return { x: posX, y: posY, height: cHeightNew, width: cWidthNew };
 }
 
-// =============================================================================
-// ============== Flatpak firefox pip windows cannot be minimized ==============
-// =============================================================================
-function movePipWindowsOffScreen() {
-  active_pip_windows.forEach((window) => {
-    window.originalGeometry = cloneProperties(window.frameGeometry);
-
-    window.frameGeometry.x = -9999999;
-    window.frameGeometry.y = -9999999;
-  });
-}
-
-function restorePipWindowsPosition() {
-  active_pip_windows.forEach((window) => {
-    window.frameGeometry = cloneProperties(window.originalGeometry);
-  });
-}
-
-function manuallyTilePipWindow() {
-  active_pip_windows.forEach((window) => {
-    window.frameGeometry = cloneProperties(window.targetGeometry);
-  });
-}
-
 function tempMinimize() {
   const timer = new QTimer();
   timer.singleShot = true;
-  timer.interval = hideDuration;
-  timer.timeout.connect(restorePipWindowsPosition);
+  timer.interval = HIDE_DURATION;
+  timer.timeout.connect(() => {
+    ACTIVE_PIP_WINDOWS.forEach((window) => {
+      window.minimized = false;
+    });
+  });
 
-  movePipWindowsOffScreen();
+  ACTIVE_PIP_WINDOWS.forEach((window) => {
+    window.minimized = true;
+  });
+
   timer.start();
 }
-// =============================================================================
-// =============================================================================
-// =============================================================================
 
 function autotilePipWindow(client) {
-  if (!pipWindowTitles.some((title) => client.caption.includes(title))) {
+  if (!PIP_WINDOW_TITLES.some((title) => client.caption.includes(title))) {
     return;
   }
-  active_pip_windows.push(client);
+  ACTIVE_PIP_WINDOWS.push(client);
 
-  client.originalGeometry = cloneProperties(client.frameGeometry);
-  client.targetGeometry = calculateTileGeometry(client);
-
-  client.frameGeometry = cloneProperties(client.targetGeometry);
+  client.frameGeometry = calculateTileGeometry(client);
   client.keepAbove = true;
   client.onAllDesktops = true;
+}
+
+function manuallyTilePipWindow() {
+  ACTIVE_PIP_WINDOWS.forEach((window) => {
+    window.frameGeometry = calculateTileGeometry(window);
+  });
 }
 
 registerShortcut(
