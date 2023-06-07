@@ -24,11 +24,11 @@ _zsh_time_precmd() {
 
 	local timer_display=""
 	if [ ${hrs} -gt 0 ]; then
-		timer_display=$(printf "%dh %dm %ds" "$hrs" "$min" "$sec")
+		timer_display="${hrs}h ${min}m ${sec}s"
 	elif [ ${min} -gt 0 ]; then
-		timer_display=$(printf "%dm %ds" "$min" "$sec")
+		timer_display="${min}m ${sec}s"
 	else
-		timer_display=$(printf "%d.%ds" "$sec" "$mil")
+		timer_display="${sec}.${mil}s"
 	fi
 
 	_ZSH_COMMAND_TIME_INFO="%101F ${timer_display}%f"
@@ -39,7 +39,7 @@ _zsh_status_precmd() {
 	# and overwrites $? and $pipestatus in this scope
 	local exit_codes=("${pipestatus[@]}")
 
-	local status_info=""
+	local status_info=()
 	local status_color=""
 
 	_ZSH_EXIT_ERROR=0
@@ -50,13 +50,11 @@ _zsh_status_precmd() {
 			# Remember error for later
 			_ZSH_EXIT_ERROR=1
 		fi
-
 		if [ ${stat} -gt 128 ];then
 			# process recieved signal, get signal name from exit code
 			stat=$(kill -l ${stat})
 		fi
-
-		status_info="${status_info}|${stat}"
+		status_info+="${stat}"
 	done
 
 	# Base success on the pipe's last command
@@ -67,8 +65,7 @@ _zsh_status_precmd() {
 	fi
 
 	if [ ${_ZSH_EXIT_ERROR} -ne 0 ]; then
-		# Remove leading "|" from $status_info
-		_ZSH_COMMAND_STATUS_INFO="${status_color} ${status_info#\|}%f"
+		_ZSH_COMMAND_STATUS_INFO="${status_color} ${(j.|.)status_info}%f"
 	else
 		_ZSH_COMMAND_STATUS_INFO="${status_color}%f"
 	fi

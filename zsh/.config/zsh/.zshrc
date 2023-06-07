@@ -100,20 +100,17 @@ if [ ! -f "${HOME}/.local/share/zap/zap.zsh" ]; then
 fi
 . "${HOME}/.local/share/zap/zap.zsh"
 
-plug "${HOME}/Dotfiles/shell-aliases"
-plug "${ZDOTDIR}/zsh_command_info.zsh"
-
 plug "zsh-users/zsh-autosuggestions"
 plug "zsh-users/zsh-syntax-highlighting"
 plug "hlissner/zsh-autopair"
+plug "romkatv/powerlevel10k" # Prompt
 
-# Prompt
-plug "romkatv/powerlevel10k"
-plug "${ZDOTDIR}/p10k-settings.zsh"
-
-# Fuzzy finder (fzf) for history/file/directory entries
-plug "/usr/share/fzf/shell/completion.zsh"
-plug "/usr/share/fzf/shell/key-bindings.zsh"
+_source() { [ -f "$1" ] && . "$1"; }
+_source "${HOME}/Dotfiles/shell-aliases"
+_source "${ZDOTDIR}/zsh_command_info.zsh"
+_source "${ZDOTDIR}/p10k-settings.zsh"
+_source "/usr/share/fzf/shell/completion.zsh"
+_source "/usr/share/fzf/shell/key-bindings.zsh"
 #}}}
 
 #: kitty integration                        {{{
