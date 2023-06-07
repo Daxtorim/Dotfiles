@@ -59,7 +59,7 @@ kitty_shell_integration
 npm_directory="${XDG_DATA_HOME}/npm-global"
 mkdir -p "${npm_directory}"
 export NPM_CONFIG_PREFIX="${npm_directory}"
-export PATH="${PATH}:${npm_directory}"
+export PATH="${PATH}:${npm_directory}/bin"
 #}}}
 
 #: anaconda setup (python)                  {{{
