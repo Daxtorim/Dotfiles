@@ -46,7 +46,7 @@ _source /usr/share/bash-completion/bash_completion \
 #}}}
 
 # ================ kitty integration ============== {{{
-if [ -n "${KITTY_SHELL_DATA_DIR}" ]; then
+if [ "${TERM}" = "xterm-kitty" ] && [ -n "${KITTY_SHELL_DATA_DIR}" ]; then
 	export KITTY_SHELL_INTEGRATION="enabled"
 	. "${KITTY_SHELL_DATA_DIR}/bash/kitty.bash"
 fi
