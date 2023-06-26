@@ -37,7 +37,7 @@ require("user.telescope")
 
 --#: Plugins                                {{{
 lvim.plugins = {
-	{ "Daxtorim/vim-auto-indent-settings" },
+	{ "tpope/vim-sleuth"},
 	{ "tpope/vim-surround" },
 	{ "ellisonleao/gruvbox.nvim" },
 	{ "HiPhish/nvim-ts-rainbow2" },

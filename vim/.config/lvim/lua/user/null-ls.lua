@@ -15,8 +15,6 @@ if ok_null then
 			d.flake8.with({ extra_args = { "--ignore", "E302,E501,W503" } }),
 			-- javascript
 			f.prettier.with({ disabled_filetypes = { "json" } }),
-			d.eslint_d,
-			a.eslint_d,
 			--json
 			f.jq,
 			-- lua
