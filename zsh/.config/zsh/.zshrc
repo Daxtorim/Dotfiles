@@ -91,6 +91,13 @@ SAVEHIST=50000
 #}}}
 
 #: Plugins                                  {{{
+_source() { [ -f "$1" ] && . "$1"; }
+_source "${HOME}/Dotfiles/shell-aliases"
+_source "${ZDOTDIR}/zsh_command_info.zsh"
+_source "${ZDOTDIR}/p10k-settings.zsh"
+_source "/usr/share/fzf/shell/completion.zsh"
+_source "/usr/share/fzf/shell/key-bindings.zsh"
+
 if [ ! -f "${HOME}/.local/share/zap/zap.zsh" ]; then
 	echo "Installing Zap plugin manager:"
 	if ! git clone https://github.com/zap-zsh/zap.git "${HOME}/.local/share/zap"; then
@@ -104,13 +111,6 @@ plug "zsh-users/zsh-autosuggestions"
 plug "zsh-users/zsh-syntax-highlighting"
 plug "hlissner/zsh-autopair"
 plug "romkatv/powerlevel10k" # Prompt
-
-_source() { [ -f "$1" ] && . "$1"; }
-_source "${HOME}/Dotfiles/shell-aliases"
-_source "${ZDOTDIR}/zsh_command_info.zsh"
-_source "${ZDOTDIR}/p10k-settings.zsh"
-_source "/usr/share/fzf/shell/completion.zsh"
-_source "/usr/share/fzf/shell/key-bindings.zsh"
 #}}}
 
 #: kitty integration                        {{{
