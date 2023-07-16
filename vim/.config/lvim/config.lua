@@ -19,14 +19,6 @@ B.nvimtree.setup.renderer.indent_markers.enable = true
 B.nvimtree.setup.renderer.group_empty = true
 
 B.treesitter.auto_install = true
-B.treesitter.rainbow = {
-	enable = true,
-	query = {
-		"rainbow-parens",
-		html = "rainbow-tags",
-		latex = "rainbow-blocks",
-	},
-}
 
 B.which_key.setup.plugins.presets = { g = true, z = true, windows = true }
 
@@ -40,8 +32,8 @@ lvim.plugins = {
 	{ "tpope/vim-sleuth"},
 	{ "tpope/vim-surround" },
 	{ "ellisonleao/gruvbox.nvim" },
-	{ "HiPhish/nvim-ts-rainbow2" },
-	{ "Pocco81/auto-save.nvim", opts = {} },
+	{ "HiPhish/rainbow-delimiters.nvim" },
+	{ "Pocco81/auto-save.nvim", opts = {debounce_delay = 5000} },
 	{ "j-hui/fidget.nvim", opts = {} },
 	{ "norcalli/nvim-colorizer.lua", opts = {} },
 	{ -- smooth scrolling
