@@ -59,15 +59,18 @@ AlwaysTileTitle=Bild-im-Bild
 BTreeInsertionPoint=2
 Blacklist=krunner, yakuake, kded, polkit, firefox
 Borders=3
-FilterClientCaption=Bild-im-Bild, Einrichten —, Emoji-Auswahl
+FilterClientCaption=Picture-in-Picture, Configure —, Emoji Selector
 MaximizeSingle=true
-TimerDelay=150
-
-[TabBox]
-LayoutName=org.kde.breeze.desktop
+TimerDelay=160
 
 [Tiling]
 padding=5
+
+[Tiling][8a6ce79c-01b9-5be7-b15a-0298214ab8b5]
+tiles={"layoutDirection":"floating","tiles":[]}
+
+[Tiling][d02c035d-eef0-5c68-aa2f-2e83d0ba08b1]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Windows]
 ElectricBorderDelay=250
@@ -81,5 +84,3 @@ Scale=1
 BorderSize=Tiny
 BorderSizeAuto=false
 ButtonsOnLeft=MFS
-library=org.kde.breeze
-theme=Breeze
