@@ -1,19 +1,40 @@
 # This is Git's per-user configuration file.
+[branch]
+	sort = -committerdate
+[column]
+	ui = auto
+[commit]
+	verbose = true
+[core]
+	pager = "less --tabs=4 -RFX"
+[diff]
+	algorithm = histogram
+	colorMoved = dimmed-zebra
+	mnemonicPrefix = true
+	renames = true
+[fetch]
+	all = true
+	prune = true
+	pruneTags = true
+[help]
+	autocorrect = prompt
+[init]
+	defaultBranch = main
+[merge]
+	conflictstyle = diff3
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+	default = simple
+[rebase]
+	autoSquash = true
+	updateRefs = true
+[rerere]
+	autoupdate = true
+	enabled = true
+[tag]
+	sort = version:refname
 [user]
 	name = Fabian Preuß
 	email = preuss_fabian@gmx.de
-
-[core]
-	pager = "pre=$(command -v delta); ${pre:-less --tabs=4 -RFX}"
-
-[push]
-	autoSetupRemote = true
-
-[merge]
-	conflictstyle = merge
-
-[delta]
-	navigate= true  # use n and N to move between diff sections
-	side-by-side = false
-[pull]
-	rebase = true

@@ -24,6 +24,7 @@ set encoding=utf-8              " Set default display encoding to utf-8
 set textwidth=0                 " Do not automatically break long lines
 set clipboard=unnamed           " Put yanked/deleted text into the * register (»primary selection« can be pasted via middle click)
 set mouse=nvi                   " Enable use of the mouse to select text inside a buffer
+set modeline                    " Read modeline to enable file specific settings
 
 if v:version >= 900
     set splitkeep=screen        " Keep buffer text on screen static when splitting windows, moving the cursor if necessary
@@ -176,13 +177,14 @@ if ! exists('g:do_not_install_vim_plugins')
 	" Install vim-plug if not found
 	if empty(glob('~/.vim/autoload/plug.vim'))
 		silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-		     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	endif
 
 	" Run PlugInstall if there are missing plugins
-	autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-	     \| PlugInstall --sync | source $MYVIMRC
-	\| endif
+	autocmd VimEnter *
+	\   if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+	\ |     PlugInstall --sync | source '~/.vim/autoload/plug.vim'
+	\ | endif
 
 	" Plugins will be downloaded under the specified directory.
 	call plug#begin('~/.vim/plugged')

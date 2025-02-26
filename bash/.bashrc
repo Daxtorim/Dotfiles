@@ -7,20 +7,6 @@ case $- in
 	*) return ;;
 esac
 
-# ================ Make zsh default =============== {{{
-# only change to zsh if this is the first start up of the terminal
-if [ -z "${REPLACED_BASH_WITH_ZSH}" ]; then
-	export REPLACED_BASH_WITH_ZSH=1
-
-	preferred_shell="$(command -v zsh)"
-	if [ -n "${preferred_shell}" ]; then
-		export SHELL="${preferred_shell}"
-		exec "${preferred_shell}"
-	fi
-	unset preferred_shell
-fi
-#}}}
-
 # ================ General Settings =============== {{{
 # Don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL=ignoreboth:erasedups
