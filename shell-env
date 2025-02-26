@@ -24,9 +24,6 @@ if [ -x "$(command -v nvim)" ]; then
 	MANPAGER="nvim '+Man!' -c 'nmap q :q!'"
 	EDITOR=nvim
 fi
-if [ -x "$(command -v nvim)" ] && [ -x "$(command -v lvim)" ]; then
-	EDITOR=lvim
-fi
 export VISUAL="${EDITOR}"
 [ -n "${MANPAGER}" ] && export MANPAGER
 #}}}

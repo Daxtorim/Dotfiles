@@ -28,14 +28,6 @@ if [ -x "$(command -v exa)" ]; then
 	alias la="exa --colour=auto --group-directories-first --icons --long --group --header --time-style=long-iso --all"
 fi
 
-if [ ! -f "/run/.containerenv" ] \
-	&& [ -x "$(command -v toolbox)" ] \
-	&& toolbox list --containers | awk '{print $2}' | grep -q "^Std$"
-then
-	# shellcheck disable=2139
-	alias lvim="toolbox run --container Std ${HOME}/.local/bin/lvim"
-fi
-
 # Use correct extraction program based on file extension
 extract() {
 	if [ -f "$1" ]; then
