@@ -73,7 +73,7 @@ _zsh_status_precmd() {
 
 _zsh_print_cmd_info() {
 	if [ "${_ZSH_COMMAND_INFO_SHOW}" -ne 0 ]; then
-		print -P "─╸\[${_ZSH_COMMAND_STATUS_INFO}\]\-\[${_ZSH_COMMAND_TIME_INFO}\]\-\[ %T\]"
+		print -P "─╸\[${_ZSH_COMMAND_STATUS_INFO}\]\-\[${_ZSH_COMMAND_TIME_INFO}\]\-\[ %D{%H:%M}\]"
 	fi
 	unset _ZSH_COMMAND_INFO_SHOW
 }

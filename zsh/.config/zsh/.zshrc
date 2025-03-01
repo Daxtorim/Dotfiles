@@ -5,9 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
-mkdir -p "${cache_dir}"
-
 #: General Options                          {{{
 unsetopt BEEP                          # Do not make a sound when encountering errors
 setopt AUTO_CD                         # Automatically cd into directories without specifying `cd`
@@ -15,6 +12,12 @@ setopt GLOB_DOTS                       # Do not require a leading dot to be matc
 setopt EXTENDED_GLOB                   # Give ~, #, ^ special meaning for patterns in filename generation
 setopt INTERACTIVE_COMMENTS            # Allow comments in interactive multi-line command chains
 setopt BANG_HIST                       # Use »!« to start history expansion
+
+# Don't consider '/' part of a word when deleting with ctrl-w
+WORDCHARS=${WORDCHARS/\/}
+autoload -Uz select-word-style
+select-word-style normal
+zstyle ':zle:*' word-style normal
 
 # Open command line in editor
 bindkey -e
@@ -31,9 +34,6 @@ autoload -Uz compinit; compinit
 zmodload zsh/complist
 
 # zstyle ':completion:<function>:<completer>:<command>:<argument>:<tag>' <option> <value>
-
-zstyle ':completion:*' use-cache true
-zstyle ':completion:*' cache-path "${cache_dir}/zcompcache"
 
 zstyle ':completion:*' completer \
 	_extensions _complete _approximate _ignored
@@ -85,32 +85,35 @@ for index ({1..9}) alias "$index"="cd +${index}"; unset index
 setopt INC_APPEND_HISTORY              # Write to the history file immediately, not when the shell exits
 setopt HIST_IGNORE_ALL_DUPS            # Delete old recorded entry if new entry is a duplicate
 setopt HIST_IGNORE_SPACE               # Don't record any entry starting with a space
-HISTFILE="${cache_dir}/zhistory"
+HISTFILE="${ZDOTDIR}/zhistory"
 HISTSIZE=50000
 SAVEHIST=50000
 #}}}
 
 #: Plugins                                  {{{
-_source() { [ -f "$1" ] && . "$1"; }
+_source() { [ -f "$1" ] && source "$1"; }
 _source "${HOME}/Dotfiles/shell-aliases"
 _source "${ZDOTDIR}/zsh_command_info.zsh"
 _source "${ZDOTDIR}/p10k-settings.zsh"
 _source "/usr/share/fzf/shell/completion.zsh"
 _source "/usr/share/fzf/shell/key-bindings.zsh"
 
-if [ ! -f "${HOME}/.local/share/zap/zap.zsh" ]; then
-	echo "Installing Zap plugin manager:"
-	if ! git clone https://github.com/zap-zsh/zap.git "${HOME}/.local/share/zap"; then
-		>2 echo "❌ Failed to install Zap!"
-		return 2
-	fi
-fi
-. "${HOME}/.local/share/zap/zap.zsh"
+ZPLUGINDIR="${XDG_DATA_HOME}/zsh/plugins"
+_source "${ZDOTDIR}/plugin-load.zsh"
+repos=(
+	"zsh-users/zsh-syntax-highlighting"
+	"zsh-users/zsh-autosuggestions"
+	"zsh-users/zsh-history-substring-search"
+	"hlissner/zsh-autopair"
+	"romkatv/powerlevel10k"
+)
+plugin-load $repos
 
-plug "zsh-users/zsh-autosuggestions"
-plug "zsh-users/zsh-syntax-highlighting"
-plug "hlissner/zsh-autopair"
-plug "romkatv/powerlevel10k" # Prompt
+bindkey '^[[A' history-substring-search-up
+bindkey '^[OA' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^[OB' history-substring-search-down
+
 #}}}
 
 #: kitty integration                        {{{
@@ -122,4 +125,4 @@ if [ "${TERM}" = "xterm-kitty" ] && [ -n "${KITTY_SHELL_DATA_DIR}" ]; then
 fi
 #}}}
 
-# vim:fdm=marker:fdl=0:
+# vim:ft=sh:fdm=marker:fdl=0:
