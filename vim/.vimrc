@@ -27,7 +27,7 @@ set mouse=nvi                   " Enable use of the mouse to select text inside 
 set modeline                    " Read modeline to enable file specific settings
 
 if v:version >= 900
-    set splitkeep=screen        " Keep buffer text on screen static when splitting windows, moving the cursor if necessary
+set splitkeep=screen            " Keep buffer text on screen static when splitting windows, moving the cursor if necessary
 endif
 
 " enable syntax highlighting and ftplugin settings
@@ -36,16 +36,16 @@ filetype plugin on
 
 " Tell vim to draw the entire background; fixes issues with colorscheme
 let &t_ut=''
-" Change cursor style to »pipe, underscore, block« in »insert, replace, normal« mode respectively
-let &t_SI="\<Esc>[6 q"
-let &t_SR="\<Esc>[4 q"
-let &t_EI="\<Esc>[2 q"
+" Change cursor style
+let &t_SI="\<Esc>[6 q"          " Insert: solid vertical bar
+let &t_SR="\<Esc>[4 q"          " Replace: solid underscore
+let &t_EI="\<Esc>[2 q"          " Normal: solid block
 
 " Stop looking for a mapping/keycode after n milliseconds
 set timeout timeoutlen=1000 ttimeoutlen=30
 
 " Display whitespace visually
-set list listchars=tab:›\ ,space:·,trail:~,nbsp:⍽,extends:>,precedes:<
+set listchars=tab:›\ ,space:·,trail:~,nbsp:⍽,extends:>,precedes:<
 " set list listchars=tab:<->,space:⋅,trail:~,nbsp:⍽,extends:>,precedes:<,eol:↴
 
 " List of characters for separators and other special places
@@ -53,7 +53,7 @@ set fillchars=fold:\ ,vert:│,diff:╱
 "}}}
 
 "#: Scrolling                               {{{
-set scrolloff=3 sidescrolloff=0 " Start scrolling when n lines away from borders
+set scrolloff=9 sidescrolloff=9 " Start scrolling when n lines away from borders
 set sidescroll=0                " Put cursor back to the middle of the screen when scrolling off horizontally
 set nowrap                      " Do not wrap long lines
 set linebreak                   " Break lines at convenient points when 'wrap' is enabled
@@ -156,57 +156,57 @@ nnoremap <leader><leader> :buffer <C-z>
 nmap <leader>h <cmd>nohls<CR><cmd>redraw<CR>
 
 " Search and Replace shortcuts
-nmap <leader>sw *N
 nmap <leader>se *N:%s@@@g<Left><Left>
 xmap <leader>se :s@@@g<Left><Left><Left>
 
 nmap <leader>v <cmd>vsplit<CR>
-nmap <leader>w <cmd>w<CR>
 "}}}
 
 "#: Plugins                                 {{{
-if ! exists('g:do_not_install_vim_plugins')
+if has('nvim')
+	" if this file is sourced from neovim modify runtimepath to automatically include vim plugins
+	set runtimepath^=~/.vim
+	set runtimepath+=~/.vim/after
+	let &packpath = &runtimepath
+endif
 
-	if has('nvim')
-		" if this file is sourced from neovim modify runtimepath to automatically include vim plugins
-		set runtimepath^=~/.vim
-		set runtimepath+=~/.vim/after
-		let &packpath = &runtimepath
-	endif
+" Install vim-plug if not found
+if empty(glob('~/.vim/autoload/plug.vim'))
+	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+	\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
 
-	" Install vim-plug if not found
-	if empty(glob('~/.vim/autoload/plug.vim'))
-		silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	endif
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter *
+\ if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+\ | PlugInstall --sync | source '~/.vim/autoload/plug.vim'
+\ | endif
 
-	" Run PlugInstall if there are missing plugins
-	autocmd VimEnter *
-	\   if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-	\ |     PlugInstall --sync | source '~/.vim/autoload/plug.vim'
-	\ | endif
+" Plugins will be downloaded under the specified directory.
+call plug#begin('~/.vim/plugged')
+	Plug 'lifepillar/vim-gruvbox8'
+	Plug 'tpope/vim-commentary'
+	Plug 'tpope/vim-surround'
+	Plug 'tpope/vim-sleuth'
 
-	" Plugins will be downloaded under the specified directory.
-	call plug#begin('~/.vim/plugged')
-		Plug 'lifepillar/vim-gruvbox8'
-		Plug 'tpope/vim-commentary'
-		Plug 'tpope/vim-surround'
-		Plug 'tpope/vim-sleuth'
-		Plug 'LunarWatcher/auto-pairs', { 'tag': '*' }
-		Plug 'machakann/vim-highlightedyank'
-	call plug#end()
-
-	"Plugin settings
-	let g:highlightedyank_highlight_duration = 300
-	let g:AutoPairsCompatibleMaps = 0
+	Plug 'LunarWatcher/auto-pairs'
+	let g:AutoPairsMapBS = 1
 	let g:AutoPairsShortcutFastWrap = '<C-e>'
 
-	colorscheme gruvbox8_hard
-	"Reduce color intensity of some highlights
-	highlight SpecialKey guifg=#3a3a3a       " listchars
-	highlight CursorLine guibg=#191919
-	highlight CursorColumn guibg=#191919
-endif
+	Plug 'machakann/vim-highlightedyank'
+	let g:highlightedyank_highlight_duration = 300
+	if has('nvim')
+		" Don't need this one when in Neovim
+		let g:loaded_highlightedyank = 1
+	end
+call plug#end()
+
+
+silent! colorscheme gruvbox8_hard
+"Reduce color intensity of some highlights
+highlight SpecialKey guifg=#3a3a3a       " listchars
+highlight CursorLine guibg=#191919
+highlight CursorColumn guibg=#191919
 "}}}
 
 " vim:fdm=marker:fdl=0:
