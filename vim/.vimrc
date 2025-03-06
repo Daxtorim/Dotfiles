@@ -1,10 +1,8 @@
 "#: General Options                         {{{
 
 " Set the window title to 'Vim: filename [+][RO][Filetype]'
-set title titlestring=%<%(Vim:\ %t\ %)%m%r%y
+set title titlestring=Vim:\ %t\ %m
 
-set termguicolors               " Activate true color support
-set background=dark             " Tell colorschemes which colour mode to use (light/dark)
 set belloff=all                 " Turn off the bell for all events, i.e. NO BEEP
 set number                      " Show line number of current line
 set norelativenumber            " Don't show other line numbers relative to current line
@@ -14,6 +12,7 @@ set cursorline                  " Highlight line where the cursor is
 set conceallevel=2              " Hide markup characters
 set history=1000                " Store cmd history
 set showcmd                     " Show incomplete commands at the bottom right
+set noshowmode			        " Do not show which mode is active at the bottom
 set cmdheight=1                 " Set the height of the cmd line at the bottom to n lines
 set laststatus=2                " Always display the status line, even if only one window is displayed
 set splitbelow splitright       " Open new split panes to right and bottom, which feels more natural
@@ -23,7 +22,7 @@ set hidden                      " Allow buffers to exist in the background witho
 set encoding=utf-8              " Set default display encoding to utf-8
 set textwidth=0                 " Do not automatically break long lines
 set clipboard=unnamed           " Put yanked/deleted text into the * register (»primary selection« can be pasted via middle click)
-set mouse=nvi                   " Enable use of the mouse to select text inside a buffer
+set mouse=a                     " Enable use of the mouse to select text inside a buffer
 set modeline                    " Read modeline to enable file specific settings
 
 if v:version >= 900
@@ -34,8 +33,6 @@ endif
 syntax enable
 filetype plugin on
 
-" Tell vim to draw the entire background; fixes issues with colorscheme
-let &t_ut=''
 " Change cursor style
 let &t_SI="\<Esc>[6 q"          " Insert: solid vertical bar
 let &t_SR="\<Esc>[4 q"          " Replace: solid underscore
@@ -117,6 +114,31 @@ augroup vimrc
 augroup END
 "}}}
 
+"#: Statusline                              {{{
+function! StatuslineColor(mode)
+	if a:mode == 'i'
+		hi! link StatusLine DiffAdd
+	elseif a:mode =~ '[vV\x16]'
+		hi! link StatusLine DiffText
+	elseif a:mode == 'R'
+		hi! link StatusLine DiffChange
+	elseif a:mode =~ '[sS\x13]'
+		hi! link StatusLine DiffDelete
+	elseif a:mode == 'c'
+		hi! link StatusLine WildMenu
+	else
+		hi! link StatusLine NONE
+	endif
+	redrawstatus
+endfunction
+
+augroup vimrcStatusline
+	autocmd!
+	autocmd ModeChanged *:* call StatuslineColor(mode())
+augroup END
+
+"}}}
+
 "#: Keybindings                             {{{
 " Avoid meta (alt) key, not reliable in all terminals
 " Capitalization does NOT matter with CTRL
@@ -150,7 +172,7 @@ inoremap <c-w> <c-g>u<c-w>
 inoremap <c-u> <c-g>u<c-u>
 
 " Open list of buffers in wildmenu
-nnoremap <leader><leader> :buffer <C-z>
+nnoremap <leader><space> :buffer <C-z>
 
 " Remove highlighting and redraw the screen
 nmap <leader>h <cmd>nohls<CR><cmd>redraw<CR>
@@ -184,10 +206,10 @@ autocmd VimEnter *
 
 " Plugins will be downloaded under the specified directory.
 call plug#begin('~/.vim/plugged')
-	Plug 'lifepillar/vim-gruvbox8'
 	Plug 'tpope/vim-commentary'
 	Plug 'tpope/vim-surround'
 	Plug 'tpope/vim-sleuth'
+	Plug 'gruvbox-community/gruvbox'
 
 	Plug 'LunarWatcher/auto-pairs'
 	let g:AutoPairsMapBS = 1
@@ -202,7 +224,11 @@ call plug#begin('~/.vim/plugged')
 call plug#end()
 
 
-silent! colorscheme gruvbox8_hard
+set termguicolors               " Activate true color support
+set background=dark             " Tell colorschemes which colour mode to use (light/dark)
+let &t_ut=''                    " Draw entire background (fixes issues with colorscheme)
+silent! colorscheme gruvbox
+
 "Reduce color intensity of some highlights
 highlight SpecialKey guifg=#3a3a3a       " listchars
 highlight CursorLine guibg=#191919
